@@ -5,9 +5,8 @@
 	"refmap": "pooptrain.refmap.json",
 	"mixins": [
 		"ContraptionInvWrapperMixin",
-		"EnderStorageManagerMixin",
 		"MountedStorageMixin",
-		"TileEnderChestMixin"
+		"enderstorage.EnderStorageManagerMixin"
 	],
 	"minVersion": "0.8"
 }

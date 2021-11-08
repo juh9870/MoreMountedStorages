@@ -1,8 +1,11 @@
-package com.juh9870.pooptrain;
+package com.juh9870.pooptrain.integrations.enderstorage;
 
 import codechicken.enderstorage.api.Frequency;
 import codechicken.enderstorage.manager.EnderStorageManager;
 import codechicken.enderstorage.storage.EnderItemStorage;
+import codechicken.enderstorage.tile.TileEnderChest;
+import com.juh9870.pooptrain.ContraptionStorageRegistry;
+import com.juh9870.pooptrain.PoopTrain;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -45,6 +48,7 @@ public class EnderStackHandler extends ItemStackHandler {
 	@Override
 	public CompoundNBT serializeNBT() {
 		CompoundNBT nbt = super.serializeNBT();
+		ContraptionStorageRegistry.serializeClassName(nbt, TileEnderChest.class);
 		nbt.put("Frequency", frequency.writeToNBT(new CompoundNBT()));
 		nbt.putBoolean("Clientside", isClientSide);
 		return nbt;
