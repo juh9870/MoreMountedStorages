@@ -49,13 +49,13 @@ public abstract class ContraptionStorageRegistry {
 	}
 
 	/**
-	 * Performs manipulations on Tile Entity when it's being added to the world after contraption disassembly and returns true if default logic of copying items from handler to inventory should be skipped;
+	 * Performs manipulations on Tile Entity when it's being added to the world after contraption disassembly and returns false if default logic of copying items from handler to inventory should be skipped;
 	 *
 	 * @param te Tile Entity being added to the world
-	 * @return true if default create logic should be skipped
+	 * @return false if default create logic should be skipped
 	 */
 	public boolean addStorageToWorld(TileEntity te, ItemStackHandler handler) {
-		return false;
+		return true;
 	}
 
 	/**

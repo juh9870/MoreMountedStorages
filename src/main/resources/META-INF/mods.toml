@@ -31,7 +31,25 @@ license="MIT"
     side="BOTH"
 [[dependencies.pooptrain]]
     modId="enderstorage"
-    mandatory=true
+    mandatory=false
     versionRange="[1.16.5-4.0.3.0,)" #keep updated
-    ordering="NONE"
+    ordering="AFTER"
+    side="BOTH"
+[[dependencies.pooptrain]]
+    modId="storagedrawers"
+    mandatory=false
+    versionRange="[1.16.3-8.3.0,)" #keep updated
+    ordering="AFTER"
+    side="BOTH"
+[[dependencies.pooptrain]]
+    modId="storagedrawers"
+    mandatory=false
+    versionRange="[1.16.3-8.3.0,)" #keep updated
+    ordering="AFTER"
+    side="BOTH"
+[[dependencies.pooptrain]]
+    modId="framedcompactdrawers"
+    mandatory=false
+    versionRange="[1.16-2.2.1,)" #keep updated
+    ordering="AFTER"
     side="BOTH"

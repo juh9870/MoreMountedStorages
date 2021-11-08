@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(MountedStorage.class)
 public class MountedStorageMixin {
 
-	@Shadow
+	@Shadow(remap = false)
 	@Final
 	private static ItemStackHandler dummyHandler;
 	@Shadow(remap = false)
