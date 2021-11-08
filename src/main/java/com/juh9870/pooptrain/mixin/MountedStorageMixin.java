@@ -52,6 +52,7 @@ public class MountedStorageMixin {
 	@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/tileentity/TileEntity;getCapability(Lnet/minecraftforge/common/capabilities/Capability;)Lnet/minecraftforge/common/util/LazyOptional;"), method = "removeStorageFromWorld()V", remap = false, cancellable = true)
 	private void pooptrain_removeStorageFromWorld(CallbackInfo ci) {
 		ContraptionStorageRegistry storage = ContraptionStorageRegistry.getStorage(te);
+		if (storage == null) return;
 		handler = dummyHandler;
 		if (!storage.prepareStorageForContraption(te)) {
 			return;
@@ -68,6 +69,7 @@ public class MountedStorageMixin {
 	@Inject(at = @At("HEAD"), method = "addStorageToWorld(Lnet/minecraft/tileentity/TileEntity;)V", remap = false, cancellable = true)
 	private void pooptrain_addStorageToWorld(TileEntity te, CallbackInfo ci) {
 		ContraptionStorageRegistry storage = ContraptionStorageRegistry.getStorage(te);
+		if (storage == null) return;
 		if (storage.addStorageToWorld(te, handler)) ci.cancel();
 	}
 }

@@ -17,7 +17,6 @@ public abstract class ContraptionStorageRegistry {
 	}
 
 	public static ContraptionStorageRegistry getStorage(TileEntity te) {
-		PoopTrain.LOGGER.debug("Tile entity class requested: " + (te != null ? te.getClass() : null));
 		return storages.get(te.getClass());
 	}
 
