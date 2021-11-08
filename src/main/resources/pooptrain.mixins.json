@@ -6,7 +6,8 @@
 	"mixins": [
 		"ContraptionInvWrapperMixin",
 		"MountedStorageMixin",
-		"enderstorage.EnderStorageManagerMixin"
+		"enderstorage.EnderStorageManagerMixin",
+		"storagedrawers.InventoryUpgradeMixin"
 	],
 	"minVersion": "0.8"
 }
