@@ -1,0 +1,13 @@
+{
+	"required": true,
+	"package": "com.example.examplemod.mixin",
+	"compatibilityLevel": "JAVA_8",
+	"refmap": "examplemod.refmap.json",
+	"mixins": [
+		"ContraptionInvWrapperMixin",
+		"EnderStorageManagerMixin",
+		"MountedStorageMixin",
+		"TileEnderChestMixin"
+	],
+	"minVersion": "0.8"
+}
