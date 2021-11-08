@@ -1,6 +1,5 @@
 package com.juh9870.pooptrain.integrations.enderstorage;
 
-import codechicken.enderstorage.init.ModContent;
 import codechicken.enderstorage.tile.TileEnderChest;
 import com.juh9870.pooptrain.ContraptionStorageRegistry;
 import net.minecraft.nbt.CompoundNBT;
@@ -9,7 +8,7 @@ import net.minecraftforge.items.ItemStackHandler;
 
 public class EnderStorageRegistry extends ContraptionStorageRegistry {
 	public static void register() {
-		registerStorage(ModContent.tileEnderChestType, new EnderStorageRegistry());
+		registerStorage(TileEnderChest.class, new EnderStorageRegistry());
 	}
 
 	@Override
