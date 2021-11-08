@@ -22,12 +22,12 @@ apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 
 mixin {
-    add sourceSets.main, "examplemod.refmap.json"
+    add sourceSets.main, "pooptrain.refmap.json"
 }
 
 version = '0.1.0'
-group = 'com.juh9870.examplemod' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'examplemod'
+group = 'com.juh9870.pooptrain' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = 'pooptrain'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
@@ -38,14 +38,14 @@ minecraft {
     runs {
         client {
             workingDirectory project.file('run')
-			args "-mixin.config=examplemod.mixins.json", "--username", "hminer"
+			args "-mixin.config=pooptrain.mixins.json", "--username", "hminer"
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                examplemod {
+                pooptrain {
                     source sourceSets.main
                 }
             }
@@ -61,7 +61,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                examplemod {
+                pooptrain {
                     source sourceSets.main
                 }
             }
@@ -73,10 +73,10 @@ minecraft {
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
-            args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            args '--mod', 'pooptrain', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
             mods {
-                examplemod {
+                pooptrain {
                     source sourceSets.main
                 }
             }
@@ -119,7 +119,7 @@ dependencies {
 jar {
     manifest {
         attributes([
-            "Specification-Title": "examplemod",
+            "Specification-Title": "pooptrain",
             "Specification-Vendor": "mrh0",
             "Specification-Version": "1", // We are version 1 of ourselves
             "Implementation-Title": project.name,
@@ -133,7 +133,7 @@ jar {
 jar {
     manifest {
         attributes([
-            "MixinConfigs": "examplemod.mixins.json"
+            "MixinConfigs": "pooptrain.mixins.json"
         ])
     }
 }

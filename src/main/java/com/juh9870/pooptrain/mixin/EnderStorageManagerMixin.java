@@ -1,7 +1,7 @@
-package com.example.examplemod.mixin;
+package com.juh9870.pooptrain.mixin;
 
 import codechicken.enderstorage.manager.EnderStorageManager;
-import com.example.examplemod.ExampleMod;
+import com.juh9870.pooptrain.PoopTrain;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class EnderStorageManagerMixin {
 
 	@Inject(at = @At("HEAD"), method = "Lcodechicken/enderstorage/manager/EnderStorageManager;reloadManager(Z)V", remap = false)
-	private static void examplemod_reloadManager(boolean client, CallbackInfo ci) {
-		ExampleMod.managerGeneration++;
+	private static void pooptrain_reloadManager(boolean client, CallbackInfo ci) {
+		PoopTrain.managerGeneration++;
 	}
 }

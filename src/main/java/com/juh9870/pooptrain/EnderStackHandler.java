@@ -1,4 +1,4 @@
-package com.example.examplemod;
+package com.juh9870.pooptrain;
 
 import codechicken.enderstorage.api.Frequency;
 import codechicken.enderstorage.manager.EnderStorageManager;
@@ -14,7 +14,7 @@ public class EnderStackHandler extends ItemStackHandler {
 	protected Frequency frequency;
 	protected boolean isClientSide;
 	protected EnderItemStorage storage;
-	protected int managerGeneration = ExampleMod.managerGeneration;
+	protected int managerGeneration = PoopTrain.managerGeneration;
 
 	public EnderStackHandler() {
 		this(new Frequency(), true);
@@ -31,8 +31,8 @@ public class EnderStackHandler extends ItemStackHandler {
 	}
 
 	private EnderItemStorage storage() {
-		if (storage == null || managerGeneration != ExampleMod.managerGeneration) {
-			managerGeneration = ExampleMod.managerGeneration;
+		if (storage == null || managerGeneration != PoopTrain.managerGeneration) {
+			managerGeneration = PoopTrain.managerGeneration;
 			storage = getStorage();
 		}
 		return storage;

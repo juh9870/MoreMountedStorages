@@ -1,12 +1,10 @@
-package com.example.examplemod.mixin;
+package com.juh9870.pooptrain.mixin;
 
-import codechicken.enderstorage.api.Frequency;
 import codechicken.enderstorage.storage.EnderItemStorage;
 import codechicken.enderstorage.tile.TileEnderChest;
-import com.example.examplemod.EnderStackHandler;
+import com.juh9870.pooptrain.EnderStackHandler;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.wrapper.InvWrapper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -19,12 +17,12 @@ public class TileEnderChestMixin {
 	private LazyOptional<IItemHandler> itemHandler = LazyOptional.empty();
 
 	@Inject(at=@At("RETURN"), method = "onFrequencySet()V", remap = false)
-	public void examplemod_onFrequencySet(CallbackInfo callback) {
+	public void pooptrain_onFrequencySet(CallbackInfo callback) {
 		itemHandler=LazyOptional.of(() -> new EnderStackHandler(getStorage()));
 	}
 
 	@Shadow(remap = false)
 	public EnderItemStorage getStorage() {
-		throw new IllegalStateException("examplemod mixin failed to shadow getStorage()");
+		throw new IllegalStateException("pooptrain mixin failed to shadow getStorage()");
 	}
 }

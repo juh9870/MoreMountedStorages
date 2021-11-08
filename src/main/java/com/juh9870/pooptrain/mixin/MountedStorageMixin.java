@@ -1,6 +1,6 @@
-package com.example.examplemod.mixin;
+package com.juh9870.pooptrain.mixin;
 
-import com.example.examplemod.EnderStackHandler;
+import com.juh9870.pooptrain.EnderStackHandler;
 import com.simibubi.create.content.contraptions.components.structureMovement.MountedStorage;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
@@ -22,7 +22,7 @@ public class MountedStorageMixin {
 	}
 
 	@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraftforge/items/ItemStackHandler;deserializeNBT(Lnet/minecraft/nbt/CompoundNBT;)V"), method = "Lcom/simibubi/create/content/contraptions/components/structureMovement/MountedStorage;deserialize(Lnet/minecraft/nbt/CompoundNBT;)Lcom/simibubi/create/content/contraptions/components/structureMovement/MountedStorage;", remap = false, cancellable = true)
-	private static void examplemod_deserializeMountedStorage(CompoundNBT nbt, CallbackInfoReturnable<MountedStorageMixin> cir) {
+	private static void pooptrain_deserializeMountedStorage(CompoundNBT nbt, CallbackInfoReturnable<MountedStorageMixin> cir) {
 		if (nbt.contains("Frequency")) {
 			MountedStorageMixin storage = new MountedStorageMixin(null);
 			storage.handler = new EnderStackHandler();
