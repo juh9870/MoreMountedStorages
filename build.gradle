@@ -110,10 +110,16 @@ dependencies {
     implementation fg.deobf("curse.maven:create-328085:3499718")
     implementation fg.deobf("curse.maven:flywheel-486392:3459739")
 
-    compile fg.deobf('codechicken:CodeChickenLib:1.16.5-4.0.3.+:universal')
-    compile fg.deobf('codechicken:EnderStorage:1.16.5-2.8.0+:universal')
-	
-	annotationProcessor 'org.spongepowered:mixin:0.8:processor'
+    implementation fg.deobf('codechicken:CodeChickenLib:1.16.5-4.0.3.+:universal')
+    implementation fg.deobf('codechicken:EnderStorage:1.16.5-2.8.0+:universal')
+
+    implementation fg.deobf("curse.maven:iron-chests-228756:3405717")
+
+    implementation fg.deobf("curse.maven:storage-drawers-223852:3402515")
+    implementation fg.deobf("curse.maven:framed-compacting-drawers-376351:3487197")
+
+
+    annotationProcessor 'org.spongepowered:mixin:0.8:processor'
 }
 
 jar {
