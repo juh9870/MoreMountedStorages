@@ -107,16 +107,16 @@ repositories {
 dependencies {
     minecraft 'net.minecraftforge:forge:1.16.5-36.2.0'
 
-    implementation fg.deobf("curse.maven:create-328085:3499718")
-    implementation fg.deobf("curse.maven:flywheel-486392:3459739")
+    implementation fg.deobf("com.jozufozu.flywheel:Flywheel:${flywheel_version}")
+    implementation fg.deobf("com.simibubi.create:Create:${create_version}")
 
-    implementation fg.deobf('codechicken:CodeChickenLib:1.16.5-4.0.3.+:universal')
-    implementation fg.deobf('codechicken:EnderStorage:1.16.5-2.8.0+:universal')
+    implementation fg.deobf("codechicken:CodeChickenLib:${chickenlib_version}:universal")
+    implementation fg.deobf("codechicken:EnderStorage:${enderstorage_version}:universal")
 
-    implementation fg.deobf("curse.maven:iron-chests-228756:3405717")
+    implementation fg.deobf("curse.maven:iron-chests-228756:${ironchests_versioncode}")
 
-    implementation fg.deobf("curse.maven:storage-drawers-223852:3402515")
-    implementation fg.deobf("curse.maven:framed-compacting-drawers-376351:3487197")
+    implementation fg.deobf("curse.maven:storage-drawers-223852:${storagedrawers_versioncode}")
+    implementation fg.deobf("curse.maven:framed-compacting-drawers-376351:${framedcompactingdrawers_versioncode}")
 
 
     annotationProcessor 'org.spongepowered:mixin:0.8:processor'
