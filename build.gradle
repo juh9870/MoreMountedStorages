@@ -95,17 +95,16 @@ repositories {
         }
     }
     maven {
-        //location of the maven for mixed mappings and registrate
-        name = "tterrag maven"
-        url = "https://maven.tterrag.com/"
-    }
-    maven {
-        // Ender Storage
-        name = "chickenbones maven"
-        url = "https://chickenbones.net/maven"
-    }
-    maven {
         url = "https://modmaven.dev/"
+        metadataSources {
+            mavenPom()
+            artifact()
+            ignoreGradleMetadataRedirection()
+        }
+    }
+    maven {
+        // Industrial Foregoing
+        url 'https://cdn.hrzn.studio/maven/'
     }
 }
 
@@ -125,8 +124,11 @@ dependencies {
 
     implementation fg.deobf("curse.maven:immersive-engineering-231951:${immersiveengineering_versioncode}")
 
-//    compileOnly fg.deobf("me.desht.pneumaticcraft:pneumaticcraft-repressurized:1.16.5-2.14.4-271:api")
-//    runtimeOnly fg.deobf("me.desht.pneumaticcraft:pneumaticcraft-repressurized:1.16.5-2.14.4-271")
+    implementation fg.deobf("com.hrznstudio:titanium:${titanium_version}")
+    implementation fg.deobf("com.buuz135:industrial-foregoing:${IF_version}")
+
+    compileOnly fg.deobf("me.desht.pneumaticcraft:pneumaticcraft-repressurized:1.16.5-2.14.4-271:api")
+    runtimeOnly fg.deobf("me.desht.pneumaticcraft:pneumaticcraft-repressurized:1.16.5-2.14.4-271")
 
 
     annotationProcessor 'org.spongepowered:mixin:0.8:processor'

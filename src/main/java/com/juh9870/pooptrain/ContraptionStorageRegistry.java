@@ -35,7 +35,7 @@ public abstract class ContraptionStorageRegistry {
 		}
 	}
 
-	public static void serializeClassName(CompoundNBT nbt, Class<? extends TileEntity> teClass) {
+	public static void serializeClassName(CompoundNBT nbt, Class<?> teClass) {
 		nbt.putString(CLASS_NAME, teClass.getName());
 	}
 
@@ -76,6 +76,17 @@ public abstract class ContraptionStorageRegistry {
 		throw new NotImplementedException();
 	}
 
+	/**
+	 * Performs manipulations on Tile Entity when it's being added to the world after contraption disassembly and returns false if default logic of copying items from handler to inventory should be skipped;
+	 * Called after and will be skipped if false is returned from {@link IStoragePlacedHandler#addStorageToWorld(net.minecraft.tileentity.TileEntity)}
+	 *
+	 * @param te Tile Entity being added to the world
+	 * @param handler Item handler
+	 * @return false if default create logic should be skipped
+	 */
+	public boolean addStorageToWorld(TileEntity te, ItemStackHandler handler){
+		return true;
+	}
 
 	/**
 	 * {@link  net.minecraftforge.items.ItemStackHandler} is provided with World after initialisation and after deserialization

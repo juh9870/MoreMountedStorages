@@ -1,7 +1,10 @@
 package com.juh9870.pooptrain;
 
+import com.juh9870.pooptrain.helpers.AdvancedStackHandlerRegistry;
+import com.juh9870.pooptrain.helpers.VoidingStackHandlerRegistry;
 import com.juh9870.pooptrain.integrations.enderstorage.EnderStorageRegistry;
 import com.juh9870.pooptrain.integrations.immersiveengineering.ImmersiveEngineeringRegistry;
+import com.juh9870.pooptrain.integrations.industrialforegoing.IndustrialForegoingRegistry;
 import com.juh9870.pooptrain.integrations.ironchests.IronChestsRegistry;
 import com.juh9870.pooptrain.integrations.storagedrawers.FramedCompactDrawersRegistry;
 import com.juh9870.pooptrain.integrations.storagedrawers.StorageDrawersRegistry;
@@ -25,6 +28,9 @@ public class PoopTrain {
 	}
 
 	public static void init(FMLCommonSetupEvent event) {
+		AdvancedStackHandlerRegistry.register();
+		VoidingStackHandlerRegistry.register();
+
 		if (ModList.get().isLoaded("enderstorage")) {
 			EnderStorageRegistry.register();
 		}
@@ -39,8 +45,12 @@ public class PoopTrain {
 			}
 		}
 
-		if(ModList.get().isLoaded("immersiveengineering")){
+		if (ModList.get().isLoaded("immersiveengineering")) {
 			ImmersiveEngineeringRegistry.register();
+		}
+
+		if (ModList.get().isLoaded("industrialforegoing")) {
+			IndustrialForegoingRegistry.register();
 		}
 	}
 }

@@ -77,6 +77,9 @@ public class MountedStorageMixin {
 		if (handler instanceof ContraptionStorageRegistry.IStoragePlacedHandler) {
 			cancel = ((ContraptionStorageRegistry.IStoragePlacedHandler) handler).addStorageToWorld(te);
 		}
+		if (!cancel) {
+			cancel = storage.addStorageToWorld(te, handler);
+		}
 		if (handler instanceof ContraptionStorageRegistry.InvalidatingItemStackHandler)
 			((ContraptionStorageRegistry.InvalidatingItemStackHandler) handler).invalidate();
 		if (cancel) {
