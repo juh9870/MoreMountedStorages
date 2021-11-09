@@ -1,12 +1,8 @@
 package com.juh9870.pooptrain.mixin;
 
-import com.juh9870.pooptrain.integrations.enderstorage.EnderStackHandler;
 import com.simibubi.create.content.contraptions.components.structureMovement.Contraption;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Contraption.ContraptionInvWrapper.class)
 public class ContraptionInvWrapperMixin extends CombinedInvWrapper {

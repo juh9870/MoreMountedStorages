@@ -37,7 +37,7 @@ public class StorageDrawerHandler extends ItemStackHandler implements ICapabilit
 	protected IDrawerGroup drawerGroup;
 	protected int storageUnits;
 	protected int drawers;
-	protected World world = null;
+	protected World world;
 	protected boolean valid = true;
 
 	public StorageDrawerHandler() {
@@ -84,9 +84,6 @@ public class StorageDrawerHandler extends ItemStackHandler implements ICapabilit
 		to.setIsUnlimitedStorage(from.isUnlimitedStorage());
 		to.setIsUnlimitedVending(from.isUnlimitedVending());
 		to.setIsDictConvertible(from.isDictConvertible());
-	}
-
-	protected void processTileEntity(TileEntityDrawers drawer) {
 	}
 
 	@Override

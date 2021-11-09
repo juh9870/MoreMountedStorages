@@ -37,7 +37,7 @@ public class ContraptionMixin {
 	public void addBlocksToWorld(World FluidState, StructureTransform mountedStorage, CallbackInfo ci) {
 		for (MountedStorage value : storage.values()) {
 			IItemHandlerModifiable handler = value.getItemHandler();
-			if(handler instanceof ContraptionStorageRegistry.IAfterStoragePlacedHandler){
+			if (handler instanceof ContraptionStorageRegistry.IAfterStoragePlacedHandler) {
 				((ContraptionStorageRegistry.IAfterStoragePlacedHandler) handler).afterAddStorageToWorld();
 			}
 		}
