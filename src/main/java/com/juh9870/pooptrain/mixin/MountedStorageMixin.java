@@ -62,6 +62,9 @@ public class MountedStorageMixin {
 			if (handler != null) {
 				valid = true;
 			}
+			if (handler instanceof ContraptionStorageRegistry.IWorldRequiringHandler) {
+				((ContraptionStorageRegistry.IWorldRequiringHandler) handler).applyWorld(te.getLevel());
+			}
 			ci.cancel();
 		}
 	}
@@ -70,6 +73,14 @@ public class MountedStorageMixin {
 	private void pooptrain_addStorageToWorld(TileEntity te, CallbackInfo ci) {
 		ContraptionStorageRegistry storage = ContraptionStorageRegistry.getStorage(te);
 		if (storage == null) return;
-		if (storage.addStorageToWorld(te, handler)) ci.cancel();
+		boolean cancel = false;
+		if (handler instanceof ContraptionStorageRegistry.IStoragePlacedHandler) {
+			cancel = ((ContraptionStorageRegistry.IStoragePlacedHandler) handler).addStorageToWorld(te);
+		}
+		if (handler instanceof ContraptionStorageRegistry.InvalidatingItemStackHandler)
+			((ContraptionStorageRegistry.InvalidatingItemStackHandler) handler).invalidate();
+		if (cancel) {
+			ci.cancel();
+		}
 	}
 }

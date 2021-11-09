@@ -1,21 +1,19 @@
 package com.juh9870.pooptrain.integrations.storagedrawers;
 
-import com.jaquadro.minecraft.storagedrawers.block.tile.TileEntityDrawersStandard;
+import com.jaquadro.minecraft.storagedrawers.block.tile.TileEntityDrawersComp;
 import com.juh9870.pooptrain.ContraptionStorageRegistry;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class StorageDrawersRegistry extends ContraptionStorageRegistry {
+public class CompactingDrawerRegistry extends ContraptionStorageRegistry {
 	public static void register() {
-		registerStorages(new StorageDrawersRegistry(),
-				TileEntityDrawersStandard.class,
+		registerStorages(new CompactingDrawerRegistry(),
+				TileEntityDrawersComp.class,
 
-				TileEntityDrawersStandard.Slot1.class,
-				TileEntityDrawersStandard.Slot2.class,
-				TileEntityDrawersStandard.Slot4.class
+				TileEntityDrawersComp.Slot3.class
 		);
-		CompactingDrawerRegistry.register();
+		FramedCompactingDrawerRegistry.register();
 	}
 
 	@Override
@@ -25,18 +23,18 @@ public class StorageDrawersRegistry extends ContraptionStorageRegistry {
 
 	@Override
 	public boolean prepareStorageForContraption(TileEntity te) {
-		TileEntityDrawersStandard drawer = (TileEntityDrawersStandard) te;
+		TileEntityDrawersComp drawer = (TileEntityDrawersComp) te;
 		return drawer.isGroupValid();
 	}
 
 	@Override
 	public ItemStackHandler getHandler(TileEntity te) {
-		return new StorageDrawerHandler((TileEntityDrawersStandard) te);
+		return new CompactingDrawerHandler((TileEntityDrawersComp) te);
 	}
 
 	@Override
 	public ItemStackHandler deserializeHandler(CompoundNBT nbt) {
-		StorageDrawerHandler handler = new StorageDrawerHandler();
+		StorageDrawerHandler handler = new CompactingDrawerHandler();
 		handler.deserializeNBT(nbt);
 		return handler;
 	}

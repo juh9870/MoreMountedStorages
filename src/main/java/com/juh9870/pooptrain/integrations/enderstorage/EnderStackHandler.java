@@ -8,16 +8,18 @@ import com.juh9870.pooptrain.ContraptionStorageRegistry;
 import com.juh9870.pooptrain.PoopTrain;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 
-public class EnderStackHandler extends ItemStackHandler {
+public class EnderStackHandler extends ItemStackHandler implements ContraptionStorageRegistry.InvalidatingItemStackHandler, ContraptionStorageRegistry.IStoragePlacedHandler {
 	protected Frequency frequency;
 	protected boolean isClientSide;
 	protected EnderItemStorage storage;
 	protected int managerGeneration = PoopTrain.managerGeneration;
+	protected boolean valid = true;
 
 	public EnderStackHandler() {
 		this(new Frequency(), true);
@@ -64,6 +66,7 @@ public class EnderStackHandler extends ItemStackHandler {
 
 	@Override
 	public void setStackInSlot(int slot, @Nonnull ItemStack stack) {
+		if (isInvalid()) return;
 		storage().setItem(slot, stack);
 	}
 
@@ -75,12 +78,14 @@ public class EnderStackHandler extends ItemStackHandler {
 	@Nonnull
 	@Override
 	public ItemStack getStackInSlot(int slot) {
+		if (isInvalid()) return ItemStack.EMPTY;
 		return storage().getItem(slot);
 	}
 
 	@Nonnull
 	@Override
 	public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
+		if (isInvalid()) return stack;
 
 		if (stack.isEmpty())
 			return ItemStack.EMPTY;
@@ -121,6 +126,8 @@ public class EnderStackHandler extends ItemStackHandler {
 	@Nonnull
 	@Override
 	public ItemStack extractItem(int slot, int amount, boolean simulate) {
+		if (isInvalid()) return ItemStack.EMPTY;
+
 		if (amount == 0)
 			return ItemStack.EMPTY;
 
@@ -165,5 +172,20 @@ public class EnderStackHandler extends ItemStackHandler {
 	protected void validateSlotIndex(int slot) {
 		if (slot < 0 || slot >= getSlots())
 			throw new RuntimeException("Slot " + slot + " not in valid range - [0," + getSlots() + ")");
+	}
+
+	@Override
+	public boolean isInvalid() {
+		return !valid;
+	}
+
+	@Override
+	public void invalidate() {
+		valid = false;
+	}
+
+	@Override
+	public boolean addStorageToWorld(TileEntity te) {
+		return false;
 	}
 }

@@ -2,6 +2,7 @@ package com.juh9870.pooptrain;
 
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import net.minecraftforge.items.ItemStackHandler;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -49,16 +50,6 @@ public abstract class ContraptionStorageRegistry {
 	}
 
 	/**
-	 * Performs manipulations on Tile Entity when it's being added to the world after contraption disassembly and returns false if default logic of copying items from handler to inventory should be skipped;
-	 *
-	 * @param te Tile Entity being added to the world
-	 * @return false if default create logic should be skipped
-	 */
-	public boolean addStorageToWorld(TileEntity te, ItemStackHandler handler) {
-		return true;
-	}
-
-	/**
 	 * Returns true if this storage uses custom subclass of {@link  net.minecraftforge.items.ItemStackHandler}. If true is returned, must also implement {@link ContraptionStorageRegistry#deserializeHandler(net.minecraft.nbt.CompoundNBT)} and {@link ContraptionStorageRegistry#getHandler(net.minecraft.tileentity.TileEntity)}
 	 *
 	 * @return true if this storage uses non-standard handler
@@ -83,5 +74,36 @@ public abstract class ContraptionStorageRegistry {
 	 */
 	public ItemStackHandler deserializeHandler(CompoundNBT nbt) {
 		throw new NotImplementedException();
+	}
+
+
+	/**
+	 * {@link  net.minecraftforge.items.ItemStackHandler} is provided with World after initialisation and after deserialization
+	 */
+	public interface IWorldRequiringHandler {
+		void applyWorld(World world);
+
+		default void applyWorldOnDeserialization(World world) {
+			applyWorld(world);
+		}
+	}
+
+	public interface IStoragePlacedHandler {
+		/**
+		 * Performs manipulations on Tile Entity when it's being added to the world after contraption disassembly and returns false if default logic of copying items from handler to inventory should be skipped;
+		 *
+		 * @param te Tile Entity being added to the world
+		 * @return false if default create logic should be skipped
+		 */
+		boolean addStorageToWorld(TileEntity te);
+	}
+
+	/**
+	 * {@link  net.minecraftforge.items.ItemStackHandler} is invalidated after contraption is disassembled, this happens after {@link IStoragePlacedHandler#addStorageToWorld(net.minecraft.tileentity.TileEntity)} but before {@link IAfterStoragePlacedHandler#afterAddStorageToWorld()}
+	 */
+	public interface InvalidatingItemStackHandler {
+		boolean isInvalid();
+
+		void invalidate();
 	}
 }

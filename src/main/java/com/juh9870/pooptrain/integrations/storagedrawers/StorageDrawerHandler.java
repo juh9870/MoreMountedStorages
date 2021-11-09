@@ -5,6 +5,7 @@ import com.jaquadro.minecraft.storagedrawers.api.storage.IDrawerAttributes;
 import com.jaquadro.minecraft.storagedrawers.api.storage.IDrawerAttributesModifiable;
 import com.jaquadro.minecraft.storagedrawers.api.storage.IDrawerGroup;
 import com.jaquadro.minecraft.storagedrawers.api.storage.attribute.LockAttribute;
+import com.jaquadro.minecraft.storagedrawers.block.tile.TileEntityDrawers;
 import com.jaquadro.minecraft.storagedrawers.block.tile.TileEntityDrawersStandard;
 import com.jaquadro.minecraft.storagedrawers.block.tile.tiledata.StandardDrawerGroup;
 import com.jaquadro.minecraft.storagedrawers.block.tile.tiledata.UpgradeData;
@@ -13,10 +14,13 @@ import com.jaquadro.minecraft.storagedrawers.config.CommonConfig;
 import com.juh9870.pooptrain.ContraptionStorageRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
@@ -24,23 +28,26 @@ import net.minecraftforge.items.ItemStackHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class StorageDrawerHandler extends ItemStackHandler implements ICapabilityProvider {
+public class StorageDrawerHandler extends ItemStackHandler implements ICapabilityProvider, ContraptionStorageRegistry.IWorldRequiringHandler, ContraptionStorageRegistry.InvalidatingItemStackHandler, ContraptionStorageRegistry.IStoragePlacedHandler {
 	@CapabilityInject(IDrawerAttributes.class)
 	public static Capability<IDrawerAttributes> DRAWER_ATTRIBUTES_CAPABILITY = null;
-	private final UpgradeData upgradeData;
-	private final BasicDrawerAttributes drawerAttributes;
-	private final LazyOptional<?> attributesHandler = LazyOptional.of(this::getDrawerAttributes);
-	private StandardDrawerGroup drawerGroup;
-	private int storageUnits;
-	private int drawers;
+	protected final UpgradeData upgradeData;
+	protected final BasicDrawerAttributes drawerAttributes;
+	protected final LazyOptional<?> attributesHandler = LazyOptional.of(this::getDrawerAttributes);
+	protected IDrawerGroup drawerGroup;
+	protected int storageUnits;
+	protected int drawers;
+	protected World world = null;
+	protected boolean valid = true;
 
 	public StorageDrawerHandler() {
-		this(new UpgradeData(7), new BasicDrawerAttributes(), null, 1);
+		this(new UpgradeData(7), new BasicDrawerAttributes(), null, 1, null);
 	}
 
-	public StorageDrawerHandler(UpgradeData upgrades, IDrawerAttributes attributes, @Nullable IDrawerGroup group, int units) {
+	public StorageDrawerHandler(UpgradeData upgrades, IDrawerAttributes attributes, @Nullable IDrawerGroup group, int units, @Nullable World world) {
 		super();
 		this.storageUnits = units;
+		this.world = world;
 
 		upgradeData = new UpgradeData(upgrades.getSlotCount());
 		copyUpgrades(upgrades, upgradeData);
@@ -49,16 +56,16 @@ public class StorageDrawerHandler extends ItemStackHandler implements ICapabilit
 		copyAttributes(attributes, drawerAttributes);
 
 		drawers = group == null ? 4 : group.getDrawerCount();
-		drawerGroup = new ContraptionDrawerGroup(drawers);
-		copyItems(group, drawerGroup);
+		drawerGroup = createGroup(drawers);
+		if (group != null) copyItems(group, drawerGroup);
 
 	}
 
-	public StorageDrawerHandler(TileEntityDrawersStandard drawer) {
-		this(drawer.upgrades(), drawer.getDrawerAttributes(), drawer.getGroup(), drawer.getDrawerCapacity());
+	public StorageDrawerHandler(TileEntityDrawers drawer) {
+		this(drawer.upgrades(), drawer.getDrawerAttributes(), drawer.getGroup(), drawer.getDrawerCapacity(), drawer.getLevel());
 	}
 
-	private static void copyUpgrades(@Nullable UpgradeData from, UpgradeData to) {
+	public static void copyUpgrades(@Nullable UpgradeData from, UpgradeData to) {
 		if (from == null) return;
 		for (int i = 0; i < from.getSlotCount(); i++) {
 			ItemStack upgrade = from.getUpgrade(i);
@@ -66,7 +73,7 @@ public class StorageDrawerHandler extends ItemStackHandler implements ICapabilit
 		}
 	}
 
-	private static void copyAttributes(@Nullable IDrawerAttributes from, IDrawerAttributesModifiable to) {
+	public static void copyAttributes(@Nullable IDrawerAttributes from, IDrawerAttributesModifiable to) {
 		if (from == null) return;
 		to.setIsConcealed(from.isConcealed());
 		to.setItemLocked(LockAttribute.LOCK_EMPTY, from.isItemLocked(LockAttribute.LOCK_EMPTY));
@@ -79,23 +86,33 @@ public class StorageDrawerHandler extends ItemStackHandler implements ICapabilit
 		to.setIsDictConvertible(from.isDictConvertible());
 	}
 
+	protected void processTileEntity(TileEntityDrawers drawer) {
+	}
+
 	@Override
 	public void setSize(int size) {
 		super.setSize(size);
 	}
 
-	private void copyItems(@Nullable IDrawerGroup from, IDrawerGroup to) {
+	public void copyItems(IDrawerGroup from, IDrawerGroup to) {
 		if (from == null) return;
 		if (from.getDrawerCount() != to.getDrawerCount())
 			throw new IllegalArgumentException("Provided drawers dimensions mismatch");
 		for (int i = 0; i < from.getDrawerCount(); i++) {
 			IDrawer dFrom = from.getDrawer(i);
-			to.getDrawer(i).setStoredItem(dFrom.getStoredItemPrototype(),
+			ItemStack stack = dFrom.getStoredItemPrototype();
+			to.getDrawer(i).setStoredItem(stack,
 					dFrom.getStoredItemCount());
 		}
 	}
 
-	public void copyItemsTo(TileEntityDrawersStandard drawer) {
+	public void clearGroup(IDrawerGroup group) {
+		for (int i = 0; i < group.getDrawerCount(); i++) {
+			group.getDrawer(i).setStoredItem(ItemStack.EMPTY);
+		}
+	}
+
+	public void copyItemsTo(@Nonnull TileEntityDrawers drawer) {
 		copyItems(drawerGroup, drawer.getGroup());
 	}
 
@@ -112,6 +129,7 @@ public class StorageDrawerHandler extends ItemStackHandler implements ICapabilit
 
 	@Override
 	public void setStackInSlot(int slot, @Nonnull ItemStack stack) {
+		if (isInvalid()) return;
 		validateSlotIndex(slot);
 		IDrawer drawer = drawerGroup.getDrawer(slot);
 		drawer.setStoredItem(stack, stack.getCount());
@@ -125,6 +143,7 @@ public class StorageDrawerHandler extends ItemStackHandler implements ICapabilit
 	@Nonnull
 	@Override
 	public ItemStack getStackInSlot(int slot) {
+		if (isInvalid()) return ItemStack.EMPTY;
 		IDrawer drawer = drawerGroup.getDrawer(slot);
 		int count = drawer.getStoredItemCount();
 		if (count <= 0) return ItemStack.EMPTY;
@@ -134,21 +153,26 @@ public class StorageDrawerHandler extends ItemStackHandler implements ICapabilit
 	@Nonnull
 	@Override
 	public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
+		if (isInvalid()) return stack;
+
 		IDrawer drawer = drawerGroup.getDrawer(slot);
 		if (stack.isEmpty())
 			return ItemStack.EMPTY;
 		if (!isItemValid(slot, stack))
 			return stack;
 
-		int max = drawer.getMaxCapacity(stack);
+		int max = drawer.getAcceptingMaxCapacity(stack);
 		int cur = drawer.getStoredItemCount();
 		int limit = max - cur;
-		if (drawerAttributes.isVoid()) limit = Integer.MAX_VALUE;
+		if (drawerAttributes.isVoid() && limit == 0) {
+			return ItemStack.EMPTY;
+		}
 
 		if (limit <= 0) return stack;
 		boolean reachedLimit = stack.getCount() > limit;
 		if (!simulate) {
-			drawer.setStoredItem(stack, Math.min(drawer.getMaxCapacity(), drawer.getStoredItemCount() + stack.getCount()));
+			drawer.setStoredItem(stack);
+			drawer.setStoredItemCount(Math.min(drawer.getMaxCapacity(), cur + stack.getCount()));
 		}
 
 		return reachedLimit ? ItemHandlerHelper.copyStackWithSize(stack, stack.getCount() - limit) : ItemStack.EMPTY;
@@ -157,6 +181,7 @@ public class StorageDrawerHandler extends ItemStackHandler implements ICapabilit
 	@Nonnull
 	@Override
 	public ItemStack extractItem(int slot, int amount, boolean simulate) {
+		if (isInvalid()) return ItemStack.EMPTY;
 		if (amount == 0)
 			return ItemStack.EMPTY;
 
@@ -191,13 +216,17 @@ public class StorageDrawerHandler extends ItemStackHandler implements ICapabilit
 	@Override
 	protected int getStackLimit(int slot, @Nonnull ItemStack stack) {
 		IDrawer drawer = drawerGroup.getDrawer(slot);
-		return drawerAttributes.isVoid() ? Integer.MAX_VALUE : drawer.getMaxCapacity(stack);
+		return drawer.getAcceptingMaxCapacity(stack);
 	}
 
 	@Override
 	public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-		IDrawer drawer = drawerGroup.getDrawer(slot);
-		return drawer.canItemBeStored(stack);
+		try {
+			IDrawer drawer = drawerGroup.getDrawer(slot);
+			return drawer.canItemBeStored(stack);
+		} catch (NullPointerException e) {
+			return false;
+		}
 	}
 
 	protected void validateSlotIndex(int slot) {
@@ -208,13 +237,13 @@ public class StorageDrawerHandler extends ItemStackHandler implements ICapabilit
 	@Override
 	public CompoundNBT serializeNBT() {
 		CompoundNBT nbt = super.serializeNBT();
-		ContraptionStorageRegistry.serializeClassName(nbt, TileEntityDrawersStandard.class);
+		ContraptionStorageRegistry.serializeClassName(nbt, getStorageClass());
 
 		nbt.putInt("StorageUnits", storageUnits);
 		nbt.putInt("DrawersAmount", drawers);
 		nbt.put("Upgrades", upgradeData.serializeNBT());
 		nbt.put("Attributes", drawerAttributes.serializeNBT());
-		nbt.put("DrawerGroup", drawerGroup.serializeNBT());
+		nbt.put("DrawerGroup", ((INBTSerializable<CompoundNBT>) drawerGroup).serializeNBT());
 		return nbt;
 	}
 
@@ -226,8 +255,38 @@ public class StorageDrawerHandler extends ItemStackHandler implements ICapabilit
 		drawers = nbt.getInt("DrawersAmount");
 		upgradeData.deserializeNBT(nbt.getCompound("Upgrades"));
 		drawerAttributes.deserializeNBT(nbt.getCompound("Attributes"));
-		drawerGroup = new ContraptionDrawerGroup(drawers);
-		drawerGroup.deserializeNBT(nbt.getCompound("DrawerGroup"));
+		drawerGroup = createGroup(drawers);
+		((INBTSerializable<CompoundNBT>) drawerGroup).deserializeNBT(nbt.getCompound("DrawerGroup"));
+	}
+
+	protected IDrawerGroup createGroup(int drawers) {
+		return new ContraptionDrawerGroup(drawers);
+	}
+
+	protected Class<? extends TileEntity> getStorageClass() {
+		return TileEntityDrawersStandard.class;
+	}
+
+	@Override
+	public void applyWorld(World world) {
+		this.world = world;
+	}
+
+	@Override
+	public boolean isInvalid() {
+		return !valid;
+	}
+
+	@Override
+	public void invalidate() {
+		valid = false;
+	}
+
+	@Override
+	public boolean addStorageToWorld(TileEntity te) {
+		TileEntityDrawersStandard drawer = (TileEntityDrawersStandard) te;
+		copyItemsTo(drawer);
+		return false;
 	}
 
 	public class ContraptionDrawerGroup extends StandardDrawerGroup {
