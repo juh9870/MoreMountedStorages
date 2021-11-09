@@ -31,15 +31,4 @@ public class ContraptionMixin {
 			}
 		}
 	}
-
-
-	@Inject(at = @At("TAIL"), method = "addBlocksToWorld(Lnet/minecraft/world/World;Lcom/simibubi/create/content/contraptions/components/structureMovement/StructureTransform;)V", remap = false)
-	public void addBlocksToWorld(World FluidState, StructureTransform mountedStorage, CallbackInfo ci) {
-		for (MountedStorage value : storage.values()) {
-			IItemHandlerModifiable handler = value.getItemHandler();
-			if (handler instanceof ContraptionStorageRegistry.IAfterStoragePlacedHandler) {
-				((ContraptionStorageRegistry.IAfterStoragePlacedHandler) handler).afterAddStorageToWorld();
-			}
-		}
-	}
 }

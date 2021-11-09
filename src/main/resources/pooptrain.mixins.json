@@ -4,7 +4,6 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "pooptrain.refmap.json",
   "mixins": [
-    "ContraptionInvWrapperMixin",
     "MountedStorageMixin",
     "enderstorage.EnderStorageManagerMixin",
     "ContraptionMixin",
