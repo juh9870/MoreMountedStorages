@@ -1,15 +1,15 @@
 buildscript {
     repositories {
-        maven { 
-			url = 'https://files.minecraftforge.net/maven'
-		}
-		maven { url='https://repo.spongepowered.org/repository/maven-public/' }
+        maven {
+            url = 'https://files.minecraftforge.net/maven'
+        }
+        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
         jcenter()
         mavenCentral()
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
-		classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
+        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
     }
 }
 
@@ -33,12 +33,12 @@ sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = co
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
-    mappings channel: 'official', version:  '1.16.5'
+    mappings channel: 'official', version: '1.16.5'
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
     runs {
         client {
             workingDirectory project.file('run')
-			args "-mixin.config=pooptrain.mixins.json", "--username", "hminer"
+            args "-mixin.config=pooptrain.mixins.json", "--username", "hminer"
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
@@ -100,7 +100,12 @@ repositories {
         url = "https://maven.tterrag.com/"
     }
     maven {
+        // Ender Storage
+        name = "chickenbones maven"
         url = "https://chickenbones.net/maven"
+    }
+    maven {
+        url = "https://modmaven.dev/"
     }
 }
 
@@ -118,6 +123,11 @@ dependencies {
     implementation fg.deobf("curse.maven:storage-drawers-223852:${storagedrawers_versioncode}")
     implementation fg.deobf("curse.maven:framed-compacting-drawers-376351:${framedcompactingdrawers_versioncode}")
 
+    implementation fg.deobf("curse.maven:immersive-engineering-231951:${immersiveengineering_versioncode}")
+
+//    compileOnly fg.deobf("me.desht.pneumaticcraft:pneumaticcraft-repressurized:1.16.5-2.14.4-271:api")
+//    runtimeOnly fg.deobf("me.desht.pneumaticcraft:pneumaticcraft-repressurized:1.16.5-2.14.4-271")
+
 
     annotationProcessor 'org.spongepowered:mixin:0.8:processor'
 }
@@ -125,13 +135,13 @@ dependencies {
 jar {
     manifest {
         attributes([
-            "Specification-Title": "pooptrain",
-            "Specification-Vendor": "mrh0",
-            "Specification-Version": "1", // We are version 1 of ourselves
-            "Implementation-Title": project.name,
-            "Implementation-Version": "${version}",
-            "Implementation-Vendor" :"mrh0",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+                "Specification-Title"     : "pooptrain",
+                "Specification-Vendor"    : "mrh0",
+                "Specification-Version"   : "1", // We are version 1 of ourselves
+                "Implementation-Title"    : project.name,
+                "Implementation-Version"  : "${version}",
+                "Implementation-Vendor"   : "mrh0",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
 }
@@ -139,7 +149,7 @@ jar {
 jar {
     manifest {
         attributes([
-            "MixinConfigs": "pooptrain.mixins.json"
+                "MixinConfigs": "pooptrain.mixins.json"
         ])
     }
 }

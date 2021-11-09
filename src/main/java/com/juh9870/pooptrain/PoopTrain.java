@@ -1,6 +1,7 @@
 package com.juh9870.pooptrain;
 
 import com.juh9870.pooptrain.integrations.enderstorage.EnderStorageRegistry;
+import com.juh9870.pooptrain.integrations.immersiveengineering.ImmersiveEngineeringRegistry;
 import com.juh9870.pooptrain.integrations.ironchests.IronChestsRegistry;
 import com.juh9870.pooptrain.integrations.storagedrawers.FramedCompactDrawersRegistry;
 import com.juh9870.pooptrain.integrations.storagedrawers.StorageDrawersRegistry;
@@ -36,6 +37,10 @@ public class PoopTrain {
 			if (ModList.get().isLoaded("framedcompactdrawers")) {
 				FramedCompactDrawersRegistry.register();
 			}
+		}
+
+		if(ModList.get().isLoaded("immersiveengineering")){
+			ImmersiveEngineeringRegistry.register();
 		}
 	}
 }
