@@ -1,24 +1,29 @@
-package com.juh9870.pooptrain.integrations.immersiveengineering;
+package com.juh9870.pooptrain.integrations.storagedrawers;
 
-import blusunrize.immersiveengineering.common.IETileTypes;
 import com.juh9870.pooptrain.ContraptionStorageRegistry;
+import eutros.framedcompactdrawers.block.ModBlocks;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.registries.IForgeRegistry;
 
-public class ImmersiveEngineeringRegistry extends ContraptionStorageRegistry {
+public class FramedDrawersRegistry extends StorageDrawersRegistry {
 	public static final Lazy<ContraptionStorageRegistry> INSTANCE = createIfModLoaded(
-			"immersiveengineering",
-			"immersiveengineering:crate",
-			ImmersiveEngineeringRegistry::new
+			"framedcompactdrawers",
+			"framedcompactdrawers:drawer",
+			FramedDrawersRegistry::new
 	);
 
 	public static void register(IForgeRegistry<ContraptionStorageRegistry> registry) {
 		registry.register(INSTANCE.get());
+		FramedCompactingDrawerRegistry.register(registry);
 	}
 
 	@Override
 	public TileEntityType<?>[] affectedStorages() {
-		return new TileEntityType[]{IETileTypes.WOODEN_CRATE.get()};
+		return new TileEntityType[]{
+				ModBlocks.Tile.standardDrawers1,
+				ModBlocks.Tile.standardDrawers2,
+				ModBlocks.Tile.standardDrawers4,
+		};
 	}
 }

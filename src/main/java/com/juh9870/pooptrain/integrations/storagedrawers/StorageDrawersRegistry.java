@@ -1,41 +1,50 @@
 package com.juh9870.pooptrain.integrations.storagedrawers;
 
 import com.jaquadro.minecraft.storagedrawers.block.tile.TileEntityDrawersStandard;
+import com.jaquadro.minecraft.storagedrawers.core.ModBlocks;
+import com.juh9870.pooptrain.ContraptionItemStackHandler;
 import com.juh9870.pooptrain.ContraptionStorageRegistry;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.items.ItemStackHandler;
+import net.minecraft.tileentity.TileEntityType;
+import net.minecraftforge.common.util.Lazy;
+import net.minecraftforge.registries.IForgeRegistry;
 
 public class StorageDrawersRegistry extends ContraptionStorageRegistry {
-	public static void register() {
-		registerStorages(new StorageDrawersRegistry(),
-				TileEntityDrawersStandard.class,
+	public static final Lazy<ContraptionStorageRegistry> INSTANCE = createIfModLoaded(
+			"storagedrawers",
+			"storagedrawers:drawer",
+			StorageDrawersRegistry::new
+	);
 
-				TileEntityDrawersStandard.Slot1.class,
-				TileEntityDrawersStandard.Slot2.class,
-				TileEntityDrawersStandard.Slot4.class
-		);
-		CompactingDrawerRegistry.register();
+	public static void register(IForgeRegistry<ContraptionStorageRegistry> registry) {
+		registry.register(INSTANCE.get());
+		CompactingDrawerRegistry.register(registry);
+		FramedDrawersRegistry.register(registry);
 	}
 
 	@Override
-	public boolean useCustomHandler() {
-		return true;
-	}
-
-	@Override
-	public boolean prepareStorageForContraption(TileEntity te) {
+	public boolean canUseAsStorage(TileEntity te) {
 		TileEntityDrawersStandard drawer = (TileEntityDrawersStandard) te;
 		return drawer.isGroupValid();
 	}
 
 	@Override
-	public ItemStackHandler getHandler(TileEntity te) {
+	public TileEntityType<?>[] affectedStorages() {
+		return new TileEntityType[]{
+				ModBlocks.Tile.STANDARD_DRAWERS_1,
+				ModBlocks.Tile.STANDARD_DRAWERS_2,
+				ModBlocks.Tile.STANDARD_DRAWERS_4,
+		};
+	}
+
+	@Override
+	public ContraptionItemStackHandler createHandler(TileEntity te) {
 		return new StorageDrawerHandler((TileEntityDrawersStandard) te);
 	}
 
 	@Override
-	public ItemStackHandler deserializeHandler(CompoundNBT nbt) {
+	public ContraptionItemStackHandler deserializeHandler(CompoundNBT nbt) {
 		StorageDrawerHandler handler = new StorageDrawerHandler();
 		handler.deserializeNBT(nbt);
 		return handler;

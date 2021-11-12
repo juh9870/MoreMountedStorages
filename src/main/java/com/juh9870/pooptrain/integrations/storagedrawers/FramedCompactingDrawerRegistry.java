@@ -1,12 +1,26 @@
 package com.juh9870.pooptrain.integrations.storagedrawers;
 
-import eutros.framedcompactdrawers.block.tile.TileCompDrawersCustom;
+import com.juh9870.pooptrain.ContraptionStorageRegistry;
+import eutros.framedcompactdrawers.block.ModBlocks;
+import net.minecraft.tileentity.TileEntityType;
+import net.minecraftforge.common.util.Lazy;
+import net.minecraftforge.registries.IForgeRegistry;
 
 public class FramedCompactingDrawerRegistry extends CompactingDrawerRegistry {
-	public static void register() {
-		registerStorages(new CompactingDrawerRegistry(),
+	public static final Lazy<ContraptionStorageRegistry> INSTANCE = createIfModLoaded(
+			"framedcompactdrawers",
+			"framedcompactdrawers:compacting_drawer",
+			FramedCompactingDrawerRegistry::new
+	);
 
-				TileCompDrawersCustom.Slot3.class
-		);
+	public static void register(IForgeRegistry<ContraptionStorageRegistry> registry) {
+		registry.register(INSTANCE.get());
+	}
+
+	@Override
+	public TileEntityType<?>[] affectedStorages() {
+		return new TileEntityType[]{
+				ModBlocks.Tile.fractionalDrawers3
+		};
 	}
 }

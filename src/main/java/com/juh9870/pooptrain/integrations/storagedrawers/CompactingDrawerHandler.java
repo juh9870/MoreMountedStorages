@@ -38,26 +38,10 @@ public class CompactingDrawerHandler extends StorageDrawerHandler implements ICa
 		to.getDrawer(0).setStoredItem(from.getDrawer(0).getStoredItemPrototype());
 		((FractionalDrawerGroup) to).setPooledCount(((FractionalDrawerGroup) from).getPooledCount());
 	}
-//	@Override
-//	public void copyItems(IDrawerGroup from, IDrawerGroup to) {
-//		if (!(from instanceof FractionalDrawerGroup))
-//			throw new IllegalArgumentException("Invalid source drawer type: expected FractionalDrawerGroup, got " + from.getClass());
-//		if (!(to instanceof FractionalDrawerGroup))
-//			throw new IllegalArgumentException("Invalid target drawer type: expected FractionalDrawerGroup, got " + to.getClass());
-//		if (from.getDrawerCount() != to.getDrawerCount())
-//			throw new IllegalArgumentException("Provided drawers dimensions mismatch");
-//
-//		((FractionalDrawerGroup) to).deserializeNBT(((FractionalDrawerGroup) from).serializeNBT());
-//	}
 
 	@Override
 	protected IDrawerGroup createGroup(int drawers) {
 		return new CompactingDrawerGroup(drawers);
-	}
-
-	@Override
-	protected Class<? extends TileEntity> getStorageClass() {
-		return TileEntityDrawersComp.class;
 	}
 
 	@Override

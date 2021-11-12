@@ -1,41 +1,53 @@
 package com.juh9870.pooptrain.helpers;
 
-import com.juh9870.pooptrain.ContraptionStorageRegistry;
+import com.juh9870.pooptrain.ContraptionItemStackHandler;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
 
-public class AdvancedItemStackHandler extends ItemStackHandler {
+public abstract class AdvancedItemStackHandler extends ContraptionItemStackHandler {
 	protected int[] stackSizes;
-	protected boolean ignoreItemStackSize = false;
+	protected boolean ignoreItemStackSize;
+	protected boolean[] voiding;
 
 	public AdvancedItemStackHandler() {
-		this(1, 64, false);
+		this(1, 64);
 	}
 
 	public AdvancedItemStackHandler(IItemHandler handler) {
-		this(handler,false);
-	}
-	public AdvancedItemStackHandler(IItemHandler handler, boolean ignoreItemStackSize) {
 		super(handler.getSlots());
 		this.stackSizes = new int[stacks.size()];
+		this.voiding = new boolean[stacks.size()];
 		for (int i = 0; i < stacks.size(); i++) {
 			this.stackSizes[i] = handler.getSlotLimit(i);
 			this.stacks.set(i, handler.getStackInSlot(i));
 		}
-		this.ignoreItemStackSize = ignoreItemStackSize;
 	}
 
-	public AdvancedItemStackHandler(int size, int stackSize, boolean ignoreItemStackSize) {
+	public AdvancedItemStackHandler(int size, int stackSize) {
 		super(size);
 		this.stackSizes = new int[size];
+		this.voiding = new boolean[size];
 		Arrays.fill(stackSizes, stackSize);
+	}
+
+	public AdvancedItemStackHandler setIgnoreItemStackSize(boolean ignoreItemStackSize) {
 		this.ignoreItemStackSize = ignoreItemStackSize;
+		return this;
+	}
+
+	public AdvancedItemStackHandler setVoiding(boolean voiding) {
+		Arrays.fill(this.voiding, voiding);
+		return this;
+	}
+
+	public AdvancedItemStackHandler setVoiding(int slot, boolean voiding) {
+		this.voiding[slot] = voiding;
+		return this;
 	}
 
 	public void simpleOverwrite(IItemHandler target) {
@@ -61,28 +73,49 @@ public class AdvancedItemStackHandler extends ItemStackHandler {
 		Arrays.fill(newSizes, 64);
 		System.arraycopy(this.stackSizes, 0, newSizes, 0, Math.min(this.stackSizes.length, size));
 		this.stackSizes = newSizes;
+
+		boolean[] newVoids = new boolean[size];
+		Arrays.fill(newVoids, false);
+		System.arraycopy(this.voiding, 0, newVoids, 0, Math.min(this.voiding.length, size));
+		this.voiding = newVoids;
 	}
 
 	@Override
 	public int getSlotLimit(int slot) {
-		return stackSizes[slot];
+		return voiding[slot] ? Integer.MAX_VALUE : stackSizes[slot];
 	}
 
 	@Override
 	protected int getStackLimit(int slot, @Nonnull ItemStack stack) {
-		return ignoreItemStackSize ? stackSizes[slot] : Math.min(stackSizes[slot], (int) (stackSizes[slot] * (stack.getMaxStackSize() / 64f)));
+		return voiding[slot] ? Integer.MAX_VALUE : ignoreItemStackSize ? stackSizes[slot] : Math.min(stackSizes[slot], (int) (stackSizes[slot] * (stack.getMaxStackSize() / 64f)));
 	}
 
-	protected Class<?> getStorageClass() {
-		return AdvancedStackHandlerRegistry.class;
+	@Override
+	public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
+		return stackSizes[slot] > 0;
+	}
+
+	@Nonnull
+	@Override
+	public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
+		ItemStack returnStack = super.insertItem(slot, stack, simulate);
+		int superLimit = super.getStackLimit(slot, stack);
+		if (stacks.get(slot).getCount() > superLimit) {
+			stacks.get(slot).setCount(superLimit);
+		}
+		return returnStack;
 	}
 
 	@Override
 	public CompoundNBT serializeNBT() {
 		CompoundNBT nbt = super.serializeNBT();
-		ContraptionStorageRegistry.serializeClassName(nbt, getStorageClass());
 		nbt.putIntArray("StackSizes", stackSizes);
 		nbt.putBoolean("IgnoreItemStackSizes", ignoreItemStackSize);
+		int[] voids = new int[voiding.length];
+		for (int i = 0; i < voiding.length; i++) {
+			voids[i] = voiding[i] ? 1 : 0;
+		}
+		nbt.putIntArray("Voiding", voids);
 		return nbt;
 	}
 
@@ -91,5 +124,10 @@ public class AdvancedItemStackHandler extends ItemStackHandler {
 		super.deserializeNBT(nbt);
 		stackSizes = nbt.getIntArray("StackSizes");
 		ignoreItemStackSize = nbt.getBoolean("IgnoreItemStackSizes");
+		int[] voids = nbt.getIntArray("Voiding");
+		voiding = new boolean[voids.length];
+		for (int i = 0; i < voids.length; i++) {
+			voiding[i] = voids[i] == 1;
+		}
 	}
 }

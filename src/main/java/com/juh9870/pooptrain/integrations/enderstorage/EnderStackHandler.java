@@ -3,22 +3,20 @@ package com.juh9870.pooptrain.integrations.enderstorage;
 import codechicken.enderstorage.api.Frequency;
 import codechicken.enderstorage.manager.EnderStorageManager;
 import codechicken.enderstorage.storage.EnderItemStorage;
-import codechicken.enderstorage.tile.TileEnderChest;
+import com.juh9870.pooptrain.ContraptionItemStackHandler;
 import com.juh9870.pooptrain.ContraptionStorageRegistry;
-import com.juh9870.pooptrain.PoopTrain;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 
-public class EnderStackHandler extends ItemStackHandler implements ContraptionStorageRegistry.InvalidatingItemStackHandler, ContraptionStorageRegistry.IStoragePlacedHandler {
+public class EnderStackHandler extends ContraptionItemStackHandler {
 	protected Frequency frequency;
 	protected boolean isClientSide;
 	protected EnderItemStorage storage;
-	protected int managerGeneration = PoopTrain.managerGeneration;
+	protected int managerGeneration = EnderStorageRegistry.managerGeneration;
 	protected boolean valid = true;
 
 	public EnderStackHandler() {
@@ -36,8 +34,8 @@ public class EnderStackHandler extends ItemStackHandler implements ContraptionSt
 	}
 
 	private EnderItemStorage storage() {
-		if (storage == null || managerGeneration != PoopTrain.managerGeneration) {
-			managerGeneration = PoopTrain.managerGeneration;
+		if (storage == null || managerGeneration != EnderStorageRegistry.managerGeneration) {
+			managerGeneration = EnderStorageRegistry.managerGeneration;
 			storage = getStorage();
 		}
 		return storage;
@@ -50,7 +48,6 @@ public class EnderStackHandler extends ItemStackHandler implements ContraptionSt
 	@Override
 	public CompoundNBT serializeNBT() {
 		CompoundNBT nbt = super.serializeNBT();
-		ContraptionStorageRegistry.serializeClassName(nbt, TileEnderChest.class);
 		nbt.put("Frequency", frequency.writeToNBT(new CompoundNBT()));
 		nbt.putBoolean("Clientside", isClientSide);
 		return nbt;
@@ -66,7 +63,7 @@ public class EnderStackHandler extends ItemStackHandler implements ContraptionSt
 
 	@Override
 	public void setStackInSlot(int slot, @Nonnull ItemStack stack) {
-		if (isInvalid()) return;
+		if (!valid) return;
 		storage().setItem(slot, stack);
 	}
 
@@ -78,14 +75,14 @@ public class EnderStackHandler extends ItemStackHandler implements ContraptionSt
 	@Nonnull
 	@Override
 	public ItemStack getStackInSlot(int slot) {
-		if (isInvalid()) return ItemStack.EMPTY;
+		if (!valid) return ItemStack.EMPTY;
 		return storage().getItem(slot);
 	}
 
 	@Nonnull
 	@Override
 	public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
-		if (isInvalid()) return stack;
+		if (!valid) return stack;
 
 		if (stack.isEmpty())
 			return ItemStack.EMPTY;
@@ -126,7 +123,7 @@ public class EnderStackHandler extends ItemStackHandler implements ContraptionSt
 	@Nonnull
 	@Override
 	public ItemStack extractItem(int slot, int amount, boolean simulate) {
-		if (isInvalid()) return ItemStack.EMPTY;
+		if (!valid) return ItemStack.EMPTY;
 
 		if (amount == 0)
 			return ItemStack.EMPTY;
@@ -175,17 +172,13 @@ public class EnderStackHandler extends ItemStackHandler implements ContraptionSt
 	}
 
 	@Override
-	public boolean isInvalid() {
-		return !valid;
-	}
-
-	@Override
-	public void invalidate() {
-		valid = false;
-	}
-
-	@Override
 	public boolean addStorageToWorld(TileEntity te) {
+		valid = false;
 		return false;
+	}
+
+	@Override
+	protected ContraptionStorageRegistry registry() {
+		return EnderStorageRegistry.INSTANCE.get();
 	}
 }

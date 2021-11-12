@@ -3,7 +3,6 @@ package com.juh9870.pooptrain.mixin;
 import com.juh9870.pooptrain.ContraptionStorageRegistry;
 import com.simibubi.create.content.contraptions.components.structureMovement.Contraption;
 import com.simibubi.create.content.contraptions.components.structureMovement.MountedStorage;
-import com.simibubi.create.content.contraptions.components.structureMovement.StructureTransform;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;

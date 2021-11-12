@@ -1,24 +1,33 @@
 package com.juh9870.pooptrain.integrations.ironchests;
 
 import com.juh9870.pooptrain.ContraptionStorageRegistry;
-import com.progwml6.ironchest.common.block.tileentity.*;
+import com.progwml6.ironchest.common.block.tileentity.IronChestsTileEntityTypes;
+import net.minecraft.tileentity.TileEntityType;
+import net.minecraftforge.common.util.Lazy;
+import net.minecraftforge.registries.IForgeRegistry;
 
 public class IronChestsRegistry extends ContraptionStorageRegistry {
-	public static void register() {
-		registerStorages(new IronChestsRegistry(),
-				IronChestTileEntity.class,
-				GoldChestTileEntity.class,
-				DiamondChestTileEntity.class,
-				CopperChestTileEntity.class,
-				SilverChestTileEntity.class,
-				CrystalChestTileEntity.class,
-				ObsidianChestTileEntity.class,
-				DirtChestTileEntity.class
-		);
+	public static final Lazy<ContraptionStorageRegistry> INSTANCE = createIfModLoaded(
+			"ironchest",
+			"ironchest:chest",
+			IronChestsRegistry::new
+	);
+
+	public static void register(IForgeRegistry<ContraptionStorageRegistry> registry) {
+		registry.register(INSTANCE.get());
 	}
 
 	@Override
-	public boolean useCustomHandler() {
-		return false;
+	public TileEntityType<?>[] affectedStorages() {
+		return new TileEntityType[]{
+				IronChestsTileEntityTypes.IRON_CHEST.get(),
+				IronChestsTileEntityTypes.GOLD_CHEST.get(),
+				IronChestsTileEntityTypes.DIAMOND_CHEST.get(),
+				IronChestsTileEntityTypes.COPPER_CHEST.get(),
+				IronChestsTileEntityTypes.SILVER_CHEST.get(),
+				IronChestsTileEntityTypes.CRYSTAL_CHEST.get(),
+				IronChestsTileEntityTypes.OBSIDIAN_CHEST.get(),
+				IronChestsTileEntityTypes.DIRT_CHEST.get(),
+		};
 	}
 }

@@ -1,9 +1,12 @@
 package com.juh9870.pooptrain.mixin;
 
+import com.juh9870.pooptrain.ContraptionItemStackHandler;
 import com.juh9870.pooptrain.ContraptionStorageRegistry;
+import com.juh9870.pooptrain.PoopTrain;
 import com.simibubi.create.content.contraptions.components.structureMovement.MountedStorage;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.items.ItemStackHandler;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -31,37 +34,33 @@ public class MountedStorageMixin {
 
 	@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/tileentity/TileEntity;getCapability(Lnet/minecraftforge/common/capabilities/Capability;)Lnet/minecraftforge/common/util/LazyOptional;"), method = "canUseAsStorage(Lnet/minecraft/tileentity/TileEntity;)Z", remap = false, cancellable = true)
 	private static void pooptrain_canUseAsStorage(TileEntity te, CallbackInfoReturnable<Boolean> cir) {
-		if (ContraptionStorageRegistry.canUseAsStorage(te)) cir.setReturnValue(true);
+		ContraptionStorageRegistry handler = ContraptionStorageRegistry.forTileEntity(te.getType());
+		if (handler != null && handler.canUseAsStorage(te)) cir.setReturnValue(true);
 	}
 
 	@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraftforge/items/ItemStackHandler;deserializeNBT(Lnet/minecraft/nbt/CompoundNBT;)V"), method = "deserialize(Lnet/minecraft/nbt/CompoundNBT;)Lcom/simibubi/create/content/contraptions/components/structureMovement/MountedStorage;", remap = false, cancellable = true)
 	private static void pooptrain_deserializeMountedStorage(CompoundNBT nbt, CallbackInfoReturnable<MountedStorageMixin> cir) {
-		if (nbt.contains(ContraptionStorageRegistry.CLASS_NAME)) {
+		PoopTrain.breakpoint();
+		if (nbt.contains(ContraptionStorageRegistry.REGISTRY_NAME)) {
 			MountedStorageMixin storage = new MountedStorageMixin(null);
-			try {
-				Class<?> cl = Class.forName(nbt.getString(ContraptionStorageRegistry.CLASS_NAME));
-				storage.handler = ContraptionStorageRegistry.getStorage(cl).deserializeHandler(nbt);
-				storage.valid = true;
-			} catch (ClassNotFoundException e) {
-				storage.valid = false;
-			}
+			String id = nbt.getString(ContraptionStorageRegistry.REGISTRY_NAME);
+			ContraptionStorageRegistry registry = ContraptionStorageRegistry.REGISTRY.get().getValue(new ResourceLocation(id));
+			if (registry == null) return;
+			storage.handler = registry.deserializeHandler(nbt);
+			if (storage.handler == null) storage.handler = dummyHandler;
+			else storage.valid = true;
 			cir.setReturnValue(storage);
 		}
 	}
 
 	@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/tileentity/TileEntity;getCapability(Lnet/minecraftforge/common/capabilities/Capability;)Lnet/minecraftforge/common/util/LazyOptional;"), method = "removeStorageFromWorld()V", remap = false, cancellable = true)
 	private void pooptrain_removeStorageFromWorld(CallbackInfo ci) {
-		ContraptionStorageRegistry storage = ContraptionStorageRegistry.getStorage(te);
+		ContraptionStorageRegistry storage = ContraptionStorageRegistry.forTileEntity(te.getType());
 		if (storage == null) return;
 		handler = dummyHandler;
-		if (!storage.prepareStorageForContraption(te)) {
-			return;
-		}
-		if (storage.useCustomHandler()) {
-			handler = storage.getHandler(te);
-			if (handler != null) {
-				valid = true;
-			}
+		handler = storage.createHandler(te);
+		if (handler != null) {
+			valid = true;
 			if (handler instanceof ContraptionStorageRegistry.IWorldRequiringHandler) {
 				((ContraptionStorageRegistry.IWorldRequiringHandler) handler).applyWorld(te.getLevel());
 			}
@@ -71,19 +70,11 @@ public class MountedStorageMixin {
 
 	@Inject(at = @At("HEAD"), method = "addStorageToWorld(Lnet/minecraft/tileentity/TileEntity;)V", remap = false, cancellable = true)
 	private void pooptrain_addStorageToWorld(TileEntity te, CallbackInfo ci) {
-		ContraptionStorageRegistry storage = ContraptionStorageRegistry.getStorage(te);
-		if (storage == null) return;
-		boolean cancel = false;
-		if (handler instanceof ContraptionStorageRegistry.IStoragePlacedHandler) {
-			cancel = ((ContraptionStorageRegistry.IStoragePlacedHandler) handler).addStorageToWorld(te);
-		}
-		if (!cancel) {
-			cancel = storage.addStorageToWorld(te, handler);
-		}
-		if (handler instanceof ContraptionStorageRegistry.InvalidatingItemStackHandler)
-			((ContraptionStorageRegistry.InvalidatingItemStackHandler) handler).invalidate();
-		if (cancel) {
-			ci.cancel();
+		if (handler instanceof ContraptionItemStackHandler) {
+			boolean cancel = !((ContraptionItemStackHandler) handler).addStorageToWorld(te);
+			if (cancel) {
+				ci.cancel();
+			}
 		}
 	}
 }

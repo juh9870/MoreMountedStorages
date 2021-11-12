@@ -1,47 +1,93 @@
 package com.juh9870.pooptrain.integrations.industrialforegoing;
 
 import com.buuz135.industrial.block.transportstorage.tile.BlackHoleUnitTile;
+import com.buuz135.industrial.utils.Reference;
+import com.juh9870.pooptrain.ContraptionItemStackHandler;
 import com.juh9870.pooptrain.ContraptionStorageRegistry;
-import com.juh9870.pooptrain.helpers.VoidingItemStackHandler;
+import com.juh9870.pooptrain.helpers.AdvancedItemStackHandler;
+import net.minecraft.item.Rarity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.IForgeRegistry;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class IndustrialForegoingRegistry extends ContraptionStorageRegistry {
-	public static final ItemStackHandler dummyHandler = new ItemStackHandler();
 
-	public static void register() {
-		registerStorages(new IndustrialForegoingRegistry(),
-				BlackHoleUnitTile.class
-		);
-		IndustrialForegoingControllerRegistry.register();
+	public static final Lazy<ContraptionStorageRegistry> INSTANCE = createIfModLoaded(
+			"industrialforegoing",
+			"industrialforegoing:black_hole_unit",
+			IndustrialForegoingRegistry::new
+	);
+
+	private static final Lazy<TileEntityType<?>[]> affectedStorages = Lazy.of(() -> {
+		List<TileEntityType<?>> values = new ArrayList<>();
+
+		for (Rarity rarity : Rarity.values()) {
+			TileEntityType<?> type = ForgeRegistries.TILE_ENTITIES.getValue(new ResourceLocation(Reference.MOD_ID, rarity.name().toLowerCase() + "_black_hole_unit"));
+			if (type != null) values.add(type);
+		}
+
+		return values.toArray(new TileEntityType<?>[0]);
+	});
+
+	public static void register(IForgeRegistry<ContraptionStorageRegistry> registry) {
+		registry.register(INSTANCE.get());
+		IndustrialForegoingControllerRegistry.register(registry);
 	}
 
 	@Override
-	public boolean useCustomHandler() {
-		return true;
+	public TileEntityType<?>[] affectedStorages() {
+		return affectedStorages.get();
 	}
 
 	@Override
-	public ItemStackHandler getHandler(TileEntity te) {
-		BlackHoleUnitTile bhu = (BlackHoleUnitTile) te;
-		IItemHandler bhHandler = bhu.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(dummyHandler);
+	public ContraptionItemStackHandler createHandler(TileEntity te) {
+		IItemHandler bhHandler = getHandlerFromDefaultCapability(te);
 		if (bhHandler == dummyHandler) {
 			return null;
 		}
-		return new VoidingItemStackHandler(bhHandler, true);
+		boolean voiding = te.serializeNBT().getBoolean("voidItems");
+		return new BlackHoleItemStackHandler(bhHandler).setVoiding(voiding);
 	}
 
 	@Override
-	public boolean addStorageToWorld(TileEntity te, ItemStackHandler handler) {
-		BlackHoleUnitTile bhu = (BlackHoleUnitTile) te;
-		IItemHandler bhHandler = bhu.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(dummyHandler);
-		if (bhHandler == dummyHandler) {
-			return false;
+	public ContraptionItemStackHandler deserializeHandler(CompoundNBT nbt) {
+		return deserializeHandler(new BlackHoleItemStackHandler(), nbt);
+	}
+
+	public static class BlackHoleItemStackHandler extends AdvancedItemStackHandler {
+		public BlackHoleItemStackHandler() {
+			setIgnoreItemStackSize(true);
+			setVoiding(true);
 		}
 
-		((VoidingItemStackHandler) handler).simpleOverwrite(bhHandler);
-		return false;
+		public BlackHoleItemStackHandler(IItemHandler handler) {
+			super(handler);
+			setIgnoreItemStackSize(true);
+			setVoiding(true);
+		}
+
+		@Override
+		protected ContraptionStorageRegistry registry() {
+			return INSTANCE.get();
+		}
+
+		@Override
+		public boolean addStorageToWorld(TileEntity te) {
+			IItemHandler bhHandler = getHandlerFromDefaultCapability(te);
+			if (bhHandler == dummyHandler) {
+				return false;
+			}
+
+			simpleOverwrite(bhHandler);
+			return false;
+		}
 	}
 }

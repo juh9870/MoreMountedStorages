@@ -102,10 +102,10 @@ repositories {
             ignoreGradleMetadataRedirection()
         }
     }
-    maven {
-        // Industrial Foregoing
-        url 'https://cdn.hrzn.studio/maven/'
-    }
+//    maven {
+//        // Industrial Foregoing
+//        url 'https://cdn.hrzn.studio/maven/'
+//    }
 }
 
 dependencies {
@@ -127,8 +127,7 @@ dependencies {
     implementation fg.deobf("com.hrznstudio:titanium:${titanium_version}")
     implementation fg.deobf("com.buuz135:industrial-foregoing:${IF_version}")
 
-    compileOnly fg.deobf("me.desht.pneumaticcraft:pneumaticcraft-repressurized:1.16.5-2.14.4-271:api")
-    runtimeOnly fg.deobf("me.desht.pneumaticcraft:pneumaticcraft-repressurized:1.16.5-2.14.4-271")
+    implementation fg.deobf("me.desht.pneumaticcraft:pneumaticcraft-repressurized:1.16.5-2.14.5-273")
 
 
     annotationProcessor 'org.spongepowered:mixin:0.8:processor'

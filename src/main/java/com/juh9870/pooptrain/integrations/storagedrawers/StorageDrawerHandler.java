@@ -11,6 +11,7 @@ import com.jaquadro.minecraft.storagedrawers.block.tile.tiledata.StandardDrawerG
 import com.jaquadro.minecraft.storagedrawers.block.tile.tiledata.UpgradeData;
 import com.jaquadro.minecraft.storagedrawers.capabilities.BasicDrawerAttributes;
 import com.jaquadro.minecraft.storagedrawers.config.CommonConfig;
+import com.juh9870.pooptrain.ContraptionItemStackHandler;
 import com.juh9870.pooptrain.ContraptionStorageRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -23,12 +24,11 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class StorageDrawerHandler extends ItemStackHandler implements ICapabilityProvider, ContraptionStorageRegistry.IWorldRequiringHandler, ContraptionStorageRegistry.InvalidatingItemStackHandler, ContraptionStorageRegistry.IStoragePlacedHandler {
+public class StorageDrawerHandler extends ContraptionItemStackHandler implements ICapabilityProvider, ContraptionStorageRegistry.IWorldRequiringHandler {
 	@CapabilityInject(IDrawerAttributes.class)
 	public static Capability<IDrawerAttributes> DRAWER_ATTRIBUTES_CAPABILITY = null;
 	protected final UpgradeData upgradeData;
@@ -38,7 +38,6 @@ public class StorageDrawerHandler extends ItemStackHandler implements ICapabilit
 	protected int storageUnits;
 	protected int drawers;
 	protected World world;
-	protected boolean valid = true;
 
 	public StorageDrawerHandler() {
 		this(new UpgradeData(7), new BasicDrawerAttributes(), null, 1, null);
@@ -126,7 +125,6 @@ public class StorageDrawerHandler extends ItemStackHandler implements ICapabilit
 
 	@Override
 	public void setStackInSlot(int slot, @Nonnull ItemStack stack) {
-		if (isInvalid()) return;
 		validateSlotIndex(slot);
 		IDrawer drawer = drawerGroup.getDrawer(slot);
 		drawer.setStoredItem(stack, stack.getCount());
@@ -140,7 +138,6 @@ public class StorageDrawerHandler extends ItemStackHandler implements ICapabilit
 	@Nonnull
 	@Override
 	public ItemStack getStackInSlot(int slot) {
-		if (isInvalid()) return ItemStack.EMPTY;
 		IDrawer drawer = drawerGroup.getDrawer(slot);
 		int count = drawer.getStoredItemCount();
 		if (count <= 0) return ItemStack.EMPTY;
@@ -150,8 +147,6 @@ public class StorageDrawerHandler extends ItemStackHandler implements ICapabilit
 	@Nonnull
 	@Override
 	public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
-		if (isInvalid()) return stack;
-
 		IDrawer drawer = drawerGroup.getDrawer(slot);
 		if (stack.isEmpty())
 			return ItemStack.EMPTY;
@@ -178,7 +173,6 @@ public class StorageDrawerHandler extends ItemStackHandler implements ICapabilit
 	@Nonnull
 	@Override
 	public ItemStack extractItem(int slot, int amount, boolean simulate) {
-		if (isInvalid()) return ItemStack.EMPTY;
 		if (amount == 0)
 			return ItemStack.EMPTY;
 
@@ -232,9 +226,9 @@ public class StorageDrawerHandler extends ItemStackHandler implements ICapabilit
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public CompoundNBT serializeNBT() {
 		CompoundNBT nbt = super.serializeNBT();
-		ContraptionStorageRegistry.serializeClassName(nbt, getStorageClass());
 
 		nbt.putInt("StorageUnits", storageUnits);
 		nbt.putInt("DrawersAmount", drawers);
@@ -245,6 +239,7 @@ public class StorageDrawerHandler extends ItemStackHandler implements ICapabilit
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public void deserializeNBT(CompoundNBT nbt) {
 		super.deserializeNBT(nbt);
 
@@ -260,23 +255,9 @@ public class StorageDrawerHandler extends ItemStackHandler implements ICapabilit
 		return new ContraptionDrawerGroup(drawers);
 	}
 
-	protected Class<? extends TileEntity> getStorageClass() {
-		return TileEntityDrawersStandard.class;
-	}
-
 	@Override
 	public void applyWorld(World world) {
 		this.world = world;
-	}
-
-	@Override
-	public boolean isInvalid() {
-		return !valid;
-	}
-
-	@Override
-	public void invalidate() {
-		valid = false;
 	}
 
 	@Override
@@ -284,6 +265,11 @@ public class StorageDrawerHandler extends ItemStackHandler implements ICapabilit
 		TileEntityDrawersStandard drawer = (TileEntityDrawersStandard) te;
 		copyItemsTo(drawer);
 		return false;
+	}
+
+	@Override
+	protected ContraptionStorageRegistry registry() {
+		return StorageDrawersRegistry.INSTANCE.get();
 	}
 
 	public class ContraptionDrawerGroup extends StandardDrawerGroup {

@@ -1,18 +1,17 @@
 package com.juh9870.pooptrain;
 
-import com.juh9870.pooptrain.helpers.AdvancedStackHandlerRegistry;
-import com.juh9870.pooptrain.helpers.VoidingStackHandlerRegistry;
 import com.juh9870.pooptrain.integrations.enderstorage.EnderStorageRegistry;
 import com.juh9870.pooptrain.integrations.immersiveengineering.ImmersiveEngineeringRegistry;
 import com.juh9870.pooptrain.integrations.industrialforegoing.IndustrialForegoingRegistry;
 import com.juh9870.pooptrain.integrations.ironchests.IronChestsRegistry;
-import com.juh9870.pooptrain.integrations.storagedrawers.FramedCompactDrawersRegistry;
+import com.juh9870.pooptrain.integrations.pneumaticcraft.PneumaticcraftRegistry;
 import com.juh9870.pooptrain.integrations.storagedrawers.StorageDrawersRegistry;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.ModList;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.IForgeRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,37 +19,25 @@ import org.apache.logging.log4j.Logger;
 @Mod("pooptrain")
 public class PoopTrain {
 	public static final Logger LOGGER = LogManager.getLogger();
-	public static int managerGeneration = 0;
 
 	public PoopTrain() {
 		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-		modEventBus.addListener(PoopTrain::init);
+		modEventBus.register(this);
+		ContraptionStorageRegistry.STORAGES.register(modEventBus);
 	}
 
-	public static void init(FMLCommonSetupEvent event) {
-		AdvancedStackHandlerRegistry.register();
-		VoidingStackHandlerRegistry.register();
+	@SubscribeEvent
+	public void registerModules(RegistryEvent.Register<ContraptionStorageRegistry> event) {
+		IForgeRegistry<ContraptionStorageRegistry> registry = event.getRegistry();
+		EnderStorageRegistry.register(registry);
+		IronChestsRegistry.register(registry);
+		StorageDrawersRegistry.register(registry);
+		ImmersiveEngineeringRegistry.register(registry);
+		IndustrialForegoingRegistry.register(registry);
+		PneumaticcraftRegistry.register(registry);
+	}
 
-		if (ModList.get().isLoaded("enderstorage")) {
-			EnderStorageRegistry.register();
-		}
-		if (ModList.get().isLoaded("ironchest")) {
-			IronChestsRegistry.register();
-		}
-		if (ModList.get().isLoaded("storagedrawers")) {
-			StorageDrawersRegistry.register();
-
-			if (ModList.get().isLoaded("framedcompactdrawers")) {
-				FramedCompactDrawersRegistry.register();
-			}
-		}
-
-		if (ModList.get().isLoaded("immersiveengineering")) {
-			ImmersiveEngineeringRegistry.register();
-		}
-
-		if (ModList.get().isLoaded("industrialforegoing")) {
-			IndustrialForegoingRegistry.register();
-		}
+	public static void breakpoint(){
+		LOGGER.debug("POOP!");
 	}
 }
