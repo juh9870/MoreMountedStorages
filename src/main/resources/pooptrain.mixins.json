@@ -4,9 +4,9 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "pooptrain.refmap.json",
   "mixins": [
+    "ContraptionMixin",
     "MountedStorageMixin",
     "enderstorage.EnderStorageManagerMixin",
-    "ContraptionMixin",
     "storagedrawers.InventoryUpgradeMixin"
   ],
   "minVersion": "0.8"

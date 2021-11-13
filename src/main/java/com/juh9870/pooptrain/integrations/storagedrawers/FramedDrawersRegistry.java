@@ -4,19 +4,10 @@ import com.juh9870.pooptrain.ContraptionStorageRegistry;
 import eutros.framedcompactdrawers.block.ModBlocks;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.common.util.Lazy;
-import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.ObjectHolder;
 
 public class FramedDrawersRegistry extends StorageDrawersRegistry {
-	public static final Lazy<ContraptionStorageRegistry> INSTANCE = createIfModLoaded(
-			"framedcompactdrawers",
-			"framedcompactdrawers:drawer",
-			FramedDrawersRegistry::new
-	);
-
-	public static void register(IForgeRegistry<ContraptionStorageRegistry> registry) {
-		registry.register(INSTANCE.get());
-		FramedCompactingDrawerRegistry.register(registry);
-	}
+	public static final Lazy<ContraptionStorageRegistry> INSTANCE = getInstance("framedcompactdrawers:drawer");
 
 	@Override
 	public TileEntityType<?>[] affectedStorages() {

@@ -1,6 +1,7 @@
 package com.juh9870.pooptrain.integrations.industrialforegoing;
 
 import com.buuz135.industrial.capability.BLHBlockItemHandlerItemStack;
+import com.juh9870.pooptrain.Config;
 import com.juh9870.pooptrain.ContraptionItemStackHandler;
 import com.juh9870.pooptrain.ContraptionStorageRegistry;
 import com.juh9870.pooptrain.helpers.FilteringItemStackHandler;
@@ -9,31 +10,21 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.ObjectHolder;
 
 import javax.annotation.Nonnull;
 
 public class IndustrialForegoingControllerRegistry extends ContraptionStorageRegistry {
-	public static final Lazy<ContraptionStorageRegistry> INSTANCE = createIfModLoaded(
-			"industrialforegoing",
-			"industrialforegoing:black_hole_controller",
-			IndustrialForegoingControllerRegistry::new
-	);
+	public static final Lazy<ContraptionStorageRegistry> INSTANCE = getInstance("industrialforegoing:black_hole_controller");
 
-	private static final Lazy<TileEntityType<?>[]> affectedStorages = Lazy.of(() -> {
-		return new TileEntityType<?>[]{ForgeRegistries.TILE_ENTITIES.getValue(new ResourceLocation("industrialforegoing:black_hole_controller"))};
-	});
-	public static ForgeConfigSpec.ConfigValue<Boolean> enabled;
+	private static final Lazy<TileEntityType<?>[]> affectedStorages = Lazy.of(() -> new TileEntityType<?>[]{ForgeRegistries.TILE_ENTITIES.getValue(new ResourceLocation("industrialforegoing:black_hole_controller"))});
 
-	public static void register(IForgeRegistry<ContraptionStorageRegistry> registry) {
-		registry.register(INSTANCE.get());
-	}
 
 	@Override
 	public ContraptionItemStackHandler deserializeHandler(CompoundNBT nbt) {
@@ -42,7 +33,7 @@ public class IndustrialForegoingControllerRegistry extends ContraptionStorageReg
 
 	@Override
 	public boolean canUseAsStorage(TileEntity te) {
-		return super.canUseAsStorage(te) && enabled.get();
+		return super.canUseAsStorage(te) && Config.INDUSTRIAL_FOREGOING_CONTROLLER.get();
 	}
 
 	@Override

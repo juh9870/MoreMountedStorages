@@ -13,7 +13,8 @@ Suppoted mods:
     - Ender Storage https://www.curseforge.com/minecraft/mc-mods/ender-storage-1-8
     - Iron Chests https://www.curseforge.com/minecraft/mc-mods/iron-chests
     - Storage Drawers https://www.curseforge.com/minecraft/mc-mods/storage-drawers
-    - Framed Compacting Drawers https://www.curseforge.com/minecraft/mc-mods/framed-compacting-drawers'''
+    - Framed Compacting Drawers https://www.curseforge.com/minecraft/mc-mods/framed-compacting-drawers
+    - '''
 [[dependencies.pooptrain]] #optional
     modId="forge" #mandatory
     mandatory=true #mandatory

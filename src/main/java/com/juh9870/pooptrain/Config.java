@@ -1,36 +1,38 @@
 package com.juh9870.pooptrain;
 
-import com.juh9870.pooptrain.integrations.enderstorage.EnderStorageRegistry;
-import com.juh9870.pooptrain.integrations.immersiveengineering.ImmersiveEngineeringRegistry;
-import com.juh9870.pooptrain.integrations.industrialforegoing.IndustrialForegoingRegistry;
-import com.juh9870.pooptrain.integrations.ironchests.IronChestsRegistry;
-import com.juh9870.pooptrain.integrations.pneumaticcraft.PneumaticcraftRegistry;
-import com.juh9870.pooptrain.integrations.storagedrawers.CompactingDrawerRegistry;
-import com.juh9870.pooptrain.integrations.storagedrawers.StorageDrawersRegistry;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 public final class Config {
 	public static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 	public static final ForgeConfigSpec SPEC;
 
+	public static final ForgeConfigSpec.ConfigValue<Boolean> ENDER_STORAGE;
+	public static final ForgeConfigSpec.ConfigValue<Boolean> IMMERSIVE_ENGINEERING;
+	public static final ForgeConfigSpec.ConfigValue<Boolean> INDUSTRIAL_FOREGOING_UNIT;
+	public static final ForgeConfigSpec.ConfigValue<Boolean> INDUSTRIAL_FOREGOING_CONTROLLER;
+	public static final ForgeConfigSpec.ConfigValue<Boolean> IRON_CHESTS;
+	public static final ForgeConfigSpec.ConfigValue<Boolean> PNEUMATICCRAFT;
+	public static final ForgeConfigSpec.ConfigValue<Boolean> STORAGE_DRAWERS;
+	public static final ForgeConfigSpec.ConfigValue<Boolean> COMPACTING_DRAWER;
+
 	static {
-		BUILDER.push("Mod integration config");
+		BUILDER.comment("Mod integration config").push("integration");
 		{
-			EnderStorageRegistry.enabled = BUILDER.comment("Enables Ender Storage integration. Default value is true").define("EnderStorage", true);
-			ImmersiveEngineeringRegistry.enabled = BUILDER.comment("Enables Immersive Engineering integration. Default value is true").define("ImmersiveEngineering", true);
-			BUILDER.push("Industrial Foregoing");
+			ENDER_STORAGE = BUILDER.comment("Enables Ender Storage integration. Default value is true").define("EnderStorage", true);
+			IMMERSIVE_ENGINEERING = BUILDER.comment("Enables Immersive Engineering integration. Default value is true").define("ImmersiveEngineering", true);
+			BUILDER.comment("Industrial Foregoing").push("IndustrialForegoing");
 			{
-				IndustrialForegoingRegistry.enabled = BUILDER.comment("Enables Black Hole Unit integration. Default value is true").define("IndustrialForegoingUnit", true);
-				IndustrialForegoingRegistry.enabled = BUILDER.comment("Enables Black Hole Controller integration. Default value is true").define("IndustrialForegoingController", true);
+				INDUSTRIAL_FOREGOING_UNIT = BUILDER.comment("Enables Black Hole Unit integration. Default value is true").define("BlackHoleUnit", true);
+				INDUSTRIAL_FOREGOING_CONTROLLER = BUILDER.comment("Enables Black Hole Controller integration. Default value is true").define("BlackHoleController", true);
 			}
 			BUILDER.pop();
-			IronChestsRegistry.enabled = BUILDER.comment("Enables Iron Chest integration. Default value is true").define("IronChest", true);
-			PneumaticcraftRegistry.enabled = BUILDER.comment("Enables Pneumaticcraft integration. Default value is true").define("Pneumaticcraft", true);
-			BUILDER.push("Storage Drawers");
+			IRON_CHESTS = BUILDER.comment("Enables Iron Chest integration. Default value is true").define("IronChest", true);
+			PNEUMATICCRAFT = BUILDER.comment("Enables Pneumaticcraft integration. Default value is true").define("Pneumaticcraft", true);
+			BUILDER.comment("Storage Drawers").push("StorageDrawers");
 			{
 				BUILDER.comment("Framed Compacting Drawers integration follow this setting too");
-				StorageDrawersRegistry.enabled = BUILDER.comment("Enables standard drawers integration. Default value is true").define("StorageDrawersStandard", true);
-				CompactingDrawerRegistry.enabled = BUILDER.comment("Enables compacting drawers integration. Default value is true").define("StorageDrawersCompacting", true);
+				STORAGE_DRAWERS = BUILDER.comment("Enables standard drawers integration. Default value is true").define("Standard", true);
+				COMPACTING_DRAWER = BUILDER.comment("Enables compacting drawers integration. Default value is true").define("Compacting", true);
 			}
 			BUILDER.pop();
 		}

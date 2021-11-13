@@ -4,9 +4,11 @@ import com.simibubi.create.Create;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
@@ -50,34 +52,34 @@ public abstract class ContraptionStorageRegistry extends ForgeRegistryEntry<Cont
 	}
 
 	/**
-	 * Helper method to conditionally register handlers. Returns value from {@code supplier} parameter if {@code condition} returns true, otherwise generates new {@link DummyHandler} and returns it
+	 * Helper method to conditionally register handlers. Registers value from {@code supplier} parameter if {@code condition} returns true, otherwise generates new {@link DummyHandler} and registers it
 	 *
+	 * @param registry     registry for entry registering
 	 * @param condition    Loading condition supplier
 	 * @param registryName Name to register the entry under
 	 * @param supplier     Supplier to get the entry
-	 * @return registered entry or dummy entry if target mod or version is not found
 	 */
-	protected static Lazy<ContraptionStorageRegistry> createConditionally(Supplier<Boolean> condition, String registryName, Supplier<ContraptionStorageRegistry> supplier) {
-		return Lazy.of(() -> {
-			if (condition.get()) {
-				return supplier.get().setRegistryName(registryName);
-			} else {
-				return new DummyHandler().setRegistryName(registryName);
-			}
-		});
+	public static void registerConditionally(IForgeRegistry<ContraptionStorageRegistry> registry, Supplier<Boolean> condition, String registryName, Supplier<ContraptionStorageRegistry> supplier) {
+		ContraptionStorageRegistry entry;
+		if (condition.get()) {
+			entry = supplier.get().setRegistryName(registryName);
+		} else {
+			entry = new DummyHandler().setRegistryName(registryName);
+		}
+		registry.register(entry);
 	}
 
 
 	/**
-	 * Helper method to conditionally register handlers based on if specified mod is loaded. Returns value from {@code supplier} parameter if specified mod is loaded, otherwise generates new {@link DummyHandler} and returns it
+	 * Helper method to conditionally register handlers based on if specified mod is loaded. Registers value from {@code supplier} parameter if specified mod is loaded, otherwise generates new {@link DummyHandler} and registers it
 	 *
+	 * @param registry     registry for entry registering
 	 * @param modid        Required mod ID
 	 * @param registryName Name to register the entry under
 	 * @param supplier     Supplier to get the entry
-	 * @return registered entry or dummy entry if target mod or version is not found
 	 */
-	protected static Lazy<ContraptionStorageRegistry> createIfModLoaded(String modid, String registryName, Supplier<ContraptionStorageRegistry> supplier) {
-		return createConditionally(() -> ModList.get().isLoaded(modid), registryName, supplier);
+	public static void registerIfModLoaded(IForgeRegistry<ContraptionStorageRegistry> registry, String modid, String registryName, Supplier<ContraptionStorageRegistry> supplier) {
+		registerConditionally(registry, () -> ModList.get().isLoaded(modid), registryName, supplier);
 	}
 
 	/**
@@ -88,6 +90,10 @@ public abstract class ContraptionStorageRegistry extends ForgeRegistryEntry<Cont
 	 */
 	protected static IItemHandler getHandlerFromDefaultCapability(TileEntity te) {
 		return te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(dummyHandler);
+	}
+
+	protected static Lazy<ContraptionStorageRegistry> getInstance(String id) {
+		return Lazy.of(() -> REGISTRY.get().getValue(new ResourceLocation(id)));
 	}
 
 	/**

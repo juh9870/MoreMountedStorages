@@ -1,6 +1,7 @@
 package com.juh9870.pooptrain.integrations.industrialforegoing;
 
 import com.buuz135.industrial.utils.Reference;
+import com.juh9870.pooptrain.Config;
 import com.juh9870.pooptrain.ContraptionItemStackHandler;
 import com.juh9870.pooptrain.ContraptionStorageRegistry;
 import com.juh9870.pooptrain.helpers.AdvancedItemStackHandler;
@@ -9,22 +10,17 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.ObjectHolder;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class IndustrialForegoingRegistry extends ContraptionStorageRegistry {
 
-	public static final Lazy<ContraptionStorageRegistry> INSTANCE = createIfModLoaded(
-			"industrialforegoing",
-			"industrialforegoing:black_hole_unit",
-			IndustrialForegoingRegistry::new
-	);
+	public static final Lazy<ContraptionStorageRegistry> INSTANCE = getInstance("industrialforegoing:black_hole_unit");
 	private static final Lazy<TileEntityType<?>[]> affectedStorages = Lazy.of(() -> {
 		List<TileEntityType<?>> values = new ArrayList<>();
 
@@ -35,16 +31,11 @@ public class IndustrialForegoingRegistry extends ContraptionStorageRegistry {
 
 		return values.toArray(new TileEntityType<?>[0]);
 	});
-	public static ForgeConfigSpec.ConfigValue<Boolean> enabled;
 
-	public static void register(IForgeRegistry<ContraptionStorageRegistry> registry) {
-		registry.register(INSTANCE.get());
-		IndustrialForegoingControllerRegistry.register(registry);
-	}
 
 	@Override
 	public boolean canUseAsStorage(TileEntity te) {
-		return super.canUseAsStorage(te) && enabled.get();
+		return super.canUseAsStorage(te) && Config.INDUSTRIAL_FOREGOING_UNIT.get();
 	}
 
 	@Override

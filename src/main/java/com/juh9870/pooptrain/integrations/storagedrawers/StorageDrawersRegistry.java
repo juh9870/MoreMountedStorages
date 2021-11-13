@@ -2,34 +2,23 @@ package com.juh9870.pooptrain.integrations.storagedrawers;
 
 import com.jaquadro.minecraft.storagedrawers.block.tile.TileEntityDrawersStandard;
 import com.jaquadro.minecraft.storagedrawers.core.ModBlocks;
+import com.juh9870.pooptrain.Config;
 import com.juh9870.pooptrain.ContraptionItemStackHandler;
 import com.juh9870.pooptrain.ContraptionStorageRegistry;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
-import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.util.Lazy;
-import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.ObjectHolder;
 
 public class StorageDrawersRegistry extends ContraptionStorageRegistry {
-	public static final Lazy<ContraptionStorageRegistry> INSTANCE = createIfModLoaded(
-			"storagedrawers",
-			"storagedrawers:drawer",
-			StorageDrawersRegistry::new
-	);
+	public static final Lazy<ContraptionStorageRegistry> INSTANCE = getInstance("storagedrawers:drawer");
 
-	public static void register(IForgeRegistry<ContraptionStorageRegistry> registry) {
-		registry.register(INSTANCE.get());
-		CompactingDrawerRegistry.register(registry);
-		FramedDrawersRegistry.register(registry);
-	}
-
-	public static ForgeConfigSpec.ConfigValue<Boolean> enabled;
 
 	@Override
 	public boolean canUseAsStorage(TileEntity te) {
 		TileEntityDrawersStandard drawer = (TileEntityDrawersStandard) te;
-		return drawer.isGroupValid() && enabled.get();
+		return drawer.isGroupValid() && Config.STORAGE_DRAWERS.get();
 	}
 
 	@Override

@@ -30,7 +30,9 @@ public abstract class ContraptionItemStackHandler extends ItemStackHandler {
 	}
 
 
-	/** Returns associated {@link ContraptionStorageRegistry}
+	/**
+	 * Returns associated {@link ContraptionStorageRegistry}
+	 *
 	 * @return associated registry
 	 */
 	protected abstract ContraptionStorageRegistry registry();

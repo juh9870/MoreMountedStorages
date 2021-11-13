@@ -2,33 +2,23 @@ package com.juh9870.pooptrain.integrations.enderstorage;
 
 import codechicken.enderstorage.init.ModContent;
 import codechicken.enderstorage.tile.TileEnderChest;
+import com.juh9870.pooptrain.Config;
 import com.juh9870.pooptrain.ContraptionItemStackHandler;
 import com.juh9870.pooptrain.ContraptionStorageRegistry;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
-import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.util.Lazy;
-import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.ObjectHolder;
 
 public class EnderStorageRegistry extends ContraptionStorageRegistry {
-	public static final Lazy<ContraptionStorageRegistry> INSTANCE =
-			createIfModLoaded(
-					"enderstorage",
-					"enderstorage:ender_chest",
-					EnderStorageRegistry::new);
-
-	public static ForgeConfigSpec.ConfigValue<Boolean> enabled;
+	public static final Lazy<ContraptionStorageRegistry> INSTANCE = getInstance("enderstorage:ender_chest");
 
 	public static int managerGeneration = 0;
 
-	public static void register(IForgeRegistry<ContraptionStorageRegistry> registry) {
-		registry.register(INSTANCE.get());
-	}
-
 	@Override
 	public boolean canUseAsStorage(TileEntity te) {
-		return super.canUseAsStorage(te) && enabled.get();
+		return super.canUseAsStorage(te) && Config.ENDER_STORAGE.get();
 	}
 
 	@Override
