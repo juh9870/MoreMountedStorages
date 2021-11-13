@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "com.juh9870.moremountedstorages.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "moremountedstorages.refmap.json",
+  "mixins": [
+    "ContraptionMixin",
+    "MountedStorageMixin",
+    "enderstorage.EnderStorageManagerMixin",
+    "storagedrawers.InventoryUpgradeMixin"
+  ],
+  "minVersion": "0.8"
+}

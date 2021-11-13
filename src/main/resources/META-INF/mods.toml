@@ -2,11 +2,11 @@ modLoader="javafml" #mandatory
 loaderVersion="[36,)"
 license="MIT"
 [[mods]]
-    modId="pooptrain" #mandatory
+    modId="moremountedstorages" #mandatory
     version="${file.jarVersion}" #mandatory
     displayName="Poop Train" #mandatory
     logoFile="logo.png" #optional
-    issueTrackerURL="https://github.com/juh9870/PoopTrain/issues" #optional
+    issueTrackerURL="https://github.com/juh9870/MoreMountedStorages/issues" #optional
     authors="juh9870" #optional
     description='''Allows storages from various mods to be used as a part of Create moving contraptions.
 Suppoted mods:
@@ -17,56 +17,56 @@ Suppoted mods:
     - Immersive Engineering https://www.curseforge.com/minecraft/mc-mods/immersive-engineering
     - Industrial Foregoing https://www.curseforge.com/minecraft/mc-mods/industrial-foregoing
     - PneumaticCraft: Repressurized https://www.curseforge.com/minecraft/mc-mods/pneumaticcraft-repressurized'''
-[[dependencies.pooptrain]] #optional
+[[dependencies.moremountedstorages]] #optional
     modId="forge" #mandatory
     mandatory=true #mandatory
     versionRange="[36,)" #mandatory
     ordering="NONE"
     side="BOTH"
 # Here's another dependency
-[[dependencies.pooptrain]]
+[[dependencies.moremountedstorages]]
     modId="minecraft"
     mandatory=true
     versionRange="[1.16.5,1.17)"
     ordering="NONE"
     side="BOTH"
-[[dependencies.pooptrain]]
+[[dependencies.moremountedstorages]]
     modId="create"
     mandatory=true
     versionRange="[mc1.16.5_v0.3.2,)" #keep updated
     ordering="NONE"
     side="BOTH"
-[[dependencies.pooptrain]]
+[[dependencies.moremountedstorages]]
     modId="enderstorage"
     mandatory=false
     versionRange="[1.16.5-4.0.3.0,)" #keep updated
     ordering="AFTER"
     side="BOTH"
-[[dependencies.pooptrain]]
+[[dependencies.moremountedstorages]]
     modId="storagedrawers"
     mandatory=false
     versionRange="[1.16.3-8.3.0,)" #keep updated
     ordering="AFTER"
     side="BOTH"
-[[dependencies.pooptrain]]
+[[dependencies.moremountedstorages]]
     modId="framedcompactdrawers"
     mandatory=false
     versionRange="[1.16-2.2.1,)" #keep updated
     ordering="AFTER"
     side="BOTH"
-[[dependencies.pooptrain]]
+[[dependencies.moremountedstorages]]
     modId="immersiveengineering"
     mandatory=false
     versionRange="[1.16.5-5.0.5-140,)" #keep updated
     ordering="AFTER"
     side="BOTH"
-[[dependencies.pooptrain]]
+[[dependencies.moremountedstorages]]
     modId="industrialforegoing"
     mandatory=false
     versionRange="[1.16.5-3.2.14.6-14,)" #keep updated
     ordering="AFTER"
     side="BOTH"
-[[dependencies.pooptrain]]
+[[dependencies.moremountedstorages]]
     modId="pneumaticcraft"
     mandatory=false
     versionRange="[1.16.5-2.14.4-258,)" #keep updated
