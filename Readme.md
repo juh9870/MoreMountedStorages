@@ -1,4 +1,4 @@
-![banner](banner.gif "Banner")
+<p align="center"><img src="https://imgur.com/yrrR3Lf.gif" alt="Logo"></p>
 **This mod is in an alpha state, and I will be really surprised if nothing breaks while using it, so for the love of the almighty Notch, make backup of your world before using this mod**
 
 **More Mounted Storages** mod allows for a greater variety of the modded storages to be used as a part of Create moving contraptions, as well as providing an API for other mod makers to add their own types of mounted storages.
