@@ -7,6 +7,7 @@ import com.juh9870.pooptrain.ContraptionStorageRegistry;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.registries.IForgeRegistry;
 
@@ -17,10 +18,17 @@ public class EnderStorageRegistry extends ContraptionStorageRegistry {
 					"enderstorage:ender_chest",
 					EnderStorageRegistry::new);
 
+	public static ForgeConfigSpec.ConfigValue<Boolean> enabled;
+
 	public static int managerGeneration = 0;
 
 	public static void register(IForgeRegistry<ContraptionStorageRegistry> registry) {
 		registry.register(INSTANCE.get());
+	}
+
+	@Override
+	public boolean canUseAsStorage(TileEntity te) {
+		return super.canUseAsStorage(te) && enabled.get();
 	}
 
 	@Override

@@ -7,6 +7,7 @@ import com.juh9870.pooptrain.ContraptionStorageRegistry;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.registries.IForgeRegistry;
 
@@ -17,6 +18,8 @@ public class CompactingDrawerRegistry extends ContraptionStorageRegistry {
 			CompactingDrawerRegistry::new
 	);
 
+	public static ForgeConfigSpec.ConfigValue<Boolean> enabled;
+
 	public static void register(IForgeRegistry<ContraptionStorageRegistry> registry) {
 		registry.register(INSTANCE.get());
 	}
@@ -24,7 +27,7 @@ public class CompactingDrawerRegistry extends ContraptionStorageRegistry {
 	@Override
 	public boolean canUseAsStorage(TileEntity te) {
 		TileEntityDrawersComp drawer = (TileEntityDrawersComp) te;
-		return drawer.isGroupValid();
+		return drawer.isGroupValid() && enabled.get();
 	}
 
 	@Override

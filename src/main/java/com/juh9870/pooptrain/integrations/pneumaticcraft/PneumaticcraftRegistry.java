@@ -8,6 +8,7 @@ import me.desht.pneumaticcraft.common.tileentity.TileEntitySmartChest;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModList;
@@ -36,6 +37,7 @@ public class PneumaticcraftRegistry extends ContraptionStorageRegistry {
 			"pneumaticcraft:smart_chest",
 			PneumaticcraftRegistry::new
 	);
+	public static ForgeConfigSpec.ConfigValue<Boolean> enabled;
 
 	public static void register(IForgeRegistry<ContraptionStorageRegistry> registry) {
 		registry.register(INSTANCE.get());
@@ -50,7 +52,7 @@ public class PneumaticcraftRegistry extends ContraptionStorageRegistry {
 
 	@Override
 	public boolean canUseAsStorage(TileEntity te) {
-		return getHandlerFromDefaultCapability(te) instanceof TileEntitySmartChest.SmartChestItemHandler;
+		return getHandlerFromDefaultCapability(te) instanceof TileEntitySmartChest.SmartChestItemHandler && enabled.get();
 	}
 
 	@Override

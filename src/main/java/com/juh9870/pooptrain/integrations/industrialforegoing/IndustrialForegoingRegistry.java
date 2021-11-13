@@ -1,6 +1,5 @@
 package com.juh9870.pooptrain.integrations.industrialforegoing;
 
-import com.buuz135.industrial.block.transportstorage.tile.BlackHoleUnitTile;
 import com.buuz135.industrial.utils.Reference;
 import com.juh9870.pooptrain.ContraptionItemStackHandler;
 import com.juh9870.pooptrain.ContraptionStorageRegistry;
@@ -10,6 +9,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -25,7 +25,6 @@ public class IndustrialForegoingRegistry extends ContraptionStorageRegistry {
 			"industrialforegoing:black_hole_unit",
 			IndustrialForegoingRegistry::new
 	);
-
 	private static final Lazy<TileEntityType<?>[]> affectedStorages = Lazy.of(() -> {
 		List<TileEntityType<?>> values = new ArrayList<>();
 
@@ -36,10 +35,16 @@ public class IndustrialForegoingRegistry extends ContraptionStorageRegistry {
 
 		return values.toArray(new TileEntityType<?>[0]);
 	});
+	public static ForgeConfigSpec.ConfigValue<Boolean> enabled;
 
 	public static void register(IForgeRegistry<ContraptionStorageRegistry> registry) {
 		registry.register(INSTANCE.get());
 		IndustrialForegoingControllerRegistry.register(registry);
+	}
+
+	@Override
+	public boolean canUseAsStorage(TileEntity te) {
+		return super.canUseAsStorage(te) && enabled.get();
 	}
 
 	@Override

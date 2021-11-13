@@ -2,7 +2,9 @@ package com.juh9870.pooptrain.integrations.ironchests;
 
 import com.juh9870.pooptrain.ContraptionStorageRegistry;
 import com.progwml6.ironchest.common.block.tileentity.IronChestsTileEntityTypes;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.registries.IForgeRegistry;
 
@@ -13,9 +15,17 @@ public class IronChestsRegistry extends ContraptionStorageRegistry {
 			IronChestsRegistry::new
 	);
 
+	public static ForgeConfigSpec.ConfigValue<Boolean> enabled;
+
+	@Override
+	public boolean canUseAsStorage(TileEntity te) {
+		return super.canUseAsStorage(te) && enabled.get();
+	}
+
 	public static void register(IForgeRegistry<ContraptionStorageRegistry> registry) {
 		registry.register(INSTANCE.get());
 	}
+
 
 	@Override
 	public TileEntityType<?>[] affectedStorages() {

@@ -9,7 +9,9 @@ import com.juh9870.pooptrain.integrations.storagedrawers.StorageDrawersRegistry;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.IForgeRegistry;
 import org.apache.logging.log4j.LogManager;
@@ -24,6 +26,11 @@ public class PoopTrain {
 		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		modEventBus.register(this);
 		ContraptionStorageRegistry.STORAGES.register(modEventBus);
+		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC, "pooptrain-common.toml");
+	}
+
+	public static void breakpoint() {
+		LOGGER.debug("POOP!");
 	}
 
 	@SubscribeEvent
@@ -35,9 +42,5 @@ public class PoopTrain {
 		ImmersiveEngineeringRegistry.register(registry);
 		IndustrialForegoingRegistry.register(registry);
 		PneumaticcraftRegistry.register(registry);
-	}
-
-	public static void breakpoint(){
-		LOGGER.debug("POOP!");
 	}
 }

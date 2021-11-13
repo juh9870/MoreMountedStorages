@@ -9,6 +9,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -28,6 +29,7 @@ public class IndustrialForegoingControllerRegistry extends ContraptionStorageReg
 	private static final Lazy<TileEntityType<?>[]> affectedStorages = Lazy.of(() -> {
 		return new TileEntityType<?>[]{ForgeRegistries.TILE_ENTITIES.getValue(new ResourceLocation("industrialforegoing:black_hole_controller"))};
 	});
+	public static ForgeConfigSpec.ConfigValue<Boolean> enabled;
 
 	public static void register(IForgeRegistry<ContraptionStorageRegistry> registry) {
 		registry.register(INSTANCE.get());
@@ -36,6 +38,11 @@ public class IndustrialForegoingControllerRegistry extends ContraptionStorageReg
 	@Override
 	public ContraptionItemStackHandler deserializeHandler(CompoundNBT nbt) {
 		return deserializeHandler(new BlackHoleControllerItemStackHandler(), nbt);
+	}
+
+	@Override
+	public boolean canUseAsStorage(TileEntity te) {
+		return super.canUseAsStorage(te) && enabled.get();
 	}
 
 	@Override
