@@ -46,14 +46,26 @@ Suppoted mods:
     ordering="AFTER"
     side="BOTH"
 [[dependencies.pooptrain]]
-    modId="storagedrawers"
-    mandatory=false
-    versionRange="[1.16.3-8.3.0,)" #keep updated
-    ordering="AFTER"
-    side="BOTH"
-[[dependencies.pooptrain]]
     modId="framedcompactdrawers"
     mandatory=false
     versionRange="[1.16-2.2.1,)" #keep updated
+    ordering="AFTER"
+    side="BOTH"
+[[dependencies.pooptrain]]
+    modId="immersiveengineering"
+    mandatory=false
+    versionRange="[1.16.5-5.0.5-140,)" #keep updated
+    ordering="AFTER"
+    side="BOTH"
+[[dependencies.pooptrain]]
+    modId="industrialforegoing"
+    mandatory=false
+    versionRange="[1.16.5-3.2.14.6-14,)" #keep updated
+    ordering="AFTER"
+    side="BOTH"
+[[dependencies.pooptrain]]
+    modId="pneumaticcraft"
+    mandatory=false
+    versionRange="[1.16.5-2.14.4-258,)" #keep updated
     ordering="AFTER"
     side="BOTH"
