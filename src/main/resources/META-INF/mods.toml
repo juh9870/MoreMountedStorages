@@ -16,7 +16,8 @@ Suppoted mods:
     - Framed Compacting Drawers https://www.curseforge.com/minecraft/mc-mods/framed-compacting-drawers
     - Immersive Engineering https://www.curseforge.com/minecraft/mc-mods/immersive-engineering
     - Industrial Foregoing https://www.curseforge.com/minecraft/mc-mods/industrial-foregoing
-    - PneumaticCraft: Repressurized https://www.curseforge.com/minecraft/mc-mods/pneumaticcraft-repressurized'''
+    - PneumaticCraft: Repressurized https://www.curseforge.com/minecraft/mc-mods/pneumaticcraft-repressurized
+    - Expanded Storage: https://www.curseforge.com/minecraft/mc-mods/expanded-storage-forge'''
 [[dependencies.moremountedstorages]] #optional
     modId="forge" #mandatory
     mandatory=true #mandatory
@@ -63,12 +64,18 @@ Suppoted mods:
 [[dependencies.moremountedstorages]]
     modId="industrialforegoing"
     mandatory=false
-    versionRange="[1.16.5-3.2.14.6-14,)" #keep updated
+    versionRange="[1.16.5-3.2.14.7-16,)" #keep updated
     ordering="AFTER"
     side="BOTH"
 [[dependencies.moremountedstorages]]
     modId="pneumaticcraft"
     mandatory=false
     versionRange="[1.16.5-2.14.4-258,)" #keep updated
+    ordering="AFTER"
+    side="BOTH"
+[[dependencies.moremountedstorages]]
+    modId="expandedstorage"
+    mandatory=false
+    versionRange="[7.0.1,)" #keep updated
     ordering="AFTER"
     side="BOTH"
