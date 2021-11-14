@@ -1,5 +1,6 @@
 package com.juh9870.moremountedstorages.integrations.industrialforegoing;
 
+import com.buuz135.industrial.block.transportstorage.tile.BlackHoleUnitTile;
 import com.buuz135.industrial.utils.Reference;
 import com.juh9870.moremountedstorages.Config;
 import com.juh9870.moremountedstorages.ContraptionItemStackHandler;
@@ -14,7 +15,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.ObjectHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,12 +51,12 @@ public class IndustrialForegoingRegistry extends ContraptionStorageRegistry {
 
 	@Override
 	public ContraptionItemStackHandler createHandler(TileEntity te) {
-		IItemHandler bhHandler = getHandlerFromDefaultCapability(te);
+		BlackHoleUnitTile bhu = (BlackHoleUnitTile) te;
+		IItemHandler bhHandler = getHandlerFromDefaultCapability(bhu);
 		if (bhHandler == dummyHandler) {
 			return null;
 		}
-		boolean voiding = te.serializeNBT().getBoolean("voidItems");
-		return new BlackHoleItemStackHandler(bhHandler).setVoiding(voiding);
+		return new BlackHoleItemStackHandler(bhHandler).setVoiding(bhu.isVoidItems());
 	}
 
 	@Override

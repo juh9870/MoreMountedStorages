@@ -1,6 +1,8 @@
 package com.juh9870.moremountedstorages.integrations.industrialforegoing;
 
+import com.buuz135.industrial.block.transportstorage.tile.BlackHoleControllerTile;
 import com.buuz135.industrial.capability.BLHBlockItemHandlerItemStack;
+import com.hrznstudio.titanium.component.inventory.InventoryComponent;
 import com.juh9870.moremountedstorages.Config;
 import com.juh9870.moremountedstorages.ContraptionItemStackHandler;
 import com.juh9870.moremountedstorages.ContraptionStorageRegistry;
@@ -46,6 +48,7 @@ public class IndustrialForegoingControllerRegistry extends ContraptionStorageReg
 
 	@Override
 	public ContraptionItemStackHandler createHandler(TileEntity te) {
+		BlackHoleControllerTile bhc = (BlackHoleControllerTile) te;
 		IItemHandler bhHandler = getHandlerFromDefaultCapability(te);
 		if (bhHandler == dummyHandler) {
 			return null;
@@ -53,19 +56,16 @@ public class IndustrialForegoingControllerRegistry extends ContraptionStorageReg
 
 		BlackHoleControllerItemStackHandler handler = new BlackHoleControllerItemStackHandler(bhHandler);
 
-		ItemStackHandler units = new ItemStackHandler();
-		units.deserializeNBT((CompoundNBT) te.serializeNBT().get("units_storage"));
+		InventoryComponent<BlackHoleControllerTile> units = bhc.getUnitsStorage();
 		for (int i = 0; i < units.getSlots(); i++) {
 			ItemStack unit = units.getStackInSlot(i);
 			if (unit.isEmpty()) continue;
 			IItemHandler unitHandler = unit.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElseGet(() -> dummyHandler);
+			boolean voiding = true;
 			if (unitHandler instanceof BLHBlockItemHandlerItemStack) {
 				handler.setFilter(i, ((BLHBlockItemHandlerItemStack) unitHandler).getStack());
+				voiding = ((BLHBlockItemHandlerItemStack) unitHandler).getVoid();
 			}
-			boolean voiding = !unit.hasTag() ||
-					!unit.getTag().contains("BlockEntityTag") ||
-					!unit.getTag().getCompound("BlockEntityTag").contains("voidItems") ||
-					unit.getTag().getCompound("BlockEntityTag").getBoolean("voidItems");
 			handler.setVoiding(i, voiding);
 		}
 
