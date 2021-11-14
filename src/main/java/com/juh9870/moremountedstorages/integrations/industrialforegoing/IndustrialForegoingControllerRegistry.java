@@ -4,6 +4,7 @@ import com.buuz135.industrial.capability.BLHBlockItemHandlerItemStack;
 import com.juh9870.moremountedstorages.Config;
 import com.juh9870.moremountedstorages.ContraptionItemStackHandler;
 import com.juh9870.moremountedstorages.ContraptionStorageRegistry;
+import com.juh9870.moremountedstorages.Utils;
 import com.juh9870.moremountedstorages.helpers.FilteringItemStackHandler;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -14,17 +15,19 @@ import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.ObjectHolder;
 
 import javax.annotation.Nonnull;
 
 public class IndustrialForegoingControllerRegistry extends ContraptionStorageRegistry {
-	public static final Lazy<ContraptionStorageRegistry> INSTANCE = getInstance("industrialforegoing:black_hole_controller");
+	public static final Lazy<ContraptionStorageRegistry> INSTANCE = getInstance(Utils.constructId("industrialforegoing", "black_hole_controller"));
 
 	private static final Lazy<TileEntityType<?>[]> affectedStorages = Lazy.of(() -> new TileEntityType<?>[]{ForgeRegistries.TILE_ENTITIES.getValue(new ResourceLocation("industrialforegoing:black_hole_controller"))});
 
+	@Override
+	public Priority getPriority() {
+		return Priority.ADDON;
+	}
 
 	@Override
 	public ContraptionItemStackHandler deserializeHandler(CompoundNBT nbt) {

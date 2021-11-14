@@ -2,6 +2,7 @@ package com.juh9870.moremountedstorages.integrations.ironchests;
 
 import com.juh9870.moremountedstorages.Config;
 import com.juh9870.moremountedstorages.ContraptionStorageRegistry;
+import com.juh9870.moremountedstorages.Utils;
 import com.progwml6.ironchest.common.block.tileentity.IronChestsTileEntityTypes;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
@@ -9,7 +10,7 @@ import net.minecraftforge.common.util.Lazy;
 
 public class IronChestsRegistry extends ContraptionStorageRegistry {
 	//@ObjectHolder("")
-	public static final Lazy<ContraptionStorageRegistry> INSTANCE = getInstance("ironchest:chest");
+	public static final Lazy<ContraptionStorageRegistry> INSTANCE = getInstance(Utils.constructId("ironchest", "chest"));
 
 
 	@Override
@@ -17,6 +18,10 @@ public class IronChestsRegistry extends ContraptionStorageRegistry {
 		return super.canUseAsStorage(te) && Config.IRON_CHESTS.get();
 	}
 
+	@Override
+	public Priority getPriority() {
+		return Priority.ADDON;
+	}
 
 	@Override
 	public TileEntityType<?>[] affectedStorages() {

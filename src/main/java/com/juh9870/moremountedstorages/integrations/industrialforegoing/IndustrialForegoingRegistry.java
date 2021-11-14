@@ -4,6 +4,7 @@ import com.buuz135.industrial.utils.Reference;
 import com.juh9870.moremountedstorages.Config;
 import com.juh9870.moremountedstorages.ContraptionItemStackHandler;
 import com.juh9870.moremountedstorages.ContraptionStorageRegistry;
+import com.juh9870.moremountedstorages.Utils;
 import com.juh9870.moremountedstorages.helpers.AdvancedItemStackHandler;
 import net.minecraft.item.Rarity;
 import net.minecraft.nbt.CompoundNBT;
@@ -20,7 +21,7 @@ import java.util.List;
 
 public class IndustrialForegoingRegistry extends ContraptionStorageRegistry {
 
-	public static final Lazy<ContraptionStorageRegistry> INSTANCE = getInstance("industrialforegoing:black_hole_unit");
+	public static final Lazy<ContraptionStorageRegistry> INSTANCE = getInstance(Utils.constructId("industrialforegoing", "black_hole_unit"));
 	private static final Lazy<TileEntityType<?>[]> affectedStorages = Lazy.of(() -> {
 		List<TileEntityType<?>> values = new ArrayList<>();
 
@@ -32,6 +33,11 @@ public class IndustrialForegoingRegistry extends ContraptionStorageRegistry {
 		return values.toArray(new TileEntityType<?>[0]);
 	});
 
+
+	@Override
+	public Priority getPriority() {
+		return Priority.ADDON;
+	}
 
 	@Override
 	public boolean canUseAsStorage(TileEntity te) {

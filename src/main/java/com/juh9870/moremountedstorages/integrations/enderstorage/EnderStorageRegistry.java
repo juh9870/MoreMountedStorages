@@ -5,20 +5,25 @@ import codechicken.enderstorage.tile.TileEnderChest;
 import com.juh9870.moremountedstorages.Config;
 import com.juh9870.moremountedstorages.ContraptionItemStackHandler;
 import com.juh9870.moremountedstorages.ContraptionStorageRegistry;
+import com.juh9870.moremountedstorages.Utils;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.common.util.Lazy;
-import net.minecraftforge.registries.ObjectHolder;
 
 public class EnderStorageRegistry extends ContraptionStorageRegistry {
-	public static final Lazy<ContraptionStorageRegistry> INSTANCE = getInstance("enderstorage:ender_chest");
+	public static final Lazy<ContraptionStorageRegistry> INSTANCE = getInstance(Utils.constructId("enderstorage", "ender_chest"));
 
 	public static int managerGeneration = 0;
 
 	@Override
 	public boolean canUseAsStorage(TileEntity te) {
 		return super.canUseAsStorage(te) && Config.ENDER_STORAGE.get();
+	}
+
+	@Override
+	public Priority getPriority() {
+		return Priority.ADDON;
 	}
 
 	@Override

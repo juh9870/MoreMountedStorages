@@ -5,6 +5,7 @@ import com.jaquadro.minecraft.storagedrawers.core.ModBlocks;
 import com.juh9870.moremountedstorages.Config;
 import com.juh9870.moremountedstorages.ContraptionItemStackHandler;
 import com.juh9870.moremountedstorages.ContraptionStorageRegistry;
+import com.juh9870.moremountedstorages.Utils;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
@@ -12,7 +13,7 @@ import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.registries.ObjectHolder;
 
 public class StorageDrawersRegistry extends ContraptionStorageRegistry {
-	public static final Lazy<ContraptionStorageRegistry> INSTANCE = getInstance("storagedrawers:drawer");
+	public static final Lazy<ContraptionStorageRegistry> INSTANCE = getInstance(Utils.constructId("storagedrawers", "drawer"));
 
 
 	@Override
@@ -33,6 +34,11 @@ public class StorageDrawersRegistry extends ContraptionStorageRegistry {
 	@Override
 	public ContraptionItemStackHandler createHandler(TileEntity te) {
 		return new StorageDrawerHandler((TileEntityDrawersStandard) te);
+	}
+
+	@Override
+	public Priority getPriority() {
+		return Priority.ADDON;
 	}
 
 	@Override

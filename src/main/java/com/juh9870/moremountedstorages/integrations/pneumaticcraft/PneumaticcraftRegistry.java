@@ -3,6 +3,7 @@ package com.juh9870.moremountedstorages.integrations.pneumaticcraft;
 import com.juh9870.moremountedstorages.Config;
 import com.juh9870.moremountedstorages.ContraptionItemStackHandler;
 import com.juh9870.moremountedstorages.ContraptionStorageRegistry;
+import com.juh9870.moremountedstorages.Utils;
 import com.juh9870.moremountedstorages.helpers.WrapperStackHandler;
 import me.desht.pneumaticcraft.common.core.ModTileEntities;
 import me.desht.pneumaticcraft.common.tileentity.TileEntitySmartChest;
@@ -15,7 +16,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.registries.ObjectHolder;
 
 public class PneumaticcraftRegistry extends ContraptionStorageRegistry {
-	public static final Lazy<ContraptionStorageRegistry> INSTANCE = getInstance("pneumaticcraft:smart_chest");
+	public static final Lazy<ContraptionStorageRegistry> INSTANCE = getInstance(Utils.constructId("pneumaticcraft", "smart_chest"));
 
 
 	@Override
@@ -28,6 +29,11 @@ public class PneumaticcraftRegistry extends ContraptionStorageRegistry {
 	@Override
 	public boolean canUseAsStorage(TileEntity te) {
 		return getHandlerFromDefaultCapability(te) instanceof TileEntitySmartChest.SmartChestItemHandler && Config.PNEUMATICCRAFT.get();
+	}
+
+	@Override
+	public Priority getPriority() {
+		return Priority.ADDON;
 	}
 
 	@Override

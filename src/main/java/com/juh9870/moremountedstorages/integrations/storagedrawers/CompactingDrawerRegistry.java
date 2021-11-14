@@ -5,15 +5,20 @@ import com.jaquadro.minecraft.storagedrawers.core.ModBlocks;
 import com.juh9870.moremountedstorages.Config;
 import com.juh9870.moremountedstorages.ContraptionItemStackHandler;
 import com.juh9870.moremountedstorages.ContraptionStorageRegistry;
+import com.juh9870.moremountedstorages.Utils;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.common.util.Lazy;
-import net.minecraftforge.registries.ObjectHolder;
 
 public class CompactingDrawerRegistry extends ContraptionStorageRegistry {
-	public static final Lazy<ContraptionStorageRegistry> INSTANCE = getInstance("storagedrawers:compacting_drawer");
+	public static final Lazy<ContraptionStorageRegistry> INSTANCE = getInstance(Utils.constructId("storagedrawers", "compacting_drawer"));
 
+
+	@Override
+	public Priority getPriority() {
+		return Priority.ADDON;
+	}
 
 	@Override
 	public boolean canUseAsStorage(TileEntity te) {

@@ -33,7 +33,7 @@ public class MountedStorageMixin {
 	}
 
 	@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/tileentity/TileEntity;getCapability(Lnet/minecraftforge/common/capabilities/Capability;)Lnet/minecraftforge/common/util/LazyOptional;"), method = "canUseAsStorage(Lnet/minecraft/tileentity/TileEntity;)Z", remap = false, cancellable = true)
-	private static void moremountedstorages_canUseAsStorage(TileEntity te, CallbackInfoReturnable<Boolean> cir) {
+	private static void moremountedstorages_canUseAsStorage(TileEntity te, CallbackInfoReturnable<Boolean> cir) throws ContraptionStorageRegistry.RegistryConflictException {
 		ContraptionStorageRegistry handler = ContraptionStorageRegistry.forTileEntity(te.getType());
 		if (handler != null && handler.canUseAsStorage(te)) cir.setReturnValue(true);
 	}
@@ -54,7 +54,7 @@ public class MountedStorageMixin {
 	}
 
 	@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/tileentity/TileEntity;getCapability(Lnet/minecraftforge/common/capabilities/Capability;)Lnet/minecraftforge/common/util/LazyOptional;"), method = "removeStorageFromWorld()V", remap = false, cancellable = true)
-	private void moremountedstorages_removeStorageFromWorld(CallbackInfo ci) {
+	private void moremountedstorages_removeStorageFromWorld(CallbackInfo ci) throws ContraptionStorageRegistry.RegistryConflictException {
 		ContraptionStorageRegistry storage = ContraptionStorageRegistry.forTileEntity(te.getType());
 		if (storage == null) return;
 		handler = dummyHandler;

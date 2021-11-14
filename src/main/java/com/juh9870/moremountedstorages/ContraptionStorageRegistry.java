@@ -8,7 +8,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
@@ -25,12 +24,28 @@ import java.util.function.Supplier;
 
 public abstract class ContraptionStorageRegistry extends ForgeRegistryEntry<ContraptionStorageRegistry> {
 	public static final ItemStackHandler dummyHandler = new ItemStackHandler();
-
 	public static final DeferredRegister<ContraptionStorageRegistry> STORAGES = DeferredRegister.create(ContraptionStorageRegistry.class, Create.ID);
 	public static final Supplier<IForgeRegistry<ContraptionStorageRegistry>> REGISTRY = STORAGES.makeRegistry("mountable_storage", RegistryBuilder::new);
-
 	public static final String REGISTRY_NAME = "StorageRegistryId";
 	private static Map<TileEntityType<?>, ContraptionStorageRegistry> tileEntityMappingsCache = null;
+
+	public static void initCache() throws RegistryConflictException {
+		if (tileEntityMappingsCache != null) return;
+		tileEntityMappingsCache = new HashMap<>();
+		for (ContraptionStorageRegistry registry : REGISTRY.get()) {
+			ContraptionStorageRegistry other;
+			for (TileEntityType<?> tileEntityType : registry.affectedStorages()) {
+				if ((other = tileEntityMappingsCache.get(tileEntityType)) != null) {
+					if (other.getPriority() == registry.getPriority() && other.getPriority() != Priority.DUMMY) {
+						throw new RegistryConflictException(tileEntityType, other.getClass(), registry.getClass());
+					} else if (!registry.getPriority().isOverwrite(other.getPriority()))
+						continue;
+				}
+
+				tileEntityMappingsCache.put(tileEntityType, registry);
+			}
+		}
+	}
 
 	/**
 	 * Returns registry entry that handles provided entity type, or null if no matching entry found
@@ -39,15 +54,7 @@ public abstract class ContraptionStorageRegistry extends ForgeRegistryEntry<Cont
 	 * @return matching registry entry, or null if nothing is found
 	 */
 	@Nullable
-	public static ContraptionStorageRegistry forTileEntity(TileEntityType<?> type) {
-		if (tileEntityMappingsCache == null) {
-			tileEntityMappingsCache = new HashMap<>();
-			for (ContraptionStorageRegistry registry : REGISTRY.get()) {
-				for (TileEntityType<?> tileEntityType : registry.affectedStorages()) {
-					tileEntityMappingsCache.put(tileEntityType, registry);
-				}
-			}
-		}
+	public static ContraptionStorageRegistry forTileEntity(TileEntityType<?> type) throws RegistryConflictException {
 		return tileEntityMappingsCache.get(type);
 	}
 
@@ -68,7 +75,6 @@ public abstract class ContraptionStorageRegistry extends ForgeRegistryEntry<Cont
 		}
 		registry.register(entry);
 	}
-
 
 	/**
 	 * Helper method to conditionally register handlers based on if specified mod is loaded. Registers value from {@code supplier} parameter if specified mod is loaded, otherwise generates new {@link DummyHandler} and registers it
@@ -92,9 +98,17 @@ public abstract class ContraptionStorageRegistry extends ForgeRegistryEntry<Cont
 		return te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(dummyHandler);
 	}
 
+	/**
+	 * Helper method for getting registry instance
+	 *
+	 * @param id registry name
+	 * @return Lazy with given name
+	 */
 	protected static Lazy<ContraptionStorageRegistry> getInstance(String id) {
 		return Lazy.of(() -> REGISTRY.get().getValue(new ResourceLocation(id)));
 	}
+
+	public abstract Priority getPriority();
 
 	/**
 	 * @return array of Tile Entity types handled by this registry
@@ -135,6 +149,44 @@ public abstract class ContraptionStorageRegistry extends ForgeRegistryEntry<Cont
 	}
 
 	/**
+	 * Registry priority enum
+	 * <p>
+	 * Registries with addon priority are overwritten by registries with native priority
+	 * </p>
+	 */
+	public enum Priority {
+		/**
+		 * Dummy priority, use this in case if your registry is a dummy and should be overwritten by any better option
+		 */
+		DUMMY {
+			@Override
+			public boolean isOverwrite(Priority other) {
+				return true;
+			}
+		},
+		/**
+		 * Add-on priority, use this if your registry is coming from an add-on to the external mod
+		 */
+		ADDON {
+			@Override
+			public boolean isOverwrite(Priority other) {
+				return other == DUMMY;
+			}
+		},
+		/**
+		 * Native mod priority, use this if your registry is a part of the mod it's adding support to
+		 */
+		NATIVE {
+			@Override
+			public boolean isOverwrite(Priority other) {
+				return other != NATIVE;
+			}
+		};
+
+		public abstract boolean isOverwrite(Priority other);
+	}
+
+	/**
 	 * {@link  ContraptionItemStackHandler} is provided with World after initialisation and after deserialization
 	 */
 	public interface IWorldRequiringHandler {
@@ -153,8 +205,19 @@ public abstract class ContraptionStorageRegistry extends ForgeRegistryEntry<Cont
 		}
 
 		@Override
+		public Priority getPriority() {
+			return Priority.DUMMY;
+		}
+
+		@Override
 		public TileEntityType<?>[] affectedStorages() {
 			return new TileEntityType[0];
+		}
+	}
+
+	public static class RegistryConflictException extends Exception {
+		public RegistryConflictException(TileEntityType<?> teType, Class<? extends ContraptionStorageRegistry> a, Class<? extends ContraptionStorageRegistry> b) {
+			super("Registry conflict: registries " + a.getName() + " and " + b.getName() + " tried to register the same tile entity " + teType.getRegistryName());
 		}
 	}
 }

@@ -13,7 +13,7 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
 
-public class CompactingDrawerHandler extends StorageDrawerHandler implements ICapabilityProvider {
+public class CompactingDrawerHandler extends StorageDrawerHandler {
 
 	public CompactingDrawerHandler() {
 		super();
