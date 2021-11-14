@@ -8,7 +8,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
         classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
     }
 }
@@ -109,7 +109,7 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.5-36.2.0'
+    minecraft 'net.minecraftforge:forge:1.16.5-36.2.9'
 
     implementation fg.deobf("com.jozufozu.flywheel:Flywheel:${flywheel_version}")
     implementation fg.deobf("com.simibubi.create:Create:${create_version}")
@@ -129,6 +129,7 @@ dependencies {
 
     implementation fg.deobf("me.desht.pneumaticcraft:pneumaticcraft-repressurized:1.16.5-2.14.5-273")
 
+    implementation fg.deobf("curse.maven:expanded-storage-forge-362415:3431510")
 
     annotationProcessor 'org.spongepowered:mixin:0.8:processor'
 }
