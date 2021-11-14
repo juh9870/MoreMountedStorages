@@ -13,7 +13,6 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.registries.ObjectHolder;
 
 public class PneumaticcraftRegistry extends ContraptionStorageRegistry {
 	public static final Lazy<ContraptionStorageRegistry> INSTANCE = getInstance(Utils.constructId("pneumaticcraft", "smart_chest"));

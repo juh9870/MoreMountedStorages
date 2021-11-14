@@ -38,7 +38,7 @@ public class ExpandedStorageRegistry extends ContraptionStorageRegistry {
 		Optional<ChestType> type = te.getBlockState().getOptionalValue(ChestBlock.TYPE);
 		if (type.isPresent() && type.get() != ChestType.SINGLE)
 			te.getLevel().setBlockAndUpdate(te.getBlockPos(),
-							te.getBlockState().setValue(ChestBlock.TYPE, ChestType.SINGLE));
+					te.getBlockState().setValue(ChestBlock.TYPE, ChestType.SINGLE));
 		te.clearCache();
 		return null;
 	}

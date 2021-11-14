@@ -9,7 +9,6 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.common.util.Lazy;
 
 public class IronChestsRegistry extends ContraptionStorageRegistry {
-	//@ObjectHolder("")
 	public static final Lazy<ContraptionStorageRegistry> INSTANCE = getInstance(Utils.constructId("ironchest", "chest"));
 
 

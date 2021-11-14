@@ -17,7 +17,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.ModLoadingException;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -49,8 +48,9 @@ public class MoreMountedStorages {
 
 	@SubscribeEvent
 	public void commonSetup(FMLCommonSetupEvent event) throws ContraptionStorageRegistry.RegistryConflictException {
-			ContraptionStorageRegistry.initCache();
+		ContraptionStorageRegistry.initCache();
 	}
+
 	// Using method refs causes class loadign issues when target mod isn't loaded, so we use lambdas instead
 	@SuppressWarnings("Convert2MethodRef")
 	@SubscribeEvent
@@ -102,7 +102,7 @@ public class MoreMountedStorages {
 		}
 
 		void register(String modId, String registryName, Supplier<ContraptionStorageRegistry> supplier) {
-			ContraptionStorageRegistry.registerIfModLoaded(registry, modId, Utils.constructId(modId,registryName), supplier);
+			ContraptionStorageRegistry.registerIfModLoaded(registry, modId, Utils.constructId(modId, registryName), supplier);
 		}
 
 		void registerConditionally(Supplier<Boolean> condition, String fullRegistryName, Supplier<ContraptionStorageRegistry> supplier) {
