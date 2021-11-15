@@ -39,8 +39,19 @@ public abstract class FilteringItemStackHandler extends AdvancedItemStackHandler
 		this.filter = newFilters;
 	}
 
-	public void setFilter(int slot, ItemStack stack) {
+	public FilteringItemStackHandler setFilter(int slot, ItemStack stack) {
 		filter[slot] = stack.copy();
+		return this;
+	}
+
+	@Override
+	public FilteringItemStackHandler setVoiding(boolean voiding) {
+		return (FilteringItemStackHandler) super.setVoiding(voiding);
+	}
+
+	@Override
+	public FilteringItemStackHandler setVoiding(int slot, boolean voiding) {
+		return (FilteringItemStackHandler) super.setVoiding(slot, voiding);
 	}
 
 	@Override

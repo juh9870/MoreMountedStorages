@@ -14,6 +14,7 @@ public final class Config {
 	public static final ForgeConfigSpec.ConfigValue<Boolean> PNEUMATICCRAFT;
 	public static final ForgeConfigSpec.ConfigValue<Boolean> STORAGE_DRAWERS;
 	public static final ForgeConfigSpec.ConfigValue<Boolean> COMPACTING_DRAWER;
+	public static final ForgeConfigSpec.ConfigValue<Boolean> EXPANDED_STORAGE;
 
 	static {
 		BUILDER.comment("Mod integration config").push("Integration");
@@ -35,6 +36,7 @@ public final class Config {
 				COMPACTING_DRAWER = BUILDER.comment("Enables compacting drawers integration. Default value is true").define("Compacting", true);
 			}
 			BUILDER.pop();
+			EXPANDED_STORAGE = BUILDER.comment("Enables Expanded Storage integration. Default value is true").define("ExpandedStroage", true);
 		}
 		BUILDER.pop();
 		SPEC = BUILDER.build();
