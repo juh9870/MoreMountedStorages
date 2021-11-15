@@ -19,7 +19,7 @@ public class ImmersiveEngineeringRegistry extends ContraptionStorageRegistry {
 
 	@Override
 	public boolean canUseAsStorage(TileEntity te) {
-		return super.canUseAsStorage(te) && Config.IMMERSIVE_ENGINEERING.get();
+		return super.canUseAsStorage(te) && Config.IMMERSIVE_ENGINEERING.isEnabled();
 	}
 
 	@Override

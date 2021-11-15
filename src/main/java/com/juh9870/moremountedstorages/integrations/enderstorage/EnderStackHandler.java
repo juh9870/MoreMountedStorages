@@ -3,6 +3,7 @@ package com.juh9870.moremountedstorages.integrations.enderstorage;
 import codechicken.enderstorage.api.Frequency;
 import codechicken.enderstorage.manager.EnderStorageManager;
 import codechicken.enderstorage.storage.EnderItemStorage;
+import com.juh9870.moremountedstorages.Config;
 import com.juh9870.moremountedstorages.ContraptionItemStackHandler;
 import com.juh9870.moremountedstorages.ContraptionStorageRegistry;
 import net.minecraft.item.ItemStack;
@@ -180,5 +181,10 @@ public class EnderStackHandler extends ContraptionItemStackHandler {
 	@Override
 	protected ContraptionStorageRegistry registry() {
 		return EnderStorageRegistry.INSTANCE.get();
+	}
+
+	@Override
+	public int getPriority() {
+		return Config.ENDER_STORAGE.getPriority();
 	}
 }

@@ -8,6 +8,15 @@ import net.minecraftforge.items.ItemStackHandler;
 
 public abstract class ContraptionItemStackHandler extends ItemStackHandler {
 
+	/**
+	 * Priority of trash bins that void items
+	 */
+	public static int PRIORITY_TRASH = -10;
+	/**
+	 * Priority of item bins that store large quantities of one item type
+	 */
+	public static int PRIORITY_ITEM_BIN = 10;
+
 	public ContraptionItemStackHandler() {
 	}
 
@@ -29,6 +38,22 @@ public abstract class ContraptionItemStackHandler extends ItemStackHandler {
 		return true;
 	}
 
+	/**
+	 * Returns handler priority - items are inserted first into storages with higher priority
+	 * <p>
+	 * Suggested values:
+	 *     <ul>
+	 *         <li>-10 - trash bins</li>
+	 *         <li>0 - default priority</li>
+	 *         <li>10 - bin-like storages (high amount of one item type)</li>
+	 *     </ul>
+	 * </p>
+	 *
+	 * @return Handler priority
+	 */
+	public int getPriority() {
+		return 0;
+	}
 
 	/**
 	 * Returns associated {@link ContraptionStorageRegistry}

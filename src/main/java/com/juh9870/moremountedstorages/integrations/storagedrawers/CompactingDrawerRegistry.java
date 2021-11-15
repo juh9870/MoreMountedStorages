@@ -23,7 +23,7 @@ public class CompactingDrawerRegistry extends ContraptionStorageRegistry {
 	@Override
 	public boolean canUseAsStorage(TileEntity te) {
 		TileEntityDrawersComp drawer = (TileEntityDrawersComp) te;
-		return drawer.isGroupValid() && Config.COMPACTING_DRAWER.get();
+		return drawer.isGroupValid() && Config.COMPACTING_DRAWER.isEnabled();
 	}
 
 	@Override

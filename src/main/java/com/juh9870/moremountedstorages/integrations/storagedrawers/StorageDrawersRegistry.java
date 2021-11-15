@@ -18,7 +18,7 @@ public class StorageDrawersRegistry extends ContraptionStorageRegistry {
 	@Override
 	public boolean canUseAsStorage(TileEntity te) {
 		TileEntityDrawersStandard drawer = (TileEntityDrawersStandard) te;
-		return drawer.isGroupValid() && Config.STORAGE_DRAWERS.get();
+		return drawer.isGroupValid() && Config.STORAGE_DRAWERS.isEnabled();
 	}
 
 	@Override

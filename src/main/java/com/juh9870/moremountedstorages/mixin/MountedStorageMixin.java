@@ -2,7 +2,6 @@ package com.juh9870.moremountedstorages.mixin;
 
 import com.juh9870.moremountedstorages.ContraptionItemStackHandler;
 import com.juh9870.moremountedstorages.ContraptionStorageRegistry;
-import com.juh9870.moremountedstorages.MoreMountedStorages;
 import com.simibubi.create.content.contraptions.components.structureMovement.MountedStorage;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
@@ -40,7 +39,6 @@ public class MountedStorageMixin {
 
 	@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraftforge/items/ItemStackHandler;deserializeNBT(Lnet/minecraft/nbt/CompoundNBT;)V"), method = "deserialize(Lnet/minecraft/nbt/CompoundNBT;)Lcom/simibubi/create/content/contraptions/components/structureMovement/MountedStorage;", remap = false, cancellable = true)
 	private static void moremountedstorages_deserializeMountedStorage(CompoundNBT nbt, CallbackInfoReturnable<MountedStorageMixin> cir) {
-		MoreMountedStorages.breakpoint();
 		if (nbt.contains(ContraptionStorageRegistry.REGISTRY_NAME)) {
 			MountedStorageMixin storage = new MountedStorageMixin(null);
 			String id = nbt.getString(ContraptionStorageRegistry.REGISTRY_NAME);

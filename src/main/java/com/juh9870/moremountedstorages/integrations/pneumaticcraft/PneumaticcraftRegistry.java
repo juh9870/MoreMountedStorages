@@ -27,7 +27,7 @@ public class PneumaticcraftRegistry extends ContraptionStorageRegistry {
 
 	@Override
 	public boolean canUseAsStorage(TileEntity te) {
-		return getHandlerFromDefaultCapability(te) instanceof TileEntitySmartChest.SmartChestItemHandler && Config.PNEUMATICCRAFT.get();
+		return getHandlerFromDefaultCapability(te) instanceof TileEntitySmartChest.SmartChestItemHandler && Config.PNEUMATICCRAFT.isEnabled();
 	}
 
 	@Override
@@ -63,6 +63,11 @@ public class PneumaticcraftRegistry extends ContraptionStorageRegistry {
 		@Override
 		protected ContraptionStorageRegistry registry() {
 			return INSTANCE.get();
+		}
+
+		@Override
+		public int getPriority() {
+			return Config.PNEUMATICCRAFT.getPriority();
 		}
 	}
 }

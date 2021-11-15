@@ -18,7 +18,7 @@ public class EnderStorageRegistry extends ContraptionStorageRegistry {
 
 	@Override
 	public boolean canUseAsStorage(TileEntity te) {
-		return super.canUseAsStorage(te) && Config.ENDER_STORAGE.get();
+		return super.canUseAsStorage(te) && Config.ENDER_STORAGE.isEnabled();
 	}
 
 	@Override

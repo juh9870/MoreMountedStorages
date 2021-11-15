@@ -25,6 +25,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Nonnull;
 import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
@@ -54,7 +55,7 @@ public class MoreMountedStorages {
 	// Using method refs causes class loadign issues when target mod isn't loaded, so we use lambdas instead
 	@SuppressWarnings("Convert2MethodRef")
 	@SubscribeEvent
-	public void registerModules(RegistryEvent.Register<ContraptionStorageRegistry> event) {
+	public void registerModules(@Nonnull RegistryEvent.Register<ContraptionStorageRegistry> event) {
 		Registry registry = new Registry(event.getRegistry());
 		registry.register("enderstorage", "ender_chest", () -> new EnderStorageRegistry());
 		registry.register("ironchest", "chest", () -> new IronChestsRegistry());
@@ -66,7 +67,7 @@ public class MoreMountedStorages {
 	}
 
 	@SuppressWarnings("Convert2MethodRef")
-	private void registerStorageDrawers(Registry registry) {
+	private void registerStorageDrawers(@Nonnull Registry registry) {
 		registry.register("storagedrawers", "drawer", () -> new StorageDrawersRegistry());
 		registry.register("storagedrawers", "compacting_drawer", () -> new CompactingDrawerRegistry());
 
@@ -75,12 +76,13 @@ public class MoreMountedStorages {
 	}
 
 	@SuppressWarnings("Convert2MethodRef")
-	private void registerIndustrialForegoing(Registry registry) {
+	private void registerIndustrialForegoing(@Nonnull Registry registry) {
 		registry.register("industrialforegoing", "black_hole_unit", () -> new IndustrialForegoingRegistry());
 		registry.register("industrialforegoing", "black_hole_controller", () -> new IndustrialForegoingControllerRegistry());
 	}
 
-	private void registerPneumaticcraft(Registry registry) {
+	@SuppressWarnings("Convert2MethodRef")
+	private void registerPneumaticcraft(@Nonnull Registry registry) {
 		registry.registerConditionally(() -> {
 			Optional<? extends ModContainer> container = ModList.get().getModContainerById("pneumaticcraft");
 			if (container.isPresent()) {
@@ -91,7 +93,7 @@ public class MoreMountedStorages {
 				return buildId >= 273;
 			}
 			return false;
-		}, "moremountedstorages:pneumaticcraft_smart_chest", () -> new PneumaticcraftRegistry());
+		}, Utils.constructId("pneumaticcraft", "smart_chest"), () -> new PneumaticcraftRegistry());
 	}
 
 	private static class Registry {

@@ -37,7 +37,7 @@ public class IndustrialForegoingControllerRegistry extends ContraptionStorageReg
 
 	@Override
 	public boolean canUseAsStorage(TileEntity te) {
-		return super.canUseAsStorage(te) && Config.INDUSTRIAL_FOREGOING_CONTROLLER.get();
+		return super.canUseAsStorage(te) && Config.INDUSTRIAL_FOREGOING_CONTROLLER.isEnabled();
 	}
 
 	@Override
@@ -108,6 +108,11 @@ public class IndustrialForegoingControllerRegistry extends ContraptionStorageReg
 
 			simpleOverwrite(bhHandler);
 			return false;
+		}
+
+		@Override
+		public int getPriority() {
+			return Config.INDUSTRIAL_FOREGOING_CONTROLLER.getPriority();
 		}
 	}
 

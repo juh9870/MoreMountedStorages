@@ -14,7 +14,7 @@ public class IronChestsRegistry extends ContraptionStorageRegistry {
 
 	@Override
 	public boolean canUseAsStorage(TileEntity te) {
-		return super.canUseAsStorage(te) && Config.IRON_CHESTS.get();
+		return super.canUseAsStorage(te) && Config.IRON_CHESTS.isEnabled();
 	}
 
 	@Override

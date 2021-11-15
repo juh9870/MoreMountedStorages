@@ -31,7 +31,7 @@ public class ExpandedStorageRegistry extends ContraptionStorageRegistry {
 	@SuppressWarnings("UnstableApiUsage")
 	@Override
 	public boolean canUseAsStorage(TileEntity te) {
-		if (!super.canUseAsStorage(te) && Config.EXPANDED_STORAGE.get()) return false;
+		if (!super.canUseAsStorage(te) && Config.EXPANDED_STORAGE.isEnabled()) return false;
 		Optional<CursedChestType> type = te.getBlockState().getOptionalValue(AbstractChestBlock.CURSED_CHEST_TYPE);
 		return !type.isPresent() || (type.get() != CursedChestType.SINGLE &&
 				type.get() != CursedChestType.TOP &&

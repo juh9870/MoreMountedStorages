@@ -11,6 +11,7 @@ import com.jaquadro.minecraft.storagedrawers.block.tile.tiledata.StandardDrawerG
 import com.jaquadro.minecraft.storagedrawers.block.tile.tiledata.UpgradeData;
 import com.jaquadro.minecraft.storagedrawers.capabilities.BasicDrawerAttributes;
 import com.jaquadro.minecraft.storagedrawers.config.CommonConfig;
+import com.juh9870.moremountedstorages.Config;
 import com.juh9870.moremountedstorages.ContraptionItemStackHandler;
 import com.juh9870.moremountedstorages.ContraptionStorageRegistry;
 import net.minecraft.item.ItemStack;
@@ -223,6 +224,11 @@ public class StorageDrawerHandler extends ContraptionItemStackHandler implements
 	protected void validateSlotIndex(int slot) {
 		if (slot < 0 || slot >= getSlots())
 			throw new RuntimeException("Slot " + slot + " not in valid range - [0," + stacks.size() + ")");
+	}
+
+	@Override
+	public int getPriority() {
+		return Config.STORAGE_DRAWERS.getPriority();
 	}
 
 	@Override

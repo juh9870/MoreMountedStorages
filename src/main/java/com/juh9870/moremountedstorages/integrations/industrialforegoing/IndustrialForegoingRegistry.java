@@ -6,7 +6,6 @@ import com.juh9870.moremountedstorages.Config;
 import com.juh9870.moremountedstorages.ContraptionItemStackHandler;
 import com.juh9870.moremountedstorages.ContraptionStorageRegistry;
 import com.juh9870.moremountedstorages.Utils;
-import com.juh9870.moremountedstorages.helpers.AdvancedItemStackHandler;
 import com.juh9870.moremountedstorages.helpers.FilteringItemStackHandler;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Rarity;
@@ -43,7 +42,7 @@ public class IndustrialForegoingRegistry extends ContraptionStorageRegistry {
 
 	@Override
 	public boolean canUseAsStorage(TileEntity te) {
-		return super.canUseAsStorage(te) && Config.INDUSTRIAL_FOREGOING_UNIT.get();
+		return super.canUseAsStorage(te) && Config.INDUSTRIAL_FOREGOING_UNIT.isEnabled();
 	}
 
 	@Override
@@ -59,7 +58,7 @@ public class IndustrialForegoingRegistry extends ContraptionStorageRegistry {
 			return null;
 		}
 		ItemStack filter = ItemStack.of(bhu.serializeNBT().getCompound("filter").getCompound("Filter").getCompound("0"));
-		return new BlackHoleItemStackHandler(bhHandler).setVoiding(bhu.isVoidItems()).setFilter(0,filter);
+		return new BlackHoleItemStackHandler(bhHandler).setVoiding(bhu.isVoidItems()).setFilter(0, filter);
 	}
 
 	@Override
@@ -91,6 +90,11 @@ public class IndustrialForegoingRegistry extends ContraptionStorageRegistry {
 
 			simpleOverwrite(bhHandler);
 			return false;
+		}
+
+		@Override
+		public int getPriority() {
+			return Config.INDUSTRIAL_FOREGOING_UNIT.getPriority();
 		}
 	}
 }

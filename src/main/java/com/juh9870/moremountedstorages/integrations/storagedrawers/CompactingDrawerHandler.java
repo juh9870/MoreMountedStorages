@@ -7,6 +7,7 @@ import com.jaquadro.minecraft.storagedrawers.block.tile.TileEntityDrawersComp;
 import com.jaquadro.minecraft.storagedrawers.block.tile.tiledata.FractionalDrawerGroup;
 import com.jaquadro.minecraft.storagedrawers.block.tile.tiledata.UpgradeData;
 import com.jaquadro.minecraft.storagedrawers.config.CommonConfig;
+import com.juh9870.moremountedstorages.Config;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
@@ -49,6 +50,12 @@ public class CompactingDrawerHandler extends StorageDrawerHandler {
 		copyItemsTo((TileEntityDrawersComp) te);
 		copyItemsTo((TileEntityDrawersComp) te.getLevel().getBlockEntity(te.getBlockPos()));
 		return false;
+	}
+
+
+	@Override
+	public int getPriority() {
+		return Config.COMPACTING_DRAWER.getPriority();
 	}
 
 	public class CompactingDrawerGroup extends FractionalDrawerGroup {
