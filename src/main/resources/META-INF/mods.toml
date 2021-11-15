@@ -4,7 +4,7 @@ license="MIT"
 [[mods]]
     modId="moremountedstorages" #mandatory
     version="${file.jarVersion}" #mandatory
-    displayName="Poop Train" #mandatory
+    displayName="More Mounted Storages" #mandatory
     logoFile="logo.png" #optional
     issueTrackerURL="https://github.com/juh9870/MoreMountedStorages/issues" #optional
     authors="juh9870" #optional
