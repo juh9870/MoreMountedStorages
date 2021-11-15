@@ -7,6 +7,8 @@ import com.juh9870.moremountedstorages.ContraptionItemStackHandler;
 import com.juh9870.moremountedstorages.ContraptionStorageRegistry;
 import com.juh9870.moremountedstorages.Utils;
 import com.juh9870.moremountedstorages.helpers.AdvancedItemStackHandler;
+import com.juh9870.moremountedstorages.helpers.FilteringItemStackHandler;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Rarity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
@@ -56,7 +58,8 @@ public class IndustrialForegoingRegistry extends ContraptionStorageRegistry {
 		if (bhHandler == dummyHandler) {
 			return null;
 		}
-		return new BlackHoleItemStackHandler(bhHandler).setVoiding(bhu.isVoidItems());
+		ItemStack filter = ItemStack.of(bhu.serializeNBT().getCompound("filter").getCompound("Filter").getCompound("0"));
+		return new BlackHoleItemStackHandler(bhHandler).setVoiding(bhu.isVoidItems()).setFilter(0,filter);
 	}
 
 	@Override
@@ -64,16 +67,14 @@ public class IndustrialForegoingRegistry extends ContraptionStorageRegistry {
 		return deserializeHandler(new BlackHoleItemStackHandler(), nbt);
 	}
 
-	public static class BlackHoleItemStackHandler extends AdvancedItemStackHandler {
+	public static class BlackHoleItemStackHandler extends FilteringItemStackHandler {
 		public BlackHoleItemStackHandler() {
 			setIgnoreItemStackSize(true);
-			setVoiding(true);
 		}
 
 		public BlackHoleItemStackHandler(IItemHandler handler) {
 			super(handler);
 			setIgnoreItemStackSize(true);
-			setVoiding(true);
 		}
 
 		@Override
