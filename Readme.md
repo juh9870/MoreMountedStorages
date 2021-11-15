@@ -13,4 +13,5 @@ Currently, only item storages are supported, and fluid storages support won't be
 - [Framed Compacting Drawers](https://www.curseforge.com/minecraft/mc-mods/framed-compacting-drawers): Same as above
 - [Immersive Engineering](https://www.curseforge.com/minecraft/mc-mods/immersive-engineering): Crates
 - [Industrial Foregoing](https://www.curseforge.com/minecraft/mc-mods/industrial-foregoing): Black Hole Unit and Black Hole Controller (items only)
-- [PneumaticCraft: Repressurized](https://www.curseforge.com/minecraft/mc-mods/pneumaticcraft-repressurized'''): Smart chest fix, but this integration requires PnC build 273 or higher, and since the curent public build is 272, this bugfix won't be in play until the next PnC update
+- [PneumaticCraft: Repressurized](https://www.curseforge.com/minecraft/mc-mods/pneumaticcraft-repressurized): Smart chest fix, but this integration requires PnC build 273 or higher, and since the curent public build is 272, this bugfix won't be in play until the next PnC update
+- [Expanded Storage](https://www.curseforge.com/minecraft/mc-mods/expanded-storage-forge): all chests and barrels types
