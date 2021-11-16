@@ -33,7 +33,7 @@ public class TrashCansRegistry extends ContraptionStorageRegistry {
 
 	@Override
 	public boolean canUseAsStorage(TileEntity te) {
-		return super.canUseAsStorage(te);
+		return super.canUseAsStorage(te) && CONFIG.isEnabled();
 	}
 
 	@Override
