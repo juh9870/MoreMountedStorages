@@ -133,6 +133,8 @@ dependencies {
 
     implementation fg.deobf("curse.maven:supermartijn642s-core-lib-454372:${supermartijn642score_versioncode}")
     implementation fg.deobf("curse.maven:trash-cans-394535:${trashcans_versioncode}")
+    implementation fg.deobf("curse.maven:shetiphiancore-71738:${shetiphiancore_versioncode}")
+    implementation fg.deobf("curse.maven:enderchests-363535:${enderchests_versioncode}")
 
     annotationProcessor 'org.spongepowered:mixin:0.8:processor'
 }

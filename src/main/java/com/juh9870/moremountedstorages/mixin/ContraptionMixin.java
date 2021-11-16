@@ -29,8 +29,9 @@ public class ContraptionMixin {
 	@Shadow(remap = false)
 	protected Map<BlockPos, MountedStorage> storage;
 
-	@Inject(at = @At(value = "NEW", target = "Lcom/simibubi/create/content/contraptions/components/structureMovement/Contraption$ContraptionInvWrapper;<init>([Lnet/minecraftforge/items/IItemHandlerModifiable;)V"), method = "readNBT(Lnet/minecraft/world/World;Lnet/minecraft/nbt/CompoundNBT;Z)V", remap = false)
-	public void readNBT(World world, CompoundNBT nbt, boolean spawnData, CallbackInfo cbi) {
+	@Inject(at=@At(value = "INVOKE", target = "Ljava/util/Map;clear()V", ordinal = 5), method = "readNBT", remap = false)
+	public void moremountedstorages__readNBT(World world, CompoundNBT nbt, boolean spawnData, CallbackInfo cbi){
+		MoreMountedStorages.breakpoint();
 		for (MountedStorage value : this.storage.values()) {
 			IItemHandlerModifiable handler = value.getItemHandler();
 			if (handler instanceof ContraptionStorageRegistry.IWorldRequiringHandler) {
@@ -40,7 +41,7 @@ public class ContraptionMixin {
 	}
 
 	@Inject(at = @At("TAIL"), method = "onEntityCreated", remap = false)
-	public void onEntityCreated(AbstractContraptionEntity face, CallbackInfo ci) {
+	public void moremountedstorages__onEntityCreated(AbstractContraptionEntity face, CallbackInfo ci) {
 
 		// Gather itemhandlers of mounted storage
 		List<IItemHandlerModifiable> list = storage.values()

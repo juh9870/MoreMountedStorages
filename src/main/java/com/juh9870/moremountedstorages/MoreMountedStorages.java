@@ -1,5 +1,6 @@
 package com.juh9870.moremountedstorages;
 
+import com.juh9870.moremountedstorages.integrations.enderchests.EnderChestsRegistry;
 import com.juh9870.moremountedstorages.integrations.enderstorage.EnderStorageRegistry;
 import com.juh9870.moremountedstorages.integrations.expandedstorage.ExpandedStorageRegistry;
 import com.juh9870.moremountedstorages.integrations.immersiveengineering.ImmersiveEngineeringRegistry;
@@ -61,6 +62,7 @@ public class MoreMountedStorages {
 		Registry registry = new Registry(event.getRegistry());
 
 		registry.register("enderstorage", "ender_chest", () -> new EnderStorageRegistry(), () -> EnderStorageRegistry.CONFIG);
+		registry.register("enderchests", "ender_chest", () -> new EnderChestsRegistry(), () -> EnderChestsRegistry.CONFIG);
 		registry.register("ironchest", "chest", () -> new IronChestsRegistry(), () -> IronChestsRegistry.CONFIG);
 		registerStorageDrawers(registry);
 		registry.register("immersiveengineering", "crate", () -> new ImmersiveEngineeringRegistry(), () -> ImmersiveEngineeringRegistry.CONFIG);
@@ -111,7 +113,7 @@ public class MoreMountedStorages {
 			}
 			return false;
 		}, Utils.constructId("pneumaticcraft", "smart_chest"), () -> new PneumaticcraftRegistry());
-		Config.registerConfigIfModLoaded("pneumaticcraft", () -> PneumaticcraftRegistry.CONFIG);
+		Config.registerConfigsIfModLoaded("pneumaticcraft", () -> Utils.arrayOf(PneumaticcraftRegistry.CONFIG));
 	}
 
 	private static class Registry {
@@ -127,7 +129,7 @@ public class MoreMountedStorages {
 
 		void register(String modId, String registryName, Supplier<ContraptionStorageRegistry> supplier, Supplier<Config.IRegistryInfo> config) {
 			register(modId, registryName, supplier);
-			Config.registerConfigIfModLoaded(modId, config);
+			Config.registerConfigsIfModLoaded(modId, () -> Utils.arrayOf(config.get()));
 		}
 
 		void registerConditionally(Supplier<Boolean> condition, String fullRegistryName, Supplier<ContraptionStorageRegistry> supplier) {

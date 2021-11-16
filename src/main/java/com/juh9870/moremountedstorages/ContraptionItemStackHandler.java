@@ -53,14 +53,13 @@ public abstract class ContraptionItemStackHandler extends ItemStackHandler {
 	 *         <li>-10 - trash bins</li>
 	 *         <li>0 - default priority</li>
 	 *         <li>10 - bin-like storages (high amount of one item type)</li>
+	 *         <li>20 - trash bins with whitelist</li>
 	 *     </ul>
 	 * </p>
 	 *
 	 * @return Handler priority
 	 */
-	public int getPriority() {
-		return 0;
-	}
+	public abstract int getPriority();
 
 	/**
 	 * Returns associated {@link ContraptionStorageRegistry}

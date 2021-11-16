@@ -17,7 +17,7 @@ import java.util.Optional;
 public class ExpandedStorageRegistry extends ContraptionStorageRegistry {
 
 	public static Lazy<ContraptionStorageRegistry> INSTANCE = getInstance(Utils.constructId("expandedstorage", "chest"));
-	public static final Config.RegistryInfo CONFIG = new Config.RegistryInfo("chest", "Expanded Storage");
+	public static final Config.RegistryInfo CONFIG = new Config.RegistryInfo("chest", "Chests");
 	private static final Lazy<TileEntityType<?>[]> affectedStorages = Lazy.of(() -> {
 		List<TileEntityType<?>> values = new ArrayList<>();
 		for (TileEntityType<?> tileEntity : ForgeRegistries.TILE_ENTITIES) {

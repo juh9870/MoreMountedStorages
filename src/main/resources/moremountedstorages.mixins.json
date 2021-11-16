@@ -6,6 +6,7 @@
   "mixins": [
     "ContraptionMixin",
     "MountedStorageMixin",
+    "enderchests.ChestHelperMixin",
     "enderstorage.EnderStorageManagerMixin",
     "storagedrawers.InventoryUpgradeMixin"
   ],
