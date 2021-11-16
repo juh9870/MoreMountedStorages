@@ -15,3 +15,15 @@ Currently, only item storages are supported, and fluid storages support won't be
 - [Industrial Foregoing](https://www.curseforge.com/minecraft/mc-mods/industrial-foregoing): Black Hole Unit and Black Hole Controller (items only)
 - [PneumaticCraft: Repressurized](https://www.curseforge.com/minecraft/mc-mods/pneumaticcraft-repressurized): Smart chest fix, but this integration requires PnC build 273 or higher, and since the curent public build is 272, this bugfix won't be in play until the next PnC update
 - [Expanded Storage](https://www.curseforge.com/minecraft/mc-mods/expanded-storage-forge): all chests and barrels types
+- [Trash Cans](https://www.curseforge.com/minecraft/mc-mods/trash-cans): Trash Can and Ultimate Trash Can
+- [EnderChests](https://www.curseforge.com/minecraft/mc-mods/enderchests): Ender Chest
+
+## Priority system:
+Storages have different item insertion and retrieval priorities. By default, it goes in this order
+1. Trash Can with whitelist filtering mode
+2. Storage Drawers and Black Hole Units
+3. Ender chests
+4. All other chests/barrels/crates/etc
+5. Trash Can with blacklist filtering mode
+
+Priorities can be adjusted in mod configuration file
