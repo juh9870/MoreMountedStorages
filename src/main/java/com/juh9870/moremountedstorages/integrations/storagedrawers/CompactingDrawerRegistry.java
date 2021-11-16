@@ -11,9 +11,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.common.util.Lazy;
 
+import static com.juh9870.moremountedstorages.ContraptionItemStackHandler.PRIORITY_ITEM_BIN;
+
 public class CompactingDrawerRegistry extends ContraptionStorageRegistry {
 	public static final Lazy<ContraptionStorageRegistry> INSTANCE = getInstance(Utils.constructId("storagedrawers", "compacting_drawer"));
-
+	public static final Config.PriorityRegistryInfo CONFIG = new Config.PriorityRegistryInfo("compacting_drawer", "compacting drawers", PRIORITY_ITEM_BIN);
 
 	@Override
 	public Priority getPriority() {
@@ -23,7 +25,7 @@ public class CompactingDrawerRegistry extends ContraptionStorageRegistry {
 	@Override
 	public boolean canUseAsStorage(TileEntity te) {
 		TileEntityDrawersComp drawer = (TileEntityDrawersComp) te;
-		return drawer.isGroupValid() && Config.COMPACTING_DRAWER.isEnabled();
+		return drawer.isGroupValid() && CONFIG.isEnabled();
 	}
 
 	@Override

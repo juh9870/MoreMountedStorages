@@ -11,6 +11,7 @@ import com.juh9870.moremountedstorages.integrations.storagedrawers.CompactingDra
 import com.juh9870.moremountedstorages.integrations.storagedrawers.FramedCompactingDrawerRegistry;
 import com.juh9870.moremountedstorages.integrations.storagedrawers.FramedDrawersRegistry;
 import com.juh9870.moremountedstorages.integrations.storagedrawers.StorageDrawersRegistry;
+import com.juh9870.moremountedstorages.integrations.trashcans.TrashCansRegistry;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -40,7 +41,6 @@ public class MoreMountedStorages {
 		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		modEventBus.register(this);
 		ContraptionStorageRegistry.STORAGES.register(modEventBus);
-		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC, "moremountedstorages-common.toml");
 	}
 
 	public static void breakpoint() {
@@ -56,14 +56,22 @@ public class MoreMountedStorages {
 	@SuppressWarnings("Convert2MethodRef")
 	@SubscribeEvent
 	public void registerModules(@Nonnull RegistryEvent.Register<ContraptionStorageRegistry> event) {
+		Config.BUILDER.comment("Mod integration config").push("Integration");
+
 		Registry registry = new Registry(event.getRegistry());
-		registry.register("enderstorage", "ender_chest", () -> new EnderStorageRegistry());
-		registry.register("ironchest", "chest", () -> new IronChestsRegistry());
+
+		registry.register("enderstorage", "ender_chest", () -> new EnderStorageRegistry(), () -> EnderStorageRegistry.CONFIG);
+		registry.register("ironchest", "chest", () -> new IronChestsRegistry(), () -> IronChestsRegistry.CONFIG);
 		registerStorageDrawers(registry);
-		registry.register("immersiveengineering", "crate", () -> new ImmersiveEngineeringRegistry());
+		registry.register("immersiveengineering", "crate", () -> new ImmersiveEngineeringRegistry(), () -> ImmersiveEngineeringRegistry.CONFIG);
 		registerIndustrialForegoing(registry);
 		registerPneumaticcraft(registry);
-		registry.register("expandedstorage", "chest", () -> new ExpandedStorageRegistry());
+		registry.register("expandedstorage", "chest", () -> new ExpandedStorageRegistry(), () -> ExpandedStorageRegistry.CONFIG);
+		registry.register("trashcans", "trashcan", () -> new TrashCansRegistry(), () -> TrashCansRegistry.CONFIG);
+
+		Config.BUILDER.pop();
+		Config.SPEC = Config.BUILDER.build();
+		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC, "moremountedstorages-common.toml");
 	}
 
 	@SuppressWarnings("Convert2MethodRef")
@@ -73,12 +81,21 @@ public class MoreMountedStorages {
 
 		registry.register("framedcompactdrawers", "drawer", () -> new FramedDrawersRegistry());
 		registry.register("framedcompactdrawers", "compacting_drawer", () -> new FramedCompactingDrawerRegistry());
+
+		Config.registerConfigsIfModLoaded("storagedrawers", () -> Utils.arrayOf(
+				StorageDrawersRegistry.CONFIG,
+				CompactingDrawerRegistry.CONFIG
+		));
 	}
 
 	@SuppressWarnings("Convert2MethodRef")
 	private void registerIndustrialForegoing(@Nonnull Registry registry) {
 		registry.register("industrialforegoing", "black_hole_unit", () -> new IndustrialForegoingRegistry());
 		registry.register("industrialforegoing", "black_hole_controller", () -> new IndustrialForegoingControllerRegistry());
+		Config.registerConfigsIfModLoaded("industrialforegoing", () -> Utils.arrayOf(
+				IndustrialForegoingRegistry.CONFIG,
+				IndustrialForegoingControllerRegistry.CONFIG
+		));
 	}
 
 	@SuppressWarnings("Convert2MethodRef")
@@ -94,6 +111,7 @@ public class MoreMountedStorages {
 			}
 			return false;
 		}, Utils.constructId("pneumaticcraft", "smart_chest"), () -> new PneumaticcraftRegistry());
+		Config.registerConfigIfModLoaded("pneumaticcraft", () -> PneumaticcraftRegistry.CONFIG);
 	}
 
 	private static class Registry {
@@ -105,6 +123,11 @@ public class MoreMountedStorages {
 
 		void register(String modId, String registryName, Supplier<ContraptionStorageRegistry> supplier) {
 			ContraptionStorageRegistry.registerIfModLoaded(registry, modId, Utils.constructId(modId, registryName), supplier);
+		}
+
+		void register(String modId, String registryName, Supplier<ContraptionStorageRegistry> supplier, Supplier<Config.IRegistryInfo> config) {
+			register(modId, registryName, supplier);
+			Config.registerConfigIfModLoaded(modId, config);
 		}
 
 		void registerConditionally(Supplier<Boolean> condition, String fullRegistryName, Supplier<ContraptionStorageRegistry> supplier) {

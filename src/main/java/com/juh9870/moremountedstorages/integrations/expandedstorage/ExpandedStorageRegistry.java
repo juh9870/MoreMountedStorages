@@ -16,6 +16,8 @@ import java.util.Optional;
 
 public class ExpandedStorageRegistry extends ContraptionStorageRegistry {
 
+	public static Lazy<ContraptionStorageRegistry> INSTANCE = getInstance(Utils.constructId("expandedstorage", "chest"));
+	public static final Config.RegistryInfo CONFIG = new Config.RegistryInfo("chest", "Expanded Storage");
 	private static final Lazy<TileEntityType<?>[]> affectedStorages = Lazy.of(() -> {
 		List<TileEntityType<?>> values = new ArrayList<>();
 		for (TileEntityType<?> tileEntity : ForgeRegistries.TILE_ENTITIES) {
@@ -26,12 +28,11 @@ public class ExpandedStorageRegistry extends ContraptionStorageRegistry {
 
 		return values.toArray(new TileEntityType<?>[0]);
 	});
-	public static Lazy<ContraptionStorageRegistry> INSTANCE = getInstance(Utils.constructId("expandedstorage", "chest"));
 
 	@SuppressWarnings("UnstableApiUsage")
 	@Override
 	public boolean canUseAsStorage(TileEntity te) {
-		if (!super.canUseAsStorage(te) && Config.EXPANDED_STORAGE.isEnabled()) return false;
+		if (!super.canUseAsStorage(te) && CONFIG.isEnabled()) return false;
 		Optional<CursedChestType> type = te.getBlockState().getOptionalValue(AbstractChestBlock.CURSED_CHEST_TYPE);
 		return !type.isPresent() || (type.get() != CursedChestType.SINGLE &&
 				type.get() != CursedChestType.TOP &&

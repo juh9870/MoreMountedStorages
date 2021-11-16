@@ -20,8 +20,11 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 
+import static com.juh9870.moremountedstorages.ContraptionItemStackHandler.PRIORITY_ITEM_BIN;
+
 public class IndustrialForegoingControllerRegistry extends ContraptionStorageRegistry {
 	public static final Lazy<ContraptionStorageRegistry> INSTANCE = getInstance(Utils.constructId("industrialforegoing", "black_hole_controller"));
+		public static final Config.PriorityRegistryInfo CONFIG = new Config.PriorityRegistryInfo("black_hole_controller", "Black Hole Controller", PRIORITY_ITEM_BIN);
 
 	private static final Lazy<TileEntityType<?>[]> affectedStorages = Lazy.of(() -> new TileEntityType<?>[]{ForgeRegistries.TILE_ENTITIES.getValue(new ResourceLocation("industrialforegoing:black_hole_controller"))});
 
@@ -37,7 +40,7 @@ public class IndustrialForegoingControllerRegistry extends ContraptionStorageReg
 
 	@Override
 	public boolean canUseAsStorage(TileEntity te) {
-		return super.canUseAsStorage(te) && Config.INDUSTRIAL_FOREGOING_CONTROLLER.isEnabled();
+		return super.canUseAsStorage(te) && CONFIG.isEnabled();
 	}
 
 	@Override
@@ -112,7 +115,7 @@ public class IndustrialForegoingControllerRegistry extends ContraptionStorageReg
 
 		@Override
 		public int getPriority() {
-			return Config.INDUSTRIAL_FOREGOING_CONTROLLER.getPriority();
+			return CONFIG.getPriority();
 		}
 	}
 

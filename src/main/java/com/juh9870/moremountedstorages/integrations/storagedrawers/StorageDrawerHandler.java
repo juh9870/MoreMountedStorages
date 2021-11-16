@@ -228,7 +228,7 @@ public class StorageDrawerHandler extends ContraptionItemStackHandler implements
 
 	@Override
 	public int getPriority() {
-		return Config.STORAGE_DRAWERS.getPriority();
+		return StorageDrawersRegistry.CONFIG.getPriority();
 	}
 
 	@Override

@@ -185,6 +185,6 @@ public class EnderStackHandler extends ContraptionItemStackHandler {
 
 	@Override
 	public int getPriority() {
-		return Config.ENDER_STORAGE.getPriority();
+		return EnderStorageRegistry.CONFIG.getPriority();
 	}
 }

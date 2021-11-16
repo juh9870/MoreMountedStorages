@@ -11,14 +11,17 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.common.util.Lazy;
 
+import static com.juh9870.moremountedstorages.ContraptionItemStackHandler.PRIORITY_ITEM_BIN;
+
 public class StorageDrawersRegistry extends ContraptionStorageRegistry {
 	public static final Lazy<ContraptionStorageRegistry> INSTANCE = getInstance(Utils.constructId("storagedrawers", "drawer"));
+	public static final Config.PriorityRegistryInfo CONFIG = new Config.PriorityRegistryInfo("drawer", "standard drawers", PRIORITY_ITEM_BIN);
 
 
 	@Override
 	public boolean canUseAsStorage(TileEntity te) {
 		TileEntityDrawersStandard drawer = (TileEntityDrawersStandard) te;
-		return drawer.isGroupValid() && Config.STORAGE_DRAWERS.isEnabled();
+		return drawer.isGroupValid() && CONFIG.isEnabled();
 	}
 
 	@Override

@@ -55,7 +55,7 @@ public class CompactingDrawerHandler extends StorageDrawerHandler {
 
 	@Override
 	public int getPriority() {
-		return Config.COMPACTING_DRAWER.getPriority();
+		return CompactingDrawerRegistry.CONFIG.getPriority();
 	}
 
 	public class CompactingDrawerGroup extends FractionalDrawerGroup {

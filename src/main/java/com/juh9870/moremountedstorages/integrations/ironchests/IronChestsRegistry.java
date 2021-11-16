@@ -10,11 +10,12 @@ import net.minecraftforge.common.util.Lazy;
 
 public class IronChestsRegistry extends ContraptionStorageRegistry {
 	public static final Lazy<ContraptionStorageRegistry> INSTANCE = getInstance(Utils.constructId("ironchest", "chest"));
+	public static final Config.RegistryInfo CONFIG = new Config.RegistryInfo("chest", "Iron Chests");
 
 
 	@Override
 	public boolean canUseAsStorage(TileEntity te) {
-		return super.canUseAsStorage(te) && Config.IRON_CHESTS.isEnabled();
+		return super.canUseAsStorage(te) && CONFIG.isEnabled();
 	}
 
 	@Override

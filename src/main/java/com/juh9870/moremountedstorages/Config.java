@@ -1,103 +1,97 @@
 package com.juh9870.moremountedstorages;
 
+import com.juh9870.moremountedstorages.integrations.enderstorage.EnderStorageRegistry;
+import com.juh9870.moremountedstorages.integrations.expandedstorage.ExpandedStorageRegistry;
+import com.juh9870.moremountedstorages.integrations.immersiveengineering.ImmersiveEngineeringRegistry;
+import com.juh9870.moremountedstorages.integrations.industrialforegoing.IndustrialForegoingControllerRegistry;
+import com.juh9870.moremountedstorages.integrations.industrialforegoing.IndustrialForegoingRegistry;
+import com.juh9870.moremountedstorages.integrations.ironchests.IronChestsRegistry;
+import com.juh9870.moremountedstorages.integrations.pneumaticcraft.PneumaticcraftRegistry;
+import com.juh9870.moremountedstorages.integrations.storagedrawers.CompactingDrawerRegistry;
+import com.juh9870.moremountedstorages.integrations.storagedrawers.StorageDrawersRegistry;
+import com.juh9870.moremountedstorages.integrations.trashcans.TrashCansRegistry;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModList;
 
-import static com.juh9870.moremountedstorages.ContraptionItemStackHandler.PRIORITY_ITEM_BIN;
+import java.util.function.Supplier;
 
 public final class Config {
 	public static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
-	public static final ForgeConfigSpec SPEC;
+	public static ForgeConfigSpec SPEC;
 
-	public static final RegistryInfo ENDER_STORAGE = new RegistryInfo("enderstorage", "ender_chest", "Ender Storage", 1);
-	public static final RegistryInfo IMMERSIVE_ENGINEERING = new RegistryInfo("immersiveengineering", "crate", "Immersive Engineering Crate");
-	public static final RegistryInfo INDUSTRIAL_FOREGOING_UNIT = new RegistryInfo("industrialforegoing", "black_hole_unit", "Black Hole Unit", PRIORITY_ITEM_BIN);
-	public static final RegistryInfo INDUSTRIAL_FOREGOING_CONTROLLER = new RegistryInfo("industrialforegoing", "black_hole_controller", "Black Hole Controller", PRIORITY_ITEM_BIN);
-	public static final RegistryInfo IRON_CHESTS = new RegistryInfo("ironchest", "chest", "Iron Chests");
-	public static final RegistryInfo PNEUMATICCRAFT = new RegistryInfo("pneumaticcraft", "smart_chest", "PneumaticCraft Smart Chest", 1);
-	public static final RegistryInfo STORAGE_DRAWERS = new RegistryInfo("storagedrawers", "drawer", "standard drawers", PRIORITY_ITEM_BIN);
-	public static final RegistryInfo COMPACTING_DRAWER = new RegistryInfo("storagedrawers", "compacting_drawer", "compacting drawers", PRIORITY_ITEM_BIN);
-	public static final RegistryInfo EXPANDED_STORAGE = new RegistryInfo("expandedstorage", "chest", "Expanded Storage");
-
-	static {
-		BUILDER.comment("Mod integration config").push("Integration");
-		{
-			ENDER_STORAGE.register();
-			IMMERSIVE_ENGINEERING.register();
-			new ModRegistry("industrialforegoing", new RegistryInfo[]{
-					INDUSTRIAL_FOREGOING_UNIT,
-					INDUSTRIAL_FOREGOING_CONTROLLER
-			}).register();
-			IRON_CHESTS.register();
-			PNEUMATICCRAFT.register();
-			new ModRegistry("storagedrawers", new RegistryInfo[]{
-					STORAGE_DRAWERS,
-					COMPACTING_DRAWER
-			}).register();
-			EXPANDED_STORAGE.register();
-		}
-		BUILDER.pop();
-		SPEC = BUILDER.build();
+	static void registerConfigIfModLoaded(String modid, Supplier<IRegistryInfo> registry) {
+		if (!ModList.get().isLoaded(modid)) return;
+		registry.get().register(BUILDER);
 	}
 
-	public static class RegistryInfo {
-		private final String modId;
-		private final String id;
-		private final String name;
-		private final int defaultPriority;
-		private final boolean usePriority;
+	static void registerConfigsIfModLoaded(String modid, Supplier<IRegistryInfo[]> registries) {
+		if (!ModList.get().isLoaded(modid)) return;
+		new ModRegistry(modid, registries.get()).register(BUILDER);
+	}
+
+	interface IRegistryInfo {
+		void register(ForgeConfigSpec.Builder builder);
+	}
+
+	public static class RegistryInfo implements IRegistryInfo {
+		protected final String id;
+		protected final String name;
 		private ForgeConfigSpec.ConfigValue<Boolean> enabled = null;
-		private ForgeConfigSpec.ConfigValue<Integer> priority = null;
 
-		public RegistryInfo(String modId, String id, String name, int defaultPriority) {
-			this.modId = modId;
+		public RegistryInfo(String id, String name) {
 			this.id = id;
 			this.name = name;
-			this.defaultPriority = defaultPriority;
-			this.usePriority = true;
-		}
-
-		public RegistryInfo(String modId, String id, String name) {
-			this.modId = modId;
-			this.id = id;
-			this.name = name;
-			this.defaultPriority = 0;
-			this.usePriority = false;
 		}
 
 		public Boolean isEnabled() {
-			return enabled.get();
+			return enabled != null ? enabled.get() : false;
 		}
 
-		public Integer getPriority() {
-			return priority.get();
+		protected void registerEntries(ForgeConfigSpec.Builder builder) {
+			enabled = builder.comment("Enabled " + name + " integration. Default value is true").define("enabled", true);
 		}
 
-		public void register() {
-			if (!ModList.get().isLoaded(modId)) return;
+		public final void register(ForgeConfigSpec.Builder builder) {
 			BUILDER.comment(name).push(id);
-			enabled = BUILDER.comment("Enabled " + name + " integration. Default value is true").define("enabled", true);
-			if (usePriority)
-				priority = BUILDER.comment(name + " storage priority. Items are inserted first into storages with higher priority. Default value is " + defaultPriority).define("priority", defaultPriority);
+			registerEntries(builder);
 			BUILDER.pop();
 		}
 	}
 
-	public static class ModRegistry {
-		private final String modId;
-		private final RegistryInfo[] registries;
+	public static class PriorityRegistryInfo extends RegistryInfo {
+		private final int defaultPriority;
+		private ForgeConfigSpec.ConfigValue<Integer> priority = null;
 
-		public ModRegistry(String modId, RegistryInfo[] registries) {
+		public PriorityRegistryInfo(String id, String name, int defaultPriority) {
+			super(id, name);
+			this.defaultPriority = defaultPriority;
+		}
+
+		@Override
+		protected void registerEntries(ForgeConfigSpec.Builder builder) {
+			super.registerEntries(builder);
+			priority = BUILDER.comment(name + " storage priority. Items are inserted first into storages with higher priority. Default value is " + defaultPriority).define("priority", defaultPriority);
+		}
+
+		public Integer getPriority() {
+			return priority != null ? priority.get() : -1;
+		}
+	}
+
+	public static class ModRegistry implements IRegistryInfo {
+		private final String modId;
+		private final IRegistryInfo[] registries;
+
+		public ModRegistry(String modId, IRegistryInfo[] registries) {
 			this.modId = modId;
 			this.registries = registries;
 		}
 
-		public void register() {
-			if (!ModList.get().isLoaded(modId)) return;
+		public void register(ForgeConfigSpec.Builder builder) {
 			String name = ModList.get().getModContainerById(modId).get().getModInfo().getDisplayName();
 			BUILDER.comment(name).push(modId);
-			for (RegistryInfo registry : registries) {
-				registry.register();
+			for (IRegistryInfo registry : registries) {
+				registry.register(builder);
 			}
 			BUILDER.pop();
 		}

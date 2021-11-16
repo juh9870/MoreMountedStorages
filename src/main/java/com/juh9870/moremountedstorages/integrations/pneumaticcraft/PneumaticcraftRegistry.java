@@ -16,6 +16,7 @@ import net.minecraftforge.items.ItemStackHandler;
 
 public class PneumaticcraftRegistry extends ContraptionStorageRegistry {
 	public static final Lazy<ContraptionStorageRegistry> INSTANCE = getInstance(Utils.constructId("pneumaticcraft", "smart_chest"));
+	public static final Config.PriorityRegistryInfo CONFIG = new Config.PriorityRegistryInfo("smart_chest", "PneumaticCraft Smart Chest", 1);
 
 
 	@Override
@@ -27,7 +28,7 @@ public class PneumaticcraftRegistry extends ContraptionStorageRegistry {
 
 	@Override
 	public boolean canUseAsStorage(TileEntity te) {
-		return getHandlerFromDefaultCapability(te) instanceof TileEntitySmartChest.SmartChestItemHandler && Config.PNEUMATICCRAFT.isEnabled();
+		return getHandlerFromDefaultCapability(te) instanceof TileEntitySmartChest.SmartChestItemHandler && CONFIG.isEnabled();
 	}
 
 	@Override
@@ -67,7 +68,7 @@ public class PneumaticcraftRegistry extends ContraptionStorageRegistry {
 
 		@Override
 		public int getPriority() {
-			return Config.PNEUMATICCRAFT.getPriority();
+			return CONFIG.getPriority();
 		}
 	}
 }

@@ -16,9 +16,10 @@ public class EnderStorageRegistry extends ContraptionStorageRegistry {
 
 	public static int managerGeneration = 0;
 
+	public static final Config.PriorityRegistryInfo CONFIG = new Config.PriorityRegistryInfo("ender_chest", "Ender Storage", 1);
 	@Override
 	public boolean canUseAsStorage(TileEntity te) {
-		return super.canUseAsStorage(te) && Config.ENDER_STORAGE.isEnabled();
+		return super.canUseAsStorage(te) && CONFIG.isEnabled();
 	}
 
 	@Override

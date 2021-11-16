@@ -11,6 +11,7 @@ import net.minecraftforge.common.util.Lazy;
 public class ImmersiveEngineeringRegistry extends ContraptionStorageRegistry {
 	public static final Lazy<ContraptionStorageRegistry> INSTANCE = getInstance(Utils.constructId("immersiveengineering", "crate"));
 
+	public static final Config.RegistryInfo CONFIG = new Config.RegistryInfo("crate", "Immersive Engineering Crate");
 
 	@Override
 	public Priority getPriority() {
@@ -19,7 +20,7 @@ public class ImmersiveEngineeringRegistry extends ContraptionStorageRegistry {
 
 	@Override
 	public boolean canUseAsStorage(TileEntity te) {
-		return super.canUseAsStorage(te) && Config.IMMERSIVE_ENGINEERING.isEnabled();
+		return super.canUseAsStorage(te) && CONFIG.isEnabled();
 	}
 
 	@Override

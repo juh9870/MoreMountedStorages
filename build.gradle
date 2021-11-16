@@ -131,6 +131,9 @@ dependencies {
 
     implementation fg.deobf("curse.maven:expanded-storage-forge-362415:3431510")
 
+    implementation fg.deobf("curse.maven:supermartijn642s-core-lib-454372:3524851")
+    implementation fg.deobf("curse.maven:trash-cans-394535:3301005")
+
     annotationProcessor 'org.spongepowered:mixin:0.8:processor'
 }
 

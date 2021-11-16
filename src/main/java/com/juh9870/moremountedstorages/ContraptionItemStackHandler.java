@@ -12,10 +12,17 @@ public abstract class ContraptionItemStackHandler extends ItemStackHandler {
 	 * Priority of trash bins that void items
 	 */
 	public static int PRIORITY_TRASH = -10;
+
 	/**
 	 * Priority of item bins that store large quantities of one item type
 	 */
 	public static int PRIORITY_ITEM_BIN = 10;
+
+	/**
+	 * Priority of whitelist trash bins that void only specific set of items
+	 */
+	public static int PRIORITY_WHITELIST_TRASH = 20;
+
 
 	public ContraptionItemStackHandler() {
 	}
