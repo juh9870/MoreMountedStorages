@@ -85,3 +85,9 @@ Suppoted mods:
     versionRange="[1.0.10,)" #keep updated
     ordering="AFTER"
     side="BOTH"
+[[dependencies.moremountedstorages]]
+    modId="enderchests"
+    mandatory=false
+    versionRange="[1.7.8,)" #keep updated
+    ordering="AFTER"
+    side="BOTH"
