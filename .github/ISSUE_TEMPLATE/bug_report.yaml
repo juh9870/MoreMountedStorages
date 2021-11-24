@@ -1,8 +1,8 @@
 name: Bug report
-about: Bug template
-title: ''
-labels: bug
-assignees: ''
+title: 'Bug report'
+labels: [bug]
+assignees: []
+description: "Report an issue"
 body:
 - type: textarea
   attributes:
