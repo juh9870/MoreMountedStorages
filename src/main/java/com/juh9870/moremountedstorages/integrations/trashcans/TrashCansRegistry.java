@@ -59,17 +59,17 @@ public class TrashCansRegistry extends ContraptionStorageRegistry {
 		}
 
 		@Nonnull
-		public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate){
-			for(ItemStack filter : itemFilter){
-				if(!filter.isEmpty() && ItemStack.isSame(stack, filter))
+		public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
+			for (ItemStack filter : itemFilter) {
+				if (!filter.isEmpty() && ItemStack.isSame(stack, filter))
 					return whitelist ? ItemStack.EMPTY : stack;
 			}
 			return whitelist ? stack : ItemStack.EMPTY;
 		}
 
 		public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-			for(ItemStack filter : itemFilter){
-				if(!filter.isEmpty() && ItemStack.isSame(stack, filter))
+			for (ItemStack filter : itemFilter) {
+				if (!filter.isEmpty() && ItemStack.isSame(stack, filter))
 					return whitelist;
 			}
 			return !whitelist;

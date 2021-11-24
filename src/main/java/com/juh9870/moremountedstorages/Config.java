@@ -1,15 +1,5 @@
 package com.juh9870.moremountedstorages;
 
-import com.juh9870.moremountedstorages.integrations.enderstorage.EnderStorageRegistry;
-import com.juh9870.moremountedstorages.integrations.expandedstorage.ExpandedStorageRegistry;
-import com.juh9870.moremountedstorages.integrations.immersiveengineering.ImmersiveEngineeringRegistry;
-import com.juh9870.moremountedstorages.integrations.industrialforegoing.IndustrialForegoingControllerRegistry;
-import com.juh9870.moremountedstorages.integrations.industrialforegoing.IndustrialForegoingRegistry;
-import com.juh9870.moremountedstorages.integrations.ironchests.IronChestsRegistry;
-import com.juh9870.moremountedstorages.integrations.pneumaticcraft.PneumaticcraftRegistry;
-import com.juh9870.moremountedstorages.integrations.storagedrawers.CompactingDrawerRegistry;
-import com.juh9870.moremountedstorages.integrations.storagedrawers.StorageDrawersRegistry;
-import com.juh9870.moremountedstorages.integrations.trashcans.TrashCansRegistry;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModList;
 

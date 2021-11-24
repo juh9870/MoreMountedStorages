@@ -7,7 +7,6 @@ import com.jaquadro.minecraft.storagedrawers.block.tile.TileEntityDrawersComp;
 import com.jaquadro.minecraft.storagedrawers.block.tile.tiledata.FractionalDrawerGroup;
 import com.jaquadro.minecraft.storagedrawers.block.tile.tiledata.UpgradeData;
 import com.jaquadro.minecraft.storagedrawers.config.CommonConfig;
-import com.juh9870.moremountedstorages.Config;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 

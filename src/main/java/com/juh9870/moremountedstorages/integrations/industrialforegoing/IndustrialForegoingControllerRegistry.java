@@ -24,7 +24,7 @@ import static com.juh9870.moremountedstorages.ContraptionItemStackHandler.PRIORI
 
 public class IndustrialForegoingControllerRegistry extends ContraptionStorageRegistry {
 	public static final Lazy<ContraptionStorageRegistry> INSTANCE = getInstance(Utils.constructId("industrialforegoing", "black_hole_controller"));
-		public static final Config.PriorityRegistryInfo CONFIG = new Config.PriorityRegistryInfo("black_hole_controller", "Black Hole Controller", PRIORITY_ITEM_BIN);
+	public static final Config.PriorityRegistryInfo CONFIG = new Config.PriorityRegistryInfo("black_hole_controller", "Black Hole Controller", PRIORITY_ITEM_BIN);
 
 	private static final Lazy<TileEntityType<?>[]> affectedStorages = Lazy.of(() -> new TileEntityType<?>[]{ForgeRegistries.TILE_ENTITIES.getValue(new ResourceLocation("industrialforegoing:black_hole_controller"))});
 

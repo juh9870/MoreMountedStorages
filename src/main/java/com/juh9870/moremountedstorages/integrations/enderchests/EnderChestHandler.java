@@ -4,16 +4,12 @@ import com.juh9870.moremountedstorages.ContraptionStorageRegistry;
 import com.juh9870.moremountedstorages.helpers.InventoryWrapperStackHandler;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import shetiphian.core.common.inventory.InventoryInternal;
 import shetiphian.enderchests.Configuration;
 import shetiphian.enderchests.common.misc.ChestHelper;
 import shetiphian.enderchests.common.tileentity.TileEntityEnderChest;
-
-import javax.annotation.Nonnull;
 
 public class EnderChestHandler extends InventoryWrapperStackHandler<IInventory> implements ContraptionStorageRegistry.IWorldRequiringHandler {
 	private String code;

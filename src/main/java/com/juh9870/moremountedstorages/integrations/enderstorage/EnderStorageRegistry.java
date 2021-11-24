@@ -13,10 +13,9 @@ import net.minecraftforge.common.util.Lazy;
 
 public class EnderStorageRegistry extends ContraptionStorageRegistry {
 	public static final Lazy<ContraptionStorageRegistry> INSTANCE = getInstance(Utils.constructId("enderstorage", "ender_chest"));
-
+	public static final Config.PriorityRegistryInfo CONFIG = new Config.PriorityRegistryInfo("ender_chest", "Ender Storage", 1);
 	public static int managerGeneration = 0;
 
-	public static final Config.PriorityRegistryInfo CONFIG = new Config.PriorityRegistryInfo("ender_chest", "Ender Storage", 1);
 	@Override
 	public boolean canUseAsStorage(TileEntity te) {
 		return super.canUseAsStorage(te) && CONFIG.isEnabled();

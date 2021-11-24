@@ -34,7 +34,7 @@ public class IndustrialForegoingRegistry extends ContraptionStorageRegistry {
 			try {
 				TileEntityType<?> type = ForgeRegistries.TILE_ENTITIES.getValue(new ResourceLocation(Reference.MOD_ID, rarity.name().toLowerCase() + "_black_hole_unit"));
 				if (type != null) values.add(type);
-			} catch (ResourceLocationException ignored){
+			} catch (ResourceLocationException ignored) {
 			}
 		}
 

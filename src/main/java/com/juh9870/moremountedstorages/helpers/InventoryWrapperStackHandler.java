@@ -13,7 +13,7 @@ public abstract class InventoryWrapperStackHandler<T extends IInventory> extends
 		return storage;
 	}
 
-	protected boolean storageStillValid(){
+	protected boolean storageStillValid() {
 		return true;
 	}
 

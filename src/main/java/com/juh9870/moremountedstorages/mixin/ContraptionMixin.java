@@ -29,8 +29,8 @@ public class ContraptionMixin {
 	@Shadow(remap = false)
 	protected Map<BlockPos, MountedStorage> storage;
 
-	@Inject(at=@At(value = "INVOKE", target = "Ljava/util/Map;clear()V", ordinal = 5), method = "readNBT", remap = false)
-	public void moremountedstorages__readNBT(World world, CompoundNBT nbt, boolean spawnData, CallbackInfo cbi){
+	@Inject(at = @At(value = "INVOKE", target = "Ljava/util/Map;clear()V", ordinal = 5), method = "readNBT", remap = false)
+	public void moremountedstorages__readNBT(World world, CompoundNBT nbt, boolean spawnData, CallbackInfo cbi) {
 		MoreMountedStorages.breakpoint();
 		for (MountedStorage value : this.storage.values()) {
 			IItemHandlerModifiable handler = value.getItemHandler();

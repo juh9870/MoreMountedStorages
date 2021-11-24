@@ -1,6 +1,5 @@
 package com.juh9870.moremountedstorages.helpers;
 
-import com.juh9870.moremountedstorages.ContraptionItemStackHandler;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.items.IItemHandler;
