@@ -1,20 +1,32 @@
 ---
 name: Bug report
-about: Create bug template
+about: Bug template
 title: ''
 labels: bug
 assignees: ''
-
+body:
+- type: textarea
+  attributes:
+    label: Describe your issue
+  validations:
+    required: true
+- type: input
+  attributes:
+    label: Mod version
+  validations:
+    required: true
+- type: input
+  attributes:
+    label: Forge version
+  validations:
+    required: true
+- type: input
+  attributes:
+    label: Create version
+  validations:
+    required: true
+- type: input
+  attributes:
+    label: Crash Report
+    description: "Paste a link to the crash report, if you crashed."
 ---
-
-**Describe the bug**
-A clear and concise description of what the bug is.
-Also attach crashlog if possible
-
-**To Reproduce**
-Steps to reproduce the behavior:
-
-**Additional context**
-- Mod version:
-- Forge version:
-- Create version:
