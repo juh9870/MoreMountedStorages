@@ -1,0 +1,26 @@
+name: Mod Request
+description: "Request modded storage integration"
+labels: ["mod request"]
+body:
+  - type: checkboxes
+    attributes:
+      label: "Before suggesting a mod please"
+      description: "Make sure to do all of the following checks, otherwise your suggestion may get rejected"
+      options:
+        - label: "I have already tested myself that the modded storages I want to suggest don't work as a part of Create moving contraption, even with More Mounted Storages installed"
+          required: true
+        - label: "Storages I want to suggest don't require power of any kind to function"
+          required: true
+        - label: "Storages I want to suggest are not multiblock structures"
+          required: true
+        - label: "Main function of storages I want to suggest is to store items, and they don't do any kind of items processing over time"
+          required: true
+  - type: input
+    attributes:
+      label: "URL"
+      description: "Link to the mod on Curseforge"
+      placeholder: "https://www.curseforge.com/minecraft/mc-mods/ender-storage-1-8"
+  - type: textarea
+    attributes:
+      label: "Additional info"
+      description: "Give info on which storages of the given mod you need support for. Write additional info here too (if needed)"
