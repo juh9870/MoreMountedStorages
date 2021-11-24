@@ -1,4 +1,3 @@
----
 name: Bug report
 about: Bug template
 title: ''
@@ -29,4 +28,3 @@ body:
   attributes:
     label: Crash Report
     description: "Paste a link to the crash report, if you crashed."
----
