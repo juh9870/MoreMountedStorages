@@ -9,6 +9,7 @@ assignees: ''
 
 **Describe the bug**
 A clear and concise description of what the bug is.
+Also attach crashlog if possible
 
 **To Reproduce**
 Steps to reproduce the behavior:
@@ -17,4 +18,3 @@ Steps to reproduce the behavior:
 - Mod version:
 - Forge version:
 - Create version:
-- Ender Storage version:
