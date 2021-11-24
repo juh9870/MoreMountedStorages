@@ -13,6 +13,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.ResourceLocationException;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -30,8 +31,11 @@ public class IndustrialForegoingRegistry extends ContraptionStorageRegistry {
 		List<TileEntityType<?>> values = new ArrayList<>();
 
 		for (Rarity rarity : Rarity.values()) {
-			TileEntityType<?> type = ForgeRegistries.TILE_ENTITIES.getValue(new ResourceLocation(Reference.MOD_ID, rarity.name().toLowerCase() + "_black_hole_unit"));
-			if (type != null) values.add(type);
+			try {
+				TileEntityType<?> type = ForgeRegistries.TILE_ENTITIES.getValue(new ResourceLocation(Reference.MOD_ID, rarity.name().toLowerCase() + "_black_hole_unit"));
+				if (type != null) values.add(type);
+			} catch (ResourceLocationException ignored){
+			}
 		}
 
 		return values.toArray(new TileEntityType<?>[0]);
