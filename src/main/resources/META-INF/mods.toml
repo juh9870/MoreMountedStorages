@@ -17,7 +17,8 @@ Suppoted mods:
     - Immersive Engineering https://www.curseforge.com/minecraft/mc-mods/immersive-engineering
     - Industrial Foregoing https://www.curseforge.com/minecraft/mc-mods/industrial-foregoing
     - PneumaticCraft: Repressurized https://www.curseforge.com/minecraft/mc-mods/pneumaticcraft-repressurized
-    - Expanded Storage: https://www.curseforge.com/minecraft/mc-mods/expanded-storage-forge'''
+    - Expanded Storage: https://www.curseforge.com/minecraft/mc-mods/expanded-storage-forge
+    - DimStorage: https://www.curseforge.com/minecraft/mc-mods/dimstorage'''
 [[dependencies.moremountedstorages]] #optional
     modId="forge" #mandatory
     mandatory=true #mandatory
