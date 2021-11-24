@@ -143,7 +143,7 @@ public abstract class ContraptionStorageRegistry extends ForgeRegistryEntry<Cont
 		throw new NotImplementedException();
 	}
 
-	protected final ContraptionItemStackHandler deserializeHandler(ContraptionItemStackHandler handler, CompoundNBT nbt) {
+	protected final <T extends ContraptionItemStackHandler> T deserializeHandler(T handler, CompoundNBT nbt) {
 		handler.deserializeNBT(nbt);
 		return handler;
 	}
