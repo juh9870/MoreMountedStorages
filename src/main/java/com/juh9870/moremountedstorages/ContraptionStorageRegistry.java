@@ -29,7 +29,7 @@ public abstract class ContraptionStorageRegistry extends ForgeRegistryEntry<Cont
 	public static final String REGISTRY_NAME = "StorageRegistryId";
 	private static Map<TileEntityType<?>, ContraptionStorageRegistry> tileEntityMappingsCache = null;
 
-	public static void initCache() throws RegistryConflictException {
+	public static void initCache() {
 		if (tileEntityMappingsCache != null) return;
 		tileEntityMappingsCache = new HashMap<>();
 		for (ContraptionStorageRegistry registry : REGISTRY.get()) {
@@ -54,7 +54,7 @@ public abstract class ContraptionStorageRegistry extends ForgeRegistryEntry<Cont
 	 * @return matching registry entry, or null if nothing is found
 	 */
 	@Nullable
-	public static ContraptionStorageRegistry forTileEntity(TileEntityType<?> type) throws RegistryConflictException {
+	public static ContraptionStorageRegistry forTileEntity(TileEntityType<?> type) {
 		return tileEntityMappingsCache.get(type);
 	}
 
@@ -215,7 +215,7 @@ public abstract class ContraptionStorageRegistry extends ForgeRegistryEntry<Cont
 		}
 	}
 
-	public static class RegistryConflictException extends Exception {
+	public static class RegistryConflictException extends RuntimeException {
 		public RegistryConflictException(TileEntityType<?> teType, Class<? extends ContraptionStorageRegistry> a, Class<? extends ContraptionStorageRegistry> b) {
 			super("Registry conflict: registries " + a.getName() + " and " + b.getName() + " tried to register the same tile entity " + teType.getRegistryName());
 		}

@@ -1,5 +1,6 @@
 package com.juh9870.moremountedstorages;
 
+import com.juh9870.moremountedstorages.integrations.dimstorage.DimStorageRegistry;
 import com.juh9870.moremountedstorages.integrations.enderchests.EnderChestsRegistry;
 import com.juh9870.moremountedstorages.integrations.enderstorage.EnderStorageRegistry;
 import com.juh9870.moremountedstorages.integrations.expandedstorage.ExpandedStorageRegistry;
@@ -49,7 +50,7 @@ public class MoreMountedStorages {
 	}
 
 	@SubscribeEvent
-	public void commonSetup(FMLCommonSetupEvent event) throws ContraptionStorageRegistry.RegistryConflictException {
+	public void commonSetup(FMLCommonSetupEvent event) {
 		ContraptionStorageRegistry.initCache();
 	}
 
@@ -70,6 +71,8 @@ public class MoreMountedStorages {
 		registerPneumaticcraft(registry);
 		registry.register("expandedstorage", "chest", () -> new ExpandedStorageRegistry(), () -> ExpandedStorageRegistry.CONFIG);
 		registry.register("trashcans", "trashcan", () -> new TrashCansRegistry(), () -> TrashCansRegistry.CONFIG);
+
+		registry.register("dimstorage", "dimensional_chest", () -> new DimStorageRegistry(), () -> DimStorageRegistry.CONFIG);
 
 		Config.BUILDER.pop();
 		Config.SPEC = Config.BUILDER.build();

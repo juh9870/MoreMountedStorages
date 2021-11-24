@@ -9,7 +9,10 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import javax.annotation.Nonnull;
 import java.util.Arrays;
 
-public abstract class AdvancedItemStackHandler extends ContraptionItemStackHandler {
+/**
+ * ItemStackHandler with stack size customization and voiding options
+ */
+public abstract class AdvancedItemStackHandler extends SmartItemStackHandler {
 	protected int[] stackSizes;
 	protected boolean ignoreItemStackSize;
 	protected boolean[] voiding;

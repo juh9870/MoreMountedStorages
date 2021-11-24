@@ -1,48 +1,49 @@
-package com.juh9870.moremountedstorages.integrations.enderstorage;
+package com.juh9870.moremountedstorages.integrations.dimstorage;
 
-import codechicken.enderstorage.api.Frequency;
-import codechicken.enderstorage.manager.EnderStorageManager;
-import codechicken.enderstorage.storage.EnderItemStorage;
 import com.juh9870.moremountedstorages.ContraptionStorageRegistry;
 import com.juh9870.moremountedstorages.helpers.InventoryWrapperStackHandler;
+import edivad.dimstorage.api.Frequency;
+import edivad.dimstorage.manager.DimStorageManager;
+import edivad.dimstorage.storage.DimChestStorage;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 
-public class EnderStackHandler extends InventoryWrapperStackHandler<EnderItemStorage> {
+public class DimStorageStackHandler extends InventoryWrapperStackHandler<DimChestStorage> {
 	protected Frequency frequency;
 	protected boolean isClientSide;
-	protected int managerGeneration = EnderStorageRegistry.managerGeneration;
+	protected int managerGeneration = DimStorageRegistry.managerGeneration;
 	protected boolean valid = true;
 
-	public EnderStackHandler() {
+	public DimStorageStackHandler() {
 		this(new Frequency(), true);
 	}
 
-	public EnderStackHandler(EnderItemStorage storage) {
+	public DimStorageStackHandler(DimChestStorage storage) {
 		frequency = storage.freq;
-		isClientSide = storage.manager.client;
+		isClientSide = !storage.manager.isServer();
 	}
 
-	public EnderStackHandler(Frequency frequency, boolean isClientSide) {
+	public DimStorageStackHandler(Frequency frequency, boolean isClientSide) {
 		this.frequency = frequency;
 		this.isClientSide = isClientSide;
 	}
 
 	@Override
 	protected boolean storageStillValid() {
-		return managerGeneration == EnderStorageRegistry.managerGeneration;
+		return managerGeneration == DimStorageRegistry.managerGeneration;
 	}
 
 	@Override
 	protected void updateStorage() {
-		storage = EnderStorageManager.instance(isClientSide).getStorage(frequency, EnderItemStorage.TYPE);
-		managerGeneration = EnderStorageRegistry.managerGeneration;
+		storage = (DimChestStorage) DimStorageManager.instance(isClientSide).getStorage(frequency, "item");
+		managerGeneration = DimStorageRegistry.managerGeneration;
 	}
+
 
 	@Override
 	public CompoundNBT serializeNBT() {
 		CompoundNBT nbt = super.serializeNBT();
-		nbt.put("Frequency", frequency.writeToNBT(new CompoundNBT()));
+		nbt.put("Frequency", frequency.serializeNBT());
 		nbt.putBoolean("Clientside", isClientSide);
 		return nbt;
 	}
@@ -68,11 +69,11 @@ public class EnderStackHandler extends InventoryWrapperStackHandler<EnderItemSto
 
 	@Override
 	protected ContraptionStorageRegistry registry() {
-		return EnderStorageRegistry.INSTANCE.get();
+		return DimStorageRegistry.INSTANCE.get();
 	}
 
 	@Override
 	public int getPriority() {
-		return EnderStorageRegistry.CONFIG.getPriority();
+		return DimStorageRegistry.CONFIG.getPriority();
 	}
 }
