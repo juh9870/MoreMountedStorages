@@ -11,8 +11,8 @@ import com.jaquadro.minecraft.storagedrawers.block.tile.tiledata.StandardDrawerG
 import com.jaquadro.minecraft.storagedrawers.block.tile.tiledata.UpgradeData;
 import com.jaquadro.minecraft.storagedrawers.capabilities.BasicDrawerAttributes;
 import com.jaquadro.minecraft.storagedrawers.config.CommonConfig;
-import com.juh9870.moremountedstorages.ContraptionItemStackHandler;
-import com.juh9870.moremountedstorages.ContraptionStorageRegistry;
+import com.simibubi.create.api.contraption.ContraptionItemStackHandler;
+import com.simibubi.create.api.contraption.ContraptionStorageRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
@@ -28,7 +28,7 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class StorageDrawerHandler extends ContraptionItemStackHandler implements ICapabilityProvider, ContraptionStorageRegistry.IWorldRequiringHandler {
+public class StorageDrawerHandler extends ContraptionItemStackHandler implements ICapabilityProvider {
 	@CapabilityInject(IDrawerAttributes.class)
 	public static Capability<IDrawerAttributes> DRAWER_ATTRIBUTES_CAPABILITY = null;
 	protected final UpgradeData upgradeData;

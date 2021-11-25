@@ -1,7 +1,7 @@
 package com.juh9870.moremountedstorages.helpers;
 
-import com.juh9870.moremountedstorages.ContraptionItemStackHandler;
-import com.juh9870.moremountedstorages.ContraptionStorageRegistry;
+import com.simibubi.create.api.contraption.ContraptionItemStackHandler;
+import com.simibubi.create.api.contraption.ContraptionStorageRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.items.ItemStackHandler;
@@ -56,13 +56,6 @@ public abstract class WrapperStackHandler extends ContraptionItemStackHandler {
 	@Override
 	public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
 		return handler.isItemValid(slot, stack);
-	}
-
-	@Override
-	public CompoundNBT serializeNBT() {
-		CompoundNBT nbt = handler.serializeNBT();
-		nbt.putString(ContraptionStorageRegistry.REGISTRY_NAME, registry().getRegistryName().toString());
-		return nbt;
 	}
 
 	@Override

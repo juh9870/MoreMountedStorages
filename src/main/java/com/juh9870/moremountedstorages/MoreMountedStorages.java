@@ -14,6 +14,7 @@ import com.juh9870.moremountedstorages.integrations.storagedrawers.FramedCompact
 import com.juh9870.moremountedstorages.integrations.storagedrawers.FramedDrawersRegistry;
 import com.juh9870.moremountedstorages.integrations.storagedrawers.StorageDrawersRegistry;
 import com.juh9870.moremountedstorages.integrations.trashcans.TrashCansRegistry;
+import com.simibubi.create.api.contraption.ContraptionStorageRegistry;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -22,7 +23,6 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.IForgeRegistry;
 import org.apache.logging.log4j.LogManager;
@@ -42,19 +42,19 @@ public class MoreMountedStorages {
 	public MoreMountedStorages() {
 		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		modEventBus.register(this);
-		ContraptionStorageRegistry.STORAGES.register(modEventBus);
+//		ContraptionStorageRegistry.STORAGES.register(modEventBus);
 	}
 
 	public static void breakpoint() {
 		LOGGER.debug("POOP!");
 	}
 
-	@SubscribeEvent
-	public void commonSetup(FMLCommonSetupEvent event) {
-		ContraptionStorageRegistry.initCache();
-	}
+//	@SubscribeEvent
+//	public void commonSetup(FMLCommonSetupEvent event) {
+//		ContraptionStorageRegistry.initCache();
+//	}
 
-	// Using method refs causes class loadign issues when target mod isn't loaded, so we use lambdas instead
+	// Using method refs causes class loading issues when target mod isn't loaded, so we use lambdas instead
 	@SuppressWarnings("Convert2MethodRef")
 	@SubscribeEvent
 	public void registerModules(@Nonnull RegistryEvent.Register<ContraptionStorageRegistry> event) {

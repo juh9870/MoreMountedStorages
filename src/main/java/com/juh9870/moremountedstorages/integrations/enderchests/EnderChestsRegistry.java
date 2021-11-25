@@ -1,9 +1,9 @@
 package com.juh9870.moremountedstorages.integrations.enderchests;
 
 import com.juh9870.moremountedstorages.Config;
-import com.juh9870.moremountedstorages.ContraptionItemStackHandler;
-import com.juh9870.moremountedstorages.ContraptionStorageRegistry;
 import com.juh9870.moremountedstorages.Utils;
+import com.simibubi.create.api.contraption.ContraptionItemStackHandler;
+import com.simibubi.create.api.contraption.ContraptionStorageRegistry;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;

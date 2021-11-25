@@ -1,7 +1,7 @@
 package com.juh9870.moremountedstorages.integrations.enderchests;
 
-import com.juh9870.moremountedstorages.ContraptionStorageRegistry;
 import com.juh9870.moremountedstorages.helpers.InventoryWrapperStackHandler;
+import com.simibubi.create.api.contraption.ContraptionStorageRegistry;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.nbt.CompoundNBT;
@@ -11,7 +11,7 @@ import shetiphian.enderchests.Configuration;
 import shetiphian.enderchests.common.misc.ChestHelper;
 import shetiphian.enderchests.common.tileentity.TileEntityEnderChest;
 
-public class EnderChestHandler extends InventoryWrapperStackHandler<IInventory> implements ContraptionStorageRegistry.IWorldRequiringHandler {
+public class EnderChestHandler extends InventoryWrapperStackHandler<IInventory> {
 	private String code;
 	private String owner;
 	private World world;

@@ -2,8 +2,8 @@ package com.juh9870.moremountedstorages.integrations.immersiveengineering;
 
 import blusunrize.immersiveengineering.common.IETileTypes;
 import com.juh9870.moremountedstorages.Config;
-import com.juh9870.moremountedstorages.ContraptionStorageRegistry;
 import com.juh9870.moremountedstorages.Utils;
+import com.simibubi.create.api.contraption.ContraptionStorageRegistry;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.common.util.Lazy;

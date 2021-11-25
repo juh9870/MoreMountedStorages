@@ -88,6 +88,9 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
+
+    mavenLocal()
+
     maven {
         url "https://www.cursemaven.com"
         content {
@@ -101,11 +104,11 @@ repositories {
             artifact()
             ignoreGradleMetadataRedirection()
         }
+        content {
+            // this repository contains everything BUT artifacts with group starting with "my.company"
+            excludeGroupByRegex "com\\.simibubi\\.create.*"
+        }
     }
-//    maven {
-//        // Industrial Foregoing
-//        url 'https://cdn.hrzn.studio/maven/'
-//    }
 }
 
 dependencies {

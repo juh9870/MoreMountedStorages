@@ -4,11 +4,10 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "moremountedstorages.refmap.json",
   "mixins": [
-    "ContraptionMixin",
-    "MountedStorageMixin",
     "dimstorage.DimStorageManagerMixin",
     "enderchests.ChestHelperMixin",
     "enderstorage.EnderStorageManagerMixin",
+    "storagedrawers.BasicDrawerAttributesMixin",
     "storagedrawers.InventoryUpgradeMixin"
   ],
   "minVersion": "0.8"

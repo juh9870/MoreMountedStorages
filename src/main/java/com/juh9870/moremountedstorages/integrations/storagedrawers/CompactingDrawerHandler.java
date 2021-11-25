@@ -7,6 +7,8 @@ import com.jaquadro.minecraft.storagedrawers.block.tile.TileEntityDrawersComp;
 import com.jaquadro.minecraft.storagedrawers.block.tile.tiledata.FractionalDrawerGroup;
 import com.jaquadro.minecraft.storagedrawers.block.tile.tiledata.UpgradeData;
 import com.jaquadro.minecraft.storagedrawers.config.CommonConfig;
+import com.simibubi.create.api.contraption.ContraptionStorageRegistry;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
@@ -51,6 +53,10 @@ public class CompactingDrawerHandler extends StorageDrawerHandler {
 		return false;
 	}
 
+	@Override
+	protected ContraptionStorageRegistry registry() {
+		return CompactingDrawerRegistry.INSTANCE.get();
+	}
 
 	@Override
 	public int getPriority() {

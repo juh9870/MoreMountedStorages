@@ -3,15 +3,15 @@ package com.juh9870.moremountedstorages.integrations.storagedrawers;
 import com.jaquadro.minecraft.storagedrawers.block.tile.TileEntityDrawersStandard;
 import com.jaquadro.minecraft.storagedrawers.core.ModBlocks;
 import com.juh9870.moremountedstorages.Config;
-import com.juh9870.moremountedstorages.ContraptionItemStackHandler;
-import com.juh9870.moremountedstorages.ContraptionStorageRegistry;
 import com.juh9870.moremountedstorages.Utils;
+import com.simibubi.create.api.contraption.ContraptionItemStackHandler;
+import com.simibubi.create.api.contraption.ContraptionStorageRegistry;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.common.util.Lazy;
 
-import static com.juh9870.moremountedstorages.ContraptionItemStackHandler.PRIORITY_ITEM_BIN;
+import static com.simibubi.create.api.contraption.ContraptionItemStackHandler.PRIORITY_ITEM_BIN;
 
 public class StorageDrawersRegistry extends ContraptionStorageRegistry {
 	public static final Lazy<ContraptionStorageRegistry> INSTANCE = getInstance(Utils.constructId("storagedrawers", "drawer"));

@@ -1,9 +1,9 @@
 package com.juh9870.moremountedstorages.integrations.ironchests;
 
 import com.juh9870.moremountedstorages.Config;
-import com.juh9870.moremountedstorages.ContraptionStorageRegistry;
 import com.juh9870.moremountedstorages.Utils;
 import com.progwml6.ironchest.common.block.tileentity.IronChestsTileEntityTypes;
+import com.simibubi.create.api.contraption.ContraptionStorageRegistry;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.common.util.Lazy;

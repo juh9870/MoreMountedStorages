@@ -1,7 +1,7 @@
 package com.juh9870.moremountedstorages.integrations.dimstorage;
 
-import com.juh9870.moremountedstorages.ContraptionStorageRegistry;
 import com.juh9870.moremountedstorages.helpers.InventoryWrapperStackHandler;
+import com.simibubi.create.api.contraption.ContraptionStorageRegistry;
 import edivad.dimstorage.api.Frequency;
 import edivad.dimstorage.manager.DimStorageManager;
 import edivad.dimstorage.storage.DimChestStorage;

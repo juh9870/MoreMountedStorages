@@ -4,10 +4,10 @@ import com.buuz135.industrial.block.transportstorage.tile.BlackHoleControllerTil
 import com.buuz135.industrial.capability.BLHBlockItemHandlerItemStack;
 import com.hrznstudio.titanium.component.inventory.InventoryComponent;
 import com.juh9870.moremountedstorages.Config;
-import com.juh9870.moremountedstorages.ContraptionItemStackHandler;
-import com.juh9870.moremountedstorages.ContraptionStorageRegistry;
 import com.juh9870.moremountedstorages.Utils;
 import com.juh9870.moremountedstorages.helpers.FilteringItemStackHandler;
+import com.simibubi.create.api.contraption.ContraptionItemStackHandler;
+import com.simibubi.create.api.contraption.ContraptionStorageRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
@@ -20,7 +20,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 
-import static com.juh9870.moremountedstorages.ContraptionItemStackHandler.PRIORITY_ITEM_BIN;
+import static com.simibubi.create.api.contraption.ContraptionItemStackHandler.PRIORITY_ITEM_BIN;
 
 public class IndustrialForegoingControllerRegistry extends ContraptionStorageRegistry {
 	public static final Lazy<ContraptionStorageRegistry> INSTANCE = getInstance(Utils.constructId("industrialforegoing", "black_hole_controller"));

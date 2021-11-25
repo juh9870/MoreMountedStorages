@@ -1,10 +1,10 @@
 package com.juh9870.moremountedstorages.integrations.pneumaticcraft;
 
 import com.juh9870.moremountedstorages.Config;
-import com.juh9870.moremountedstorages.ContraptionItemStackHandler;
-import com.juh9870.moremountedstorages.ContraptionStorageRegistry;
 import com.juh9870.moremountedstorages.Utils;
 import com.juh9870.moremountedstorages.helpers.WrapperStackHandler;
+import com.simibubi.create.api.contraption.ContraptionItemStackHandler;
+import com.simibubi.create.api.contraption.ContraptionStorageRegistry;
 import me.desht.pneumaticcraft.common.core.ModTileEntities;
 import me.desht.pneumaticcraft.common.tileentity.TileEntitySmartChest;
 import net.minecraft.nbt.CompoundNBT;

@@ -1,9 +1,9 @@
 package com.juh9870.moremountedstorages.integrations.dimstorage;
 
 import com.juh9870.moremountedstorages.Config;
-import com.juh9870.moremountedstorages.ContraptionItemStackHandler;
-import com.juh9870.moremountedstorages.ContraptionStorageRegistry;
 import com.juh9870.moremountedstorages.Utils;
+import com.simibubi.create.api.contraption.ContraptionItemStackHandler;
+import com.simibubi.create.api.contraption.ContraptionStorageRegistry;
 import edivad.dimstorage.setup.Registration;
 import edivad.dimstorage.tile.TileEntityDimChest;
 import net.minecraft.nbt.CompoundNBT;

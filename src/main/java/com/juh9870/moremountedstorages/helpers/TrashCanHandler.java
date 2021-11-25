@@ -1,13 +1,12 @@
 package com.juh9870.moremountedstorages.helpers;
 
-import com.juh9870.moremountedstorages.ContraptionItemStackHandler;
-import com.juh9870.moremountedstorages.ContraptionStorageRegistry;
 import com.juh9870.moremountedstorages.integrations.trashcans.TrashCansRegistry;
+import com.simibubi.create.api.contraption.ContraptionItemStackHandler;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
 
-public class TrashCanHandler extends ContraptionItemStackHandler {
+public abstract class TrashCanHandler extends ContraptionItemStackHandler {
 
 	@Override
 	public void setStackInSlot(int slot, @Nonnull ItemStack stack) {
@@ -32,11 +31,6 @@ public class TrashCanHandler extends ContraptionItemStackHandler {
 	@Nonnull
 	public ItemStack getStackInSlot(int slot) {
 		return ItemStack.EMPTY;
-	}
-
-	@Override
-	protected ContraptionStorageRegistry registry() {
-		return TrashCansRegistry.INSTANCE.get();
 	}
 
 	@Override

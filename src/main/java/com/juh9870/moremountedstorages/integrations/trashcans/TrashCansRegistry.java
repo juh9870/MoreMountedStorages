@@ -1,10 +1,10 @@
 package com.juh9870.moremountedstorages.integrations.trashcans;
 
 import com.juh9870.moremountedstorages.Config;
-import com.juh9870.moremountedstorages.ContraptionItemStackHandler;
-import com.juh9870.moremountedstorages.ContraptionStorageRegistry;
 import com.juh9870.moremountedstorages.Utils;
 import com.juh9870.moremountedstorages.helpers.TrashCanHandler;
+import com.simibubi.create.api.contraption.ContraptionItemStackHandler;
+import com.simibubi.create.api.contraption.ContraptionStorageRegistry;
 import com.supermartijn642.trashcans.TrashCanTile;
 import com.supermartijn642.trashcans.TrashCans;
 import net.minecraft.item.ItemStack;
@@ -78,6 +78,11 @@ public class TrashCansRegistry extends ContraptionStorageRegistry {
 		@Override
 		public int getPriority() {
 			return whitelist ? CONFIG.getWhitelistPriority() : CONFIG.getPriority();
+		}
+
+		@Override
+		protected ContraptionStorageRegistry registry() {
+			return INSTANCE.get();
 		}
 
 		@Override
