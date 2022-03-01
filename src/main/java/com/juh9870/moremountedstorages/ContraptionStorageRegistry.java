@@ -32,8 +32,8 @@ public abstract class ContraptionStorageRegistry extends ForgeRegistryEntry<Cont
 	public static void initCache() {
 		if (tileEntityMappingsCache != null) return;
 		tileEntityMappingsCache = new HashMap<>();
+		ContraptionStorageRegistry other;
 		for (ContraptionStorageRegistry registry : REGISTRY.get()) {
-			ContraptionStorageRegistry other;
 			for (TileEntityType<?> tileEntityType : registry.affectedStorages()) {
 				if ((other = tileEntityMappingsCache.get(tileEntityType)) != null) {
 					if (other.getPriority() == registry.getPriority() && other.getPriority() != Priority.DUMMY) {
@@ -89,6 +89,17 @@ public abstract class ContraptionStorageRegistry extends ForgeRegistryEntry<Cont
 	}
 
 	/**
+	 * Helper method to unconditionally register handlers
+	 *
+	 * @param registry     registry for entry registering
+	 * @param registryName Name to register the entry under
+	 * @param supplier     Supplier to get the entry
+	 */
+	public static void register(IForgeRegistry<ContraptionStorageRegistry> registry, String registryName, Supplier<ContraptionStorageRegistry> supplier) {
+		registerConditionally(registry, () -> true, registryName, supplier);
+	}
+
+	/**
 	 * Helper method to get default item handler capability from tile entity
 	 *
 	 * @param te TileEntity to get handler from
@@ -104,10 +115,15 @@ public abstract class ContraptionStorageRegistry extends ForgeRegistryEntry<Cont
 	 * @param id registry name
 	 * @return Lazy with given name
 	 */
-	protected static Lazy<ContraptionStorageRegistry> getInstance(String id) {
+	public static Lazy<ContraptionStorageRegistry> getInstance(String id) {
 		return Lazy.of(() -> REGISTRY.get().getValue(new ResourceLocation(id)));
 	}
 
+	/**
+	 * Method for getting registry priority. For additional info see {@link Priority}
+	 *
+	 * @return registry priority
+	 */
 	public abstract Priority getPriority();
 
 	/**
@@ -117,15 +133,13 @@ public abstract class ContraptionStorageRegistry extends ForgeRegistryEntry<Cont
 
 	/**
 	 * @param te Tile Entity
-	 * @return true if this tile entity can be used as storage
+	 * @return true if given tile entity can be used as mounted storage
 	 */
 	public boolean canUseAsStorage(TileEntity te) {
 		return true;
 	}
 
 	/**
-	 * Returns Item handler to be used in contraption, or null if default logic should be used
-	 *
 	 * @param te original Tile Entity
 	 * @return Item handler to be used in contraption or null if default logic should be used
 	 */
@@ -136,13 +150,20 @@ public abstract class ContraptionStorageRegistry extends ForgeRegistryEntry<Cont
 	/**
 	 * Returns {@link  ContraptionItemStackHandler} deserialized from NBT
 	 *
-	 * @param nbt saved NBT
+	 * @param nbt serialized NBT
 	 * @return deserialized handler
 	 */
 	public ContraptionItemStackHandler deserializeHandler(CompoundNBT nbt) {
 		throw new NotImplementedException();
 	}
 
+	/**
+	 * Helper method for deserializing handler from NBT
+	 *
+	 * @param handler handler to deserialize
+	 * @param nbt     serialized NBT
+	 * @return Deserialized handler
+	 */
 	protected final <T extends ContraptionItemStackHandler> T deserializeHandler(T handler, CompoundNBT nbt) {
 		handler.deserializeNBT(nbt);
 		return handler;
@@ -150,9 +171,6 @@ public abstract class ContraptionStorageRegistry extends ForgeRegistryEntry<Cont
 
 	/**
 	 * Registry priority enum
-	 * <p>
-	 * Registries with addon priority are overwritten by registries with native priority
-	 * </p>
 	 */
 	public enum Priority {
 		/**
@@ -161,11 +179,11 @@ public abstract class ContraptionStorageRegistry extends ForgeRegistryEntry<Cont
 		DUMMY {
 			@Override
 			public boolean isOverwrite(Priority other) {
-				return true;
+				return false;
 			}
 		},
 		/**
-		 * Add-on priority, use this if your registry is coming from an add-on to the external mod
+		 * Add-on priority, use this if your registry is coming from an add-on to the external mod and should be overwritten if official support is added
 		 */
 		ADDON {
 			@Override
@@ -185,18 +203,6 @@ public abstract class ContraptionStorageRegistry extends ForgeRegistryEntry<Cont
 
 		public abstract boolean isOverwrite(Priority other);
 	}
-
-	/**
-	 * {@link  ContraptionItemStackHandler} is provided with World after initialisation and after deserialization
-	 */
-	public interface IWorldRequiringHandler {
-		void applyWorld(World world);
-
-		default void applyWorldOnDeserialization(World world) {
-			applyWorld(world);
-		}
-	}
-
 
 	public static class DummyHandler extends ContraptionStorageRegistry {
 		@Override

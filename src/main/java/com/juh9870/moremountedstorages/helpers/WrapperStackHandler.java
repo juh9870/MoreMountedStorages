@@ -59,13 +59,6 @@ public abstract class WrapperStackHandler extends ContraptionItemStackHandler {
 	}
 
 	@Override
-	public CompoundNBT serializeNBT() {
-		CompoundNBT nbt = handler.serializeNBT();
-		nbt.putString(ContraptionStorageRegistry.REGISTRY_NAME, registry().getRegistryName().toString());
-		return nbt;
-	}
-
-	@Override
 	public void deserializeNBT(CompoundNBT nbt) {
 		handler.deserializeNBT(nbt);
 	}

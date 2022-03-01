@@ -34,8 +34,8 @@ public class ContraptionMixin {
 		MoreMountedStorages.breakpoint();
 		for (MountedStorage value : this.storage.values()) {
 			IItemHandlerModifiable handler = value.getItemHandler();
-			if (handler instanceof ContraptionStorageRegistry.IWorldRequiringHandler) {
-				((ContraptionStorageRegistry.IWorldRequiringHandler) handler).applyWorldOnDeserialization(world);
+			if (handler instanceof ContraptionItemStackHandler) {
+				((ContraptionItemStackHandler) handler).applyWorld(world);
 			}
 		}
 	}
@@ -43,7 +43,7 @@ public class ContraptionMixin {
 	@Inject(at = @At("TAIL"), method = "onEntityCreated", remap = false)
 	public void moremountedstorages__onEntityCreated(AbstractContraptionEntity face, CallbackInfo ci) {
 
-		// Gather itemhandlers of mounted storage
+		// Gather item handlers of mounted storage
 		List<IItemHandlerModifiable> list = storage.values()
 				.stream()
 				.map(MountedStorage::getItemHandler).sorted((a, b) -> {

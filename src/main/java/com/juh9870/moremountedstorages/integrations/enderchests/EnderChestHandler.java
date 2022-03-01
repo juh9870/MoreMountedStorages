@@ -11,7 +11,7 @@ import shetiphian.enderchests.Configuration;
 import shetiphian.enderchests.common.misc.ChestHelper;
 import shetiphian.enderchests.common.tileentity.TileEntityEnderChest;
 
-public class EnderChestHandler extends InventoryWrapperStackHandler<IInventory> implements ContraptionStorageRegistry.IWorldRequiringHandler {
+public class EnderChestHandler extends InventoryWrapperStackHandler<IInventory> {
 	private String code;
 	private String owner;
 	private World world;

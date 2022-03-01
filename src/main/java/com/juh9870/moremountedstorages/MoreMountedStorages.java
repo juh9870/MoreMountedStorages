@@ -1,5 +1,6 @@
 package com.juh9870.moremountedstorages;
 
+import com.juh9870.moremountedstorages.integrations.create.FlexCrateRegistry;
 import com.juh9870.moremountedstorages.integrations.dimstorage.DimStorageRegistry;
 import com.juh9870.moremountedstorages.integrations.enderchests.EnderChestsRegistry;
 import com.juh9870.moremountedstorages.integrations.enderstorage.EnderStorageRegistry;
@@ -54,13 +55,15 @@ public class MoreMountedStorages {
 		ContraptionStorageRegistry.initCache();
 	}
 
-	// Using method refs causes class loadign issues when target mod isn't loaded, so we use lambdas instead
+	// Using method refs causes class loading issues when target mod isn't loaded, so we use lambdas instead
 	@SuppressWarnings("Convert2MethodRef")
 	@SubscribeEvent
 	public void registerModules(@Nonnull RegistryEvent.Register<ContraptionStorageRegistry> event) {
 		Config.BUILDER.comment("Mod integration config").push("Integration");
 
 		Registry registry = new Registry(event.getRegistry());
+
+		registry.register("create","crate", () -> new FlexCrateRegistry(), () -> FlexCrateRegistry.CONFIG);
 
 		registry.register("enderstorage", "ender_chest", () -> new EnderStorageRegistry(), () -> EnderStorageRegistry.CONFIG);
 		registry.register("enderchests", "ender_chest", () -> new EnderChestsRegistry(), () -> EnderChestsRegistry.CONFIG);

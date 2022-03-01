@@ -42,6 +42,11 @@ public class TrashCansRegistry extends ContraptionStorageRegistry {
 		return new FilteredTrashCanHandler(can.itemFilter, can.itemFilterWhitelist);
 	}
 
+	@Override
+	public ContraptionItemStackHandler deserializeHandler(CompoundNBT nbt) {
+		return deserializeHandler(new FilteredTrashCanHandler(), nbt);
+	}
+
 	public static class FilteredTrashCanHandler extends TrashCanHandler {
 		private ArrayList<ItemStack> itemFilter = new ArrayList<>();
 		private boolean whitelist;
@@ -78,6 +83,11 @@ public class TrashCansRegistry extends ContraptionStorageRegistry {
 		@Override
 		public int getPriority() {
 			return whitelist ? CONFIG.getWhitelistPriority() : CONFIG.getPriority();
+		}
+
+		@Override
+		protected ContraptionStorageRegistry registry() {
+			return INSTANCE.get();
 		}
 
 		@Override

@@ -28,7 +28,7 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class StorageDrawerHandler extends ContraptionItemStackHandler implements ICapabilityProvider, ContraptionStorageRegistry.IWorldRequiringHandler {
+public class StorageDrawerHandler extends ContraptionItemStackHandler implements ICapabilityProvider {
 	@CapabilityInject(IDrawerAttributes.class)
 	public static Capability<IDrawerAttributes> DRAWER_ATTRIBUTES_CAPABILITY = null;
 	protected final UpgradeData upgradeData;

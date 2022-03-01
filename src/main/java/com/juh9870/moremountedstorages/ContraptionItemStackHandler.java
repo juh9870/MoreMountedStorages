@@ -4,6 +4,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
+import net.minecraft.world.World;
 import net.minecraftforge.items.ItemStackHandler;
 
 public abstract class ContraptionItemStackHandler extends ItemStackHandler {
@@ -47,15 +48,15 @@ public abstract class ContraptionItemStackHandler extends ItemStackHandler {
 
 	/**
 	 * Returns handler priority - items are inserted first into storages with higher priority
-	 * <p>
+	 * <br>
 	 * Suggested values:
-	 *     <ul>
-	 *         <li>-10 - trash bins</li>
-	 *         <li>0 - default priority</li>
-	 *         <li>10 - bin-like storages (high amount of one item type)</li>
-	 *         <li>20 - trash bins with whitelist</li>
-	 *     </ul>
-	 * </p>
+	 * <ul>
+	 *     <li>-10 - trash bins</li>
+	 *     <li>0 - default priority</li>
+	 *     <li>1 - enderchest-like storages</li>
+	 *     <li>10 - bin-like storages (high amount of one item type)</li>
+	 *     <li>20 - trash bins with whitelist</li>
+	 * </ul>
 	 *
 	 * @return Handler priority
 	 */
@@ -73,5 +74,13 @@ public abstract class ContraptionItemStackHandler extends ItemStackHandler {
 		CompoundNBT nbt = super.serializeNBT();
 		nbt.putString(ContraptionStorageRegistry.REGISTRY_NAME, registry().getRegistryName().toString());
 		return nbt;
+	}
+
+	/**
+	 * This method is called right after contraption deserialization, and can be used to do word-dependant manipulations upon deserialization
+	 *
+	 * @param world contraption world
+	 */
+	public void applyWorld(World world) {
 	}
 }
