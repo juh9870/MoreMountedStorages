@@ -12,7 +12,7 @@ import java.util.function.Supplier;
 
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-public abstract class InfiniteItemStackHandler extends ContraptionItemStackHandler {
+public abstract class InfiniteItemStackHandler extends SmartItemStackHandler {
 
 	private Supplier<ItemStack> suppliedItemStack;
 

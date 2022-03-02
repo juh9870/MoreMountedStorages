@@ -24,7 +24,7 @@ import java.util.function.Supplier;
 
 public abstract class ContraptionStorageRegistry extends ForgeRegistryEntry<ContraptionStorageRegistry> {
 	public static final ItemStackHandler dummyHandler = new ItemStackHandler();
-	public static final DeferredRegister<ContraptionStorageRegistry> STORAGES = DeferredRegister.create(ContraptionStorageRegistry.class, Create.ID);
+	public static final DeferredRegister<ContraptionStorageRegistry> STORAGES = DeferredRegister.create(ContraptionStorageRegistry.class, MoreMountedStorages.ID);
 	public static final Supplier<IForgeRegistry<ContraptionStorageRegistry>> REGISTRY = STORAGES.makeRegistry("mountable_storage", RegistryBuilder::new);
 	public static final String REGISTRY_NAME = "StorageRegistryId";
 	private static Map<TileEntityType<?>, ContraptionStorageRegistry> tileEntityMappingsCache = null;

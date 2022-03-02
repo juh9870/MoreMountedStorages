@@ -4,12 +4,16 @@ buildscript {
             url = 'https://files.minecraftforge.net/maven'
         }
         maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
+        maven {
+            url = 'https://maven.parchmentmc.org'
+        }
         jcenter()
         mavenCentral()
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
         classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
+        classpath 'org.parchmentmc:librarian:1.+'
     }
 }
 
@@ -20,6 +24,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
 apply plugin: 'org.spongepowered.mixin'
+apply plugin: 'org.parchmentmc.librarian.forgegradle'
 
 mixin {
     add sourceSets.main, "moremountedstorages.refmap.json"
@@ -33,7 +38,7 @@ sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = co
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
-    mappings channel: 'official', version: '1.16.5'
+    mappings channel: 'parchment', version: '2021.10.17-1.16.5'
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
     runs {
         client {
@@ -129,6 +134,7 @@ dependencies {
 
     implementation fg.deobf("me.desht.pneumaticcraft:pneumaticcraft-repressurized:${pneumaticcraft_version}")
 
+    implementation fg.deobf("curse.maven:ninjaphenixs-container-library_versioncode-530668:${ninjaphenixs_container_library_versioncode}")
     implementation fg.deobf("curse.maven:expanded-storage-forge-362415:${expandedstorage_versioncode}")
 
     implementation fg.deobf("curse.maven:supermartijn642s-core-lib-454372:${supermartijn642score_versioncode}")

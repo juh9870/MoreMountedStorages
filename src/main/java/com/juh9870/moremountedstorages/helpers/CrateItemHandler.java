@@ -9,7 +9,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-public abstract class CrateItemHandler extends ContraptionItemStackHandler {
+public abstract class CrateItemHandler extends SmartItemStackHandler {
 	private int allowedAmount = 0;
 
 	public CrateItemHandler() {

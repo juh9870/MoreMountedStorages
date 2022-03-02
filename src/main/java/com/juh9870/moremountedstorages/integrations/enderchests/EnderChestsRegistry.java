@@ -16,6 +16,7 @@ public class EnderChestsRegistry extends ContraptionStorageRegistry {
 	public static final Config.PriorityRegistryInfo CONFIG = new Config.PriorityRegistryInfo("ender_chest", "Ender Chests", 1);
 	public static int managerGeneration = 0;
 
+
 	@Override
 	public Priority getPriority() {
 		return Priority.ADDON;

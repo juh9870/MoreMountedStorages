@@ -4,97 +4,174 @@ import com.juh9870.moremountedstorages.Config;
 import com.juh9870.moremountedstorages.ContraptionItemStackHandler;
 import com.juh9870.moremountedstorages.ContraptionStorageRegistry;
 import com.juh9870.moremountedstorages.Utils;
-import com.juh9870.moremountedstorages.helpers.AdvancedItemStackHandler;
+import com.juh9870.moremountedstorages.helpers.DoubleChestItemStackHandler;
+import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.registries.ForgeRegistries;
-import ninjaphenix.expandedstorage.base.internal_api.block.AbstractChestBlock;
-import ninjaphenix.expandedstorage.base.internal_api.block.misc.CursedChestType;
+import ninjaphenix.expandedstorage.Common;
+import ninjaphenix.expandedstorage.api.EsChestType;
+import ninjaphenix.expandedstorage.api.ExpandedStorageAccessors;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 public class ExpandedStorageRegistry extends ContraptionStorageRegistry {
 
-	public static final Config.RegistryInfo CONFIG = new Config.RegistryInfo("chest", "Chests");
-	private static final Lazy<TileEntityType<?>[]> affectedStorages = Lazy.of(() -> {
-		List<TileEntityType<?>> values = new ArrayList<>();
-		for (TileEntityType<?> tileEntity : ForgeRegistries.TILE_ENTITIES) {
-			if (tileEntity.getRegistryName().getNamespace().equals("expandedstorage")) {
-				values.add(tileEntity);
-			}
-		}
+    public static final Config.RegistryInfo CONFIG = new Config.RegistryInfo("storages", "Expanded Storage");
+    public static Lazy<ContraptionStorageRegistry> INSTANCE = getInstance(Utils.constructId("expandedstorage", "chest"));
 
-		return values.toArray(new TileEntityType<?>[0]);
-	});
-	public static Lazy<ContraptionStorageRegistry> INSTANCE = getInstance(Utils.constructId("expandedstorage", "chest"));
 
-	@SuppressWarnings("UnstableApiUsage")
-	public static void makeSingle(TileEntity te, boolean updateNeighbour) {
-		Optional<CursedChestType> type = te.getBlockState().getOptionalValue(AbstractChestBlock.CURSED_CHEST_TYPE);
-		if (type.isPresent() && type.get() != CursedChestType.SINGLE) {
-			Direction dir = AbstractChestBlock.getDirectionToAttached(te.getBlockState());
-			te.getLevel()
-					.setBlockAndUpdate(te.getBlockPos(), te.getBlockState()
-							.setValue(AbstractChestBlock.CURSED_CHEST_TYPE, CursedChestType.SINGLE));
-			if (updateNeighbour) {
-				TileEntity other = te.getLevel().getBlockEntity(te.getBlockPos().offset(dir.getNormal()));
-				if (other != null) {
-					makeSingle(other, false);
-				}
-			}
-		}
-		te.clearCache();
-	}
+    @Override
+    public ContraptionItemStackHandler createHandler(TileEntity te) {
+        Optional<EsChestType> type = ExpandedStorageAccessors.getChestType(te.getBlockState());
+        if (type.isPresent() && type.get() != EsChestType.SINGLE) {
+            boolean second = true;
+            EsChestType esChestType = type.get();
+            if (esChestType == EsChestType.LEFT || esChestType == EsChestType.TOP || esChestType == EsChestType.FRONT) {
+                second = false;
+            }
+            return new ExpandedStorageItemStackHandler(getHandlerFromDefaultCapability(te), second, esChestType);
+        }
+        return super.createHandler(te);
+    }
 
-	@Override
-	public ContraptionItemStackHandler createHandler(TileEntity te) {
-		makeSingle(te, true);
-		return new ChestSplittingHandler(getHandlerFromDefaultCapability(te));
-	}
+    @Override
+    public ContraptionItemStackHandler deserializeHandler(CompoundNBT nbt) {
+        return deserializeHandler(new ExpandedStorageItemStackHandler(), nbt);
+    }
 
-	@Override
-	public ContraptionItemStackHandler deserializeHandler(CompoundNBT nbt) {
-		return deserializeHandler(new ChestSplittingHandler(), nbt);
-	}
+    @Override
+    public Priority getPriority() {
+        return Priority.ADDON;
+    }
 
-	@Override
-	public Priority getPriority() {
-		return Priority.ADDON;
-	}
+    @Override
+    public boolean canUseAsStorage(TileEntity te) {
+        return super.canUseAsStorage(te) && CONFIG.isEnabled();
+    }
 
-	@Override
-	public TileEntityType<?>[] affectedStorages() {
-		return affectedStorages.get();
-	}
+    @Override
+    public TileEntityType<?>[] affectedStorages() {
+        return new TileEntityType<?>[]{
+                Common.getBarrelBlockEntityType(),
+                Common.getChestBlockEntityType(),
+                Common.getOldChestBlockEntityType(),
+                Common.getMiniChestBlockEntityType(),
+        };
+    }
 
-	public static class ChestSplittingHandler extends AdvancedItemStackHandler {
-		public ChestSplittingHandler() {
-		}
+    public static class ExpandedStorageItemStackHandler extends DoubleChestItemStackHandler<EsChestType> {
 
-		public ChestSplittingHandler(IItemHandler handler) {
-			super(handler);
-		}
+        EsChestType type;
 
-		@Override
-		public int getPriority() {
-			return 0;
-		}
+        public ExpandedStorageItemStackHandler() {
+        }
 
-		@Override
-		protected ContraptionStorageRegistry registry() {
-			return INSTANCE.get();
-		}
+        public ExpandedStorageItemStackHandler(IItemHandler chest, boolean second, EsChestType type) {
+            super(chest, second);
+            this.type = type;
+        }
 
-		@Override
-		public boolean addStorageToWorld(TileEntity te) {
-			makeSingle(te, true);
-			return true;
-		}
-	}
+        @Override
+        protected BlockPos secondHalfPos(BlockPos pos, BlockState state, EsChestType type) {
+            Direction attached = ExpandedStorageAccessors.getAttachedChestDirection(
+                    ExpandedStorageAccessors.chestWithType(state, type).orElseThrow(this::throwInvalidBlockState)
+            ).orElseThrow(this::throwInvalidBlockState);
+            return pos.relative(attached);
+        }
+
+        private EsChestType opposite(EsChestType type) {
+            switch (type) {
+                case LEFT:
+                    return EsChestType.RIGHT;
+                case RIGHT:
+                    return EsChestType.LEFT;
+                case TOP:
+                    return EsChestType.BOTTOM;
+                case BOTTOM:
+                    return EsChestType.TOP;
+                case FRONT:
+                    return EsChestType.BACK;
+                case BACK:
+                    return EsChestType.FRONT;
+                default:
+                    throw new IllegalArgumentException();
+            }
+        }
+
+        @Override
+        protected void attachToOther(World level, BlockState self, BlockPos selfPos, BlockState other, BlockPos otherPos) {
+            level.setBlockAndUpdate(
+                    selfPos,
+                    ExpandedStorageAccessors.chestWithType(self, type).orElseThrow(this::throwInvalidBlockState)
+            );
+            level.setBlockAndUpdate(
+                    otherPos,
+                    ExpandedStorageAccessors.chestWithType(other, opposite(type)).orElseThrow(this::throwInvalidBlockState)
+            );
+            level.getBlockEntity(selfPos).clearCache();
+            level.getBlockEntity(otherPos).clearCache();
+        }
+
+        @Override
+        protected boolean isSingle(BlockState state) {
+            return ExpandedStorageAccessors.getChestType(state)
+                    .orElseThrow(this::throwInvalidBlockState) == EsChestType.SINGLE;
+        }
+
+        @Override
+        protected EsChestType ownType() {
+            return type;
+        }
+
+        @Override
+        protected EsChestType getType(BlockState state) {
+            return ExpandedStorageAccessors.getChestType(state).orElseThrow(this::throwInvalidBlockState);
+        }
+
+        @Override
+        protected void setSingle(World level, BlockState state, BlockPos pos) {
+            level.setBlockAndUpdate(
+                    pos,
+                    ExpandedStorageAccessors.chestWithType(state, EsChestType.SINGLE).orElseThrow(this::throwInvalidBlockState)
+            );
+        }
+
+        @Override
+        public int getPriority() {
+            return 0;
+        }
+
+        @Override
+        protected ContraptionStorageRegistry registry() {
+            return INSTANCE.get();
+        }
+
+        private RuntimeException throwInvalidBlockState() {
+            return new RuntimeException("Expected values are missing from block state");
+        }
+
+        @Override
+        public CompoundNBT serializeNBT() {
+            CompoundNBT nbt = super.serializeNBT();
+            nbt.putString("chestType", type.getSerializedName());
+            return nbt;
+        }
+
+        @Override
+        public void deserializeNBT(CompoundNBT nbt) {
+            super.deserializeNBT(nbt);
+            String name = nbt.getString("chestType");
+            for (EsChestType value : EsChestType.values()) {
+                if (!value.getSerializedName().equals(name)) continue;
+                type = value;
+                return;
+            }
+        }
+    }
 }

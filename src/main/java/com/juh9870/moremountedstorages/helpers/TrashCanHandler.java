@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
 
-public abstract class TrashCanHandler extends ContraptionItemStackHandler {
+public abstract class TrashCanHandler extends SmartItemStackHandler {
 
 	@Override
 	public void setStackInSlot(int slot, @Nonnull ItemStack stack) {

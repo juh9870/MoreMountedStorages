@@ -9,6 +9,7 @@ import com.simibubi.create.AllTileEntities;
 import com.simibubi.create.content.logistics.block.inventories.BottomlessItemHandler;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.common.util.Lazy;
 
@@ -16,7 +17,7 @@ import java.util.function.Supplier;
 
 public class CreativeCrateRegistry extends ContraptionStorageRegistry {
 	public static final Lazy<ContraptionStorageRegistry> INSTANCE = getInstance(Utils.constructId("create", "creative_crate"));
-	public static final Config.PriorityRegistryInfo CONFIG = new Config.PriorityRegistryInfo("crate", "Create Creative Crate", 0);
+	public static final Config.PriorityRegistryInfo CONFIG = new Config.PriorityRegistryInfo("creative_crate", "Create Creative Crate", 0);
 	@Override
 	public Priority getPriority() {
 		return Priority.ADDON;
@@ -27,6 +28,11 @@ public class CreativeCrateRegistry extends ContraptionStorageRegistry {
 		return new TileEntityType[]{
 				AllTileEntities.CREATIVE_CRATE.get()
 		};
+	}
+
+	@Override
+	public boolean canUseAsStorage(TileEntity te) {
+		return super.canUseAsStorage(te) && CONFIG.isEnabled();
 	}
 
 	@Override

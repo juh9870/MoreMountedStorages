@@ -43,6 +43,11 @@ public class FlexCrateRegistry extends ContraptionStorageRegistry {
 	}
 
 	@Override
+	public boolean canUseAsStorage(TileEntity te) {
+		return super.canUseAsStorage(te) && CONFIG.isEnabled();
+	}
+
+	@Override
 	public ContraptionItemStackHandler deserializeHandler(CompoundNBT nbt) {
 		return deserializeHandler(new FlexCrateHandler(), nbt);
 	}
