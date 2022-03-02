@@ -35,14 +35,14 @@ public class ExpandedStorageRegistry extends ContraptionStorageRegistry {
             if (esChestType == EsChestType.LEFT || esChestType == EsChestType.TOP || esChestType == EsChestType.FRONT) {
                 second = false;
             }
-            return new ExpandedStorageItemStackHandler(getHandlerFromDefaultCapability(te), second, esChestType);
+            return new EsItemStackHandler(getHandlerFromDefaultCapability(te), second, esChestType);
         }
         return super.createHandler(te);
     }
 
     @Override
     public ContraptionItemStackHandler deserializeHandler(CompoundNBT nbt) {
-        return deserializeHandler(new ExpandedStorageItemStackHandler(), nbt);
+        return deserializeHandler(new EsItemStackHandler(), nbt);
     }
 
     @Override
@@ -65,14 +65,14 @@ public class ExpandedStorageRegistry extends ContraptionStorageRegistry {
         };
     }
 
-    public static class ExpandedStorageItemStackHandler extends DoubleChestItemStackHandler<EsChestType> {
+    public static class EsItemStackHandler extends DoubleChestItemStackHandler<EsChestType> {
 
         EsChestType type;
 
-        public ExpandedStorageItemStackHandler() {
+        public EsItemStackHandler() {
         }
 
-        public ExpandedStorageItemStackHandler(IItemHandler chest, boolean second, EsChestType type) {
+        public EsItemStackHandler(IItemHandler chest, boolean second, EsChestType type) {
             super(chest, second);
             this.type = type;
         }

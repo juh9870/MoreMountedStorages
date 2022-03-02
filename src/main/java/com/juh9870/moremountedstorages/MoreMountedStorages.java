@@ -16,6 +16,8 @@ import com.juh9870.moremountedstorages.integrations.storagedrawers.CompactingDra
 import com.juh9870.moremountedstorages.integrations.storagedrawers.FramedCompactingDrawerRegistry;
 import com.juh9870.moremountedstorages.integrations.storagedrawers.FramedDrawersRegistry;
 import com.juh9870.moremountedstorages.integrations.storagedrawers.StorageDrawersRegistry;
+import com.juh9870.moremountedstorages.integrations.storageoverhaul.StorageBarrelRegistry;
+import com.juh9870.moremountedstorages.integrations.storageoverhaul.StorageOverhaulRegistry;
 import com.juh9870.moremountedstorages.integrations.trashcans.TrashCansRegistry;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -80,8 +82,9 @@ public class MoreMountedStorages {
         registerPneumaticcraft(registry);
         registry.register("expandedstorage", "chest", () -> new ExpandedStorageRegistry(), () -> ExpandedStorageRegistry.CONFIG);
         registry.register("trashcans", "trashcan", () -> new TrashCansRegistry(), () -> TrashCansRegistry.CONFIG);
-
         registry.register("dimstorage", "dimensional_chest", () -> new DimStorageRegistry(), () -> DimStorageRegistry.CONFIG);
+
+        registerStorageOverhaul(registry);
 
         Config.BUILDER.pop();
         Config.SPEC = Config.BUILDER.build();
@@ -126,6 +129,16 @@ public class MoreMountedStorages {
             return false;
         }, Utils.constructId("pneumaticcraft", "smart_chest"), () -> new PneumaticcraftRegistry());
         Config.registerConfigsIfModLoaded("pneumaticcraft", () -> Utils.arrayOf(PneumaticcraftRegistry.CONFIG));
+    }
+
+    @SuppressWarnings("Convert2MethodRef")
+    private void registerStorageOverhaul(@Nonnull Registry registry) {
+        registry.register("storage_overhaul", "storages", () -> new StorageOverhaulRegistry());
+        registry.register("storage_overhaul", "barrel", () -> new StorageBarrelRegistry());
+        Config.registerConfigsIfModLoaded("storage_overhaul", () -> Utils.arrayOf(
+                StorageOverhaulRegistry.CONFIG,
+                StorageBarrelRegistry.CONFIG
+        ));
     }
 
     private static class Registry {

@@ -6,6 +6,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
+import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 
@@ -25,6 +26,11 @@ public abstract class SmartItemStackHandler extends ContraptionItemStackHandler 
         super(stacks);
     }
 
+    public SmartItemStackHandler(IItemHandler handler) {
+        super(handler.getSlots());
+        copyItemsOver(handler, this, handler.getSlots(), 0, 0);
+    }
+
     protected boolean valid(int slot) {
         return true;
     }
@@ -42,6 +48,15 @@ public abstract class SmartItemStackHandler extends ContraptionItemStackHandler 
             }
             to.insertItem(i + offsetTo, from.getStackInSlot(i + offsetFrom), false);
         }
+    }
+
+    /**
+     * @return {@link ItemStackHandler} that contains same items as this handler
+     */
+    protected ItemStackHandler simpleCopy() {
+        ItemStackHandler target = new ItemStackHandler(getSlots());
+        copyItemsOver(this, target, getSlots(), 0, 0);
+        return target;
     }
 
     @Nonnull

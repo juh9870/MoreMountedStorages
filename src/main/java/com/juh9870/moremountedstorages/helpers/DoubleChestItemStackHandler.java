@@ -81,7 +81,7 @@ public abstract class DoubleChestItemStackHandler<T> extends SmartItemStackHandl
                         neighbourPos,
                         neighbourState,
                         getType(neighbourState));
-                connect = neighbourConnection == te.getBlockPos();
+                connect = Objects.equals(neighbourConnection, te.getBlockPos());
             }
             if (connect) {
                 IItemHandler otherHandler = te.getLevel().getBlockEntity(neighbourPos)

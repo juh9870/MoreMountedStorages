@@ -8,6 +8,7 @@ import com.juh9870.moremountedstorages.helpers.DoubleChestItemStackHandler;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.state.EnumProperty;
 import net.minecraft.state.properties.ChestType;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
@@ -16,8 +17,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.items.IItemHandler;
-
-import java.util.Objects;
 
 public class VanillaStorageRegistry extends ContraptionStorageRegistry {
     public static final Lazy<ContraptionStorageRegistry> INSTANCE = getInstance(Utils.constructId("minecraft", "storages"));
@@ -46,7 +45,7 @@ public class VanillaStorageRegistry extends ContraptionStorageRegistry {
             ChestType type = te.getBlockState()
                     .getValue(ChestBlock.TYPE);
             if (type != ChestType.SINGLE) {
-                return new VanillaDoubleChestItemStackHandler(getHandlerFromDefaultCapability(te), type == ChestType.LEFT);
+                return new McDoubleChestItemStackHandler(getHandlerFromDefaultCapability(te), type == ChestType.LEFT);
             }
         }
 
@@ -55,14 +54,14 @@ public class VanillaStorageRegistry extends ContraptionStorageRegistry {
 
     @Override
     public ContraptionItemStackHandler deserializeHandler(CompoundNBT nbt) {
-        return deserializeHandler(new VanillaDoubleChestItemStackHandler(), nbt);
+        return deserializeHandler(new McDoubleChestItemStackHandler(), nbt);
     }
 
-    public static class VanillaDoubleChestItemStackHandler extends DoubleChestItemStackHandler<ChestType> {
-        public VanillaDoubleChestItemStackHandler() {
+    public static class McDoubleChestItemStackHandler extends DoubleChestItemStackHandler<ChestType> {
+        public McDoubleChestItemStackHandler() {
         }
 
-        public VanillaDoubleChestItemStackHandler(IItemHandler chest, boolean second) {
+        public McDoubleChestItemStackHandler(IItemHandler chest, boolean second) {
             super(chest, second);
         }
 
@@ -80,22 +79,21 @@ public class VanillaStorageRegistry extends ContraptionStorageRegistry {
 
         @Override
         public void attachToOther(World level, BlockState self, BlockPos selfPos, BlockState other, BlockPos otherPos) {
-//            ((ChestBlock)self.getBlock()).combine(other, level, otherPos, true);
             level.setBlockAndUpdate(
                     selfPos,
-                    self.setValue(ChestBlock.TYPE, second ? ChestType.LEFT : ChestType.RIGHT)
+                    self.setValue(propertyName(), second ? ChestType.LEFT : ChestType.RIGHT)
             );
-//            level.setBlockAndUpdate(
-//                    otherPos,
-//                    other.setValue(ChestBlock.TYPE, second ? ChestType.RIGHT : ChestType.LEFT)
-//            );
+            level.setBlockAndUpdate(
+                    otherPos,
+                    other.setValue(propertyName(), second ? ChestType.RIGHT : ChestType.LEFT)
+            );
             level.getBlockEntity(selfPos).clearCache();
             level.getBlockEntity(otherPos).clearCache();
         }
 
         @Override
         public boolean isSingle(BlockState state) {
-            return state.getValue(ChestBlock.TYPE) == ChestType.SINGLE;
+            return state.getValue(propertyName()) == ChestType.SINGLE;
         }
 
         @Override
@@ -105,14 +103,14 @@ public class VanillaStorageRegistry extends ContraptionStorageRegistry {
 
         @Override
         protected ChestType getType(BlockState state) {
-            return state.getValue(ChestBlock.TYPE);
+            return state.getValue(propertyName());
         }
 
         @Override
         protected void setSingle(World level, BlockState state, BlockPos pos) {
             level.setBlockAndUpdate(
                     pos,
-                    state.setValue(ChestBlock.TYPE, ChestType.SINGLE)
+                    state.setValue(propertyName(), ChestType.SINGLE)
             );
         }
 
@@ -124,6 +122,10 @@ public class VanillaStorageRegistry extends ContraptionStorageRegistry {
         @Override
         protected ContraptionStorageRegistry registry() {
             return INSTANCE.get();
+        }
+
+        protected EnumProperty<ChestType> propertyName(){
+            return ChestBlock.TYPE;
         }
     }
 }

@@ -18,7 +18,8 @@ Suppoted mods:
     - Industrial Foregoing https://www.curseforge.com/minecraft/mc-mods/industrial-foregoing
     - PneumaticCraft: Repressurized https://www.curseforge.com/minecraft/mc-mods/pneumaticcraft-repressurized
     - Expanded Storage: https://www.curseforge.com/minecraft/mc-mods/expanded-storage-forge
-    - DimStorage: https://www.curseforge.com/minecraft/mc-mods/dimstorage'''
+    - DimStorage: https://www.curseforge.com/minecraft/mc-mods/dimstorage
+    - Storage Overhaul: https://www.curseforge.com/minecraft/mc-mods/storage-overhaul'''
 [[dependencies.moremountedstorages]] #optional
     modId="forge" #mandatory
     mandatory=true #mandatory
@@ -90,5 +91,11 @@ Suppoted mods:
     modId="enderchests"
     mandatory=false
     versionRange="[1.7.8,)" #keep updated
+    ordering="AFTER"
+    side="BOTH"
+[[dependencies.moremountedstorages]]
+    modId="storage_overhaul"
+    mandatory=false
+    versionRange="[1.0.4,)" #keep updated
     ordering="AFTER"
     side="BOTH"
