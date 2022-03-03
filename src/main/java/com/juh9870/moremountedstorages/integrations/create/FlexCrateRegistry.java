@@ -14,64 +14,65 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.common.util.Lazy;
 
 public class FlexCrateRegistry extends ContraptionStorageRegistry {
-	public static final Lazy<ContraptionStorageRegistry> INSTANCE = getInstance(Utils.constructId("create", "crate"));
-	public static final Config.PriorityRegistryInfo CONFIG = new Config.PriorityRegistryInfo("crate", "Create Crate", 0);
+    public static final Lazy<ContraptionStorageRegistry> INSTANCE = getInstance(Utils.constructId("create", "crate"));
+    public static final Config.PriorityRegistryInfo CONFIG = new Config.PriorityRegistryInfo("crate", "Create Crate", 0);
 
-	@Override
-	public Priority getPriority() {
-		return Priority.ADDON;
-	}
+    @Override
+    public Priority getPriority() {
+        return Priority.ADDON;
+    }
 
-	@Override
-	public TileEntityType<?>[] affectedStorages() {
-		return new TileEntityType[]{
-				AllTileEntities.ADJUSTABLE_CRATE.get()
-		};
-	}
+    @Override
+    public TileEntityType<?>[] affectedStorages() {
+        return new TileEntityType[]{
+                AllTileEntities.ADJUSTABLE_CRATE.get()
+        };
+    }
 
-	@Override
-	public ContraptionItemStackHandler createHandler(TileEntity te) {
-		// Split double flexcrates
-		if (te.getBlockState()
-				.getValue(AdjustableCrateBlock.DOUBLE))
-			te.getLevel()
-					.setBlockAndUpdate(te.getBlockPos(), te.getBlockState()
-							.setValue(AdjustableCrateBlock.DOUBLE, false));
-		te.clearCache();
+    @Override
+    public ContraptionItemStackHandler createHandler(TileEntity te) {
+        // Split double flexcrates
+        if (te.getBlockState()
+                .getValue(AdjustableCrateBlock.DOUBLE))
+            te.getLevel()
+                    .setBlockAndUpdate(te.getBlockPos(), te.getBlockState()
+                            .setValue(AdjustableCrateBlock.DOUBLE, false));
+        te.clearCache();
 
-		return new FlexCrateHandler((AdjustableCrateTileEntity) te);
-	}
+        return new FlexCrateHandler((AdjustableCrateTileEntity) te);
+    }
 
-	@Override
-	public boolean canUseAsStorage(TileEntity te) {
-		return super.canUseAsStorage(te) && CONFIG.isEnabled();
-	}
+    @Override
+    public boolean canUseAsStorage(TileEntity te) {
+        return super.canUseAsStorage(te) && CONFIG.isEnabled();
+    }
 
-	@Override
-	public ContraptionItemStackHandler deserializeHandler(CompoundNBT nbt) {
-		return deserializeHandler(new FlexCrateHandler(), nbt);
-	}
+    @Override
+    public ContraptionItemStackHandler deserializeHandler(CompoundNBT nbt) {
+        return deserializeHandler(new FlexCrateHandler(), nbt);
+    }
 
-	public static class FlexCrateHandler extends CrateItemHandler {
-		public FlexCrateHandler() {
-		}
+    public static class FlexCrateHandler extends CrateItemHandler {
+        public FlexCrateHandler() {
+        }
 
-		public FlexCrateHandler(AdjustableCrateTileEntity te) {
-			this(te.allowedAmount);
-		}
+        public FlexCrateHandler(AdjustableCrateTileEntity te) {
+            this(te.allowedAmount);
+            copyItemsOver(getHandlerFromDefaultCapability(te), this, getSlots(), 0, 0);
+        }
 
-		public FlexCrateHandler(int allowedAmount) {
-			super(allowedAmount);
-		}
+        public FlexCrateHandler(int allowedAmount) {
+            super(allowedAmount);
+        }
 
-		@Override
-		protected ContraptionStorageRegistry registry() {
-			return INSTANCE.get();
-		}
+        @Override
+        protected ContraptionStorageRegistry registry() {
+            return INSTANCE.get();
+        }
 
-		@Override
-		public int getPriority() {
-			return CONFIG.getPriority();
-		}
-	}
+        @Override
+        public int getPriority() {
+            return CONFIG.getPriority();
+        }
+    }
 }
