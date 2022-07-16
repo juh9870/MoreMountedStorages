@@ -5,8 +5,8 @@ import codechicken.enderstorage.manager.EnderStorageManager;
 import codechicken.enderstorage.storage.EnderItemStorage;
 import com.juh9870.moremountedstorages.ContraptionStorageRegistry;
 import com.juh9870.moremountedstorages.helpers.InventoryWrapperStackHandler;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
 public class EnderStackHandler extends InventoryWrapperStackHandler<EnderItemStorage> {
 	protected Frequency frequency;
@@ -40,15 +40,15 @@ public class EnderStackHandler extends InventoryWrapperStackHandler<EnderItemSto
 	}
 
 	@Override
-	public CompoundNBT serializeNBT() {
-		CompoundNBT nbt = super.serializeNBT();
-		nbt.put("Frequency", frequency.writeToNBT(new CompoundNBT()));
+	public CompoundTag serializeNBT() {
+		CompoundTag nbt = super.serializeNBT();
+		nbt.put("Frequency", frequency.writeToNBT(new CompoundTag()));
 		nbt.putBoolean("Clientside", isClientSide);
 		return nbt;
 	}
 
 	@Override
-	public void deserializeNBT(CompoundNBT nbt) {
+	public void deserializeNBT(CompoundTag nbt) {
 		super.deserializeNBT(nbt);
 		frequency.set(new Frequency(nbt.getCompound("Frequency")));
 		isClientSide = nbt.getBoolean("Clientside");
@@ -61,7 +61,7 @@ public class EnderStackHandler extends InventoryWrapperStackHandler<EnderItemSto
 	}
 
 	@Override
-	public boolean addStorageToWorld(TileEntity te) {
+	public boolean addStorageToWorld(BlockEntity te) {
 		valid = false;
 		return false;
 	}

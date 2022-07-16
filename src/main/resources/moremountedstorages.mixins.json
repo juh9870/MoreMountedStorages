@@ -1,10 +1,11 @@
 {
   "required": true,
   "package": "com.juh9870.moremountedstorages.mixin",
-  "compatibilityLevel": "JAVA_8",
+  "compatibilityLevel": "JAVA_16",
   "refmap": "moremountedstorages.refmap.json",
   "mixins": [
     "ContraptionMixin",
+    "MountedStorageManagerMixin",
     "MountedStorageMixin",
     "dimstorage.DimStorageManagerMixin",
     "enderchests.ChestHelperMixin",

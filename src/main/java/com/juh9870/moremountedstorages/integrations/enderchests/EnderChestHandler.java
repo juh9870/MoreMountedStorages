@@ -2,26 +2,26 @@ package com.juh9870.moremountedstorages.integrations.enderchests;
 
 import com.juh9870.moremountedstorages.ContraptionStorageRegistry;
 import com.juh9870.moremountedstorages.helpers.InventoryWrapperStackHandler;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.Level;
 import shetiphian.enderchests.Configuration;
 import shetiphian.enderchests.common.misc.ChestHelper;
 import shetiphian.enderchests.common.tileentity.TileEntityEnderChest;
 
-public class EnderChestHandler extends InventoryWrapperStackHandler<IInventory> {
+public class EnderChestHandler extends InventoryWrapperStackHandler<Container> {
 	private String code;
 	private String owner;
-	private World world;
+	private Level world;
 	private boolean valid;
 	private int managerGeneration;
 
 	public EnderChestHandler() {
 		code = "000";
 		owner = "all";
-		storage = new Inventory(Configuration.UPGRADE_SETTINGS.chestSizeMax.get());
+		storage = new SimpleContainer(Configuration.UPGRADE_SETTINGS.chestSizeMax.get());
 		valid = false;
 	}
 
@@ -33,7 +33,7 @@ public class EnderChestHandler extends InventoryWrapperStackHandler<IInventory> 
 	}
 
 	@Override
-	public boolean addStorageToWorld(TileEntity te) {
+	public boolean addStorageToWorld(BlockEntity te) {
 		valid = false;
 		return false;
 	}
@@ -49,7 +49,7 @@ public class EnderChestHandler extends InventoryWrapperStackHandler<IInventory> 
 	}
 
 	@Override
-	public void applyWorld(World world) {
+	public void applyWorld(Level world) {
 		this.world = world;
 		updateStorage();
 		valid = true;
@@ -79,15 +79,15 @@ public class EnderChestHandler extends InventoryWrapperStackHandler<IInventory> 
 	}
 
 	@Override
-	public CompoundNBT serializeNBT() {
-		CompoundNBT nbt = super.serializeNBT();
+	public CompoundTag serializeNBT() {
+		CompoundTag nbt = super.serializeNBT();
 		nbt.putString("owner", owner);
 		nbt.putString("code", code);
 		return nbt;
 	}
 
 	@Override
-	public void deserializeNBT(CompoundNBT nbt) {
+	public void deserializeNBT(CompoundTag nbt) {
 		super.deserializeNBT(nbt);
 		owner = nbt.getString("owner");
 		code = nbt.getString("code");

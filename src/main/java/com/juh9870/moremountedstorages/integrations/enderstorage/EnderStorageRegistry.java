@@ -1,14 +1,14 @@
 package com.juh9870.moremountedstorages.integrations.enderstorage;
 
-import codechicken.enderstorage.init.ModContent;
+import codechicken.enderstorage.init.EnderStorageModContent;
 import codechicken.enderstorage.tile.TileEnderChest;
 import com.juh9870.moremountedstorages.Config;
 import com.juh9870.moremountedstorages.ContraptionItemStackHandler;
 import com.juh9870.moremountedstorages.ContraptionStorageRegistry;
 import com.juh9870.moremountedstorages.Utils;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.common.util.Lazy;
 
 public class EnderStorageRegistry extends ContraptionStorageRegistry {
@@ -17,7 +17,7 @@ public class EnderStorageRegistry extends ContraptionStorageRegistry {
 	public static int managerGeneration = 0;
 
 	@Override
-	public boolean canUseAsStorage(TileEntity te) {
+	public boolean canUseAsStorage(BlockEntity te) {
 		return super.canUseAsStorage(te) && CONFIG.isEnabled();
 	}
 
@@ -27,18 +27,18 @@ public class EnderStorageRegistry extends ContraptionStorageRegistry {
 	}
 
 	@Override
-	public TileEntityType<?>[] affectedStorages() {
-		return new TileEntityType[]{ModContent.tileEnderChestType};
+	public BlockEntityType<?>[] affectedStorages() {
+		return new BlockEntityType[]{EnderStorageModContent.ENDER_CHEST_TILE.get()};
 	}
 
 	@Override
-	public ContraptionItemStackHandler createHandler(TileEntity te) {
+	public ContraptionItemStackHandler createHandler(BlockEntity te) {
 		TileEnderChest chest = (TileEnderChest) te;
 		return new EnderStackHandler(chest.getStorage());
 	}
 
 	@Override
-	public ContraptionItemStackHandler deserializeHandler(CompoundNBT nbt) {
+	public ContraptionItemStackHandler deserializeHandler(CompoundTag nbt) {
 		EnderStackHandler handler = new EnderStackHandler();
 		handler.deserializeNBT(nbt);
 		return handler;

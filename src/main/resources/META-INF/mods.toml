@@ -1,5 +1,5 @@
 modLoader="javafml" #mandatory
-loaderVersion="[36,)"
+loaderVersion="[40,)"
 license="MIT"
 [[mods]]
     modId="moremountedstorages" #mandatory
@@ -19,83 +19,83 @@ Suppoted mods:
     - PneumaticCraft: Repressurized https://www.curseforge.com/minecraft/mc-mods/pneumaticcraft-repressurized
     - Expanded Storage: https://www.curseforge.com/minecraft/mc-mods/expanded-storage-forge
     - DimStorage: https://www.curseforge.com/minecraft/mc-mods/dimstorage
-    - Storage Overhaul: https://www.curseforge.com/minecraft/mc-mods/storage-overhaul'''
+    # - Storage Overhaul: https://www.curseforge.com/minecraft/mc-mods/storage-overhaul'''
 [[dependencies.moremountedstorages]] #optional
     modId="forge" #mandatory
     mandatory=true #mandatory
-    versionRange="[36,)" #mandatory
+    versionRange="[40,)" #mandatory
     ordering="NONE"
     side="BOTH"
 # Here's another dependency
 [[dependencies.moremountedstorages]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.16.5,1.17)"
+    versionRange="[1.18.2,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.moremountedstorages]]
     modId="create"
     mandatory=true
-    versionRange="[mc1.16.5_v0.3.2,)" #keep updated
+    versionRange="[0.5.0c,)" #keep updated
     ordering="NONE"
     side="BOTH"
 [[dependencies.moremountedstorages]]
     modId="enderstorage"
     mandatory=false
-    versionRange="[1.16.5-4.0.3.0,)" #keep updated
+    versionRange="[2.9.0.177,)" #keep updated
     ordering="AFTER"
     side="BOTH"
 [[dependencies.moremountedstorages]]
     modId="storagedrawers"
     mandatory=false
-    versionRange="[1.16.3-8.3.0,)" #keep updated
+    versionRange="[10.2,)" #keep updated
     ordering="AFTER"
     side="BOTH"
 [[dependencies.moremountedstorages]]
     modId="framedcompactdrawers"
     mandatory=false
-    versionRange="[1.16-2.2.1,)" #keep updated
+    versionRange="[1.18-4.1.0,)" #keep updated
     ordering="AFTER"
     side="BOTH"
 [[dependencies.moremountedstorages]]
     modId="immersiveengineering"
     mandatory=false
-    versionRange="[1.16.5-5.0.5-140,)" #keep updated
+    versionRange="[1.18.2-8.0.2-149,)" #keep updated
     ordering="AFTER"
     side="BOTH"
 [[dependencies.moremountedstorages]]
     modId="industrialforegoing"
     mandatory=false
-    versionRange="[1.16.5-3.2.14.7-16,)" #keep updated
+    versionRange="[3.3.1.4,)" #keep updated
     ordering="AFTER"
     side="BOTH"
 [[dependencies.moremountedstorages]]
     modId="pneumaticcraft"
     mandatory=false
-    versionRange="[1.16.5-2.14.4-258,)" #keep updated
+    versionRange="[1.18.2-3.3.1-110,)" #keep updated
     ordering="AFTER"
     side="BOTH"
 [[dependencies.moremountedstorages]]
     modId="expandedstorage"
     mandatory=false
-    versionRange="[7.3.8,)" #keep updated
+    versionRange="[7.4.0-beta.4,)" #keep updated
     ordering="AFTER"
     side="BOTH"
 [[dependencies.moremountedstorages]]
     modId="trashcans"
     mandatory=false
-    versionRange="[1.0.10,)" #keep updated
+    versionRange="[1.0.15,)" #keep updated
     ordering="AFTER"
     side="BOTH"
 [[dependencies.moremountedstorages]]
     modId="enderchests"
     mandatory=false
-    versionRange="[1.7.8,)" #keep updated
+    versionRange="[1.9.5,)" #keep updated
     ordering="AFTER"
     side="BOTH"
-[[dependencies.moremountedstorages]]
-    modId="storage_overhaul"
-    mandatory=false
-    versionRange="[1.0.4,)" #keep updated
-    ordering="AFTER"
-    side="BOTH"
+#[[dependencies.moremountedstorages]]
+#    modId="storage_overhaul"
+#    mandatory=false
+#    versionRange="[1.0.4,)" #keep updated
+#    ordering="AFTER"
+#    side="BOTH"

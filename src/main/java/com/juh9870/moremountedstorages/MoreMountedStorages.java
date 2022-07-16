@@ -2,7 +2,6 @@ package com.juh9870.moremountedstorages;
 
 import com.juh9870.moremountedstorages.integrations.VanillaStorageRegistry;
 import com.juh9870.moremountedstorages.integrations.create.CreativeCrateRegistry;
-import com.juh9870.moremountedstorages.integrations.create.FlexCrateRegistry;
 import com.juh9870.moremountedstorages.integrations.dimstorage.DimStorageRegistry;
 import com.juh9870.moremountedstorages.integrations.enderchests.EnderChestsRegistry;
 import com.juh9870.moremountedstorages.integrations.enderstorage.EnderStorageRegistry;
@@ -16,8 +15,8 @@ import com.juh9870.moremountedstorages.integrations.storagedrawers.CompactingDra
 import com.juh9870.moremountedstorages.integrations.storagedrawers.FramedCompactingDrawerRegistry;
 import com.juh9870.moremountedstorages.integrations.storagedrawers.FramedDrawersRegistry;
 import com.juh9870.moremountedstorages.integrations.storagedrawers.StorageDrawersRegistry;
-import com.juh9870.moremountedstorages.integrations.storageoverhaul.StorageBarrelRegistry;
-import com.juh9870.moremountedstorages.integrations.storageoverhaul.StorageOverhaulRegistry;
+//import com.juh9870.moremountedstorages.integrations.storageoverhaul.StorageBarrelRegistry;
+//import com.juh9870.moremountedstorages.integrations.storageoverhaul.StorageOverhaulRegistry;
 import com.juh9870.moremountedstorages.integrations.trashcans.TrashCansRegistry;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -70,7 +69,6 @@ public class MoreMountedStorages {
 
         registry.register("minecraft", "storages", () -> new VanillaStorageRegistry(), () -> VanillaStorageRegistry.CONFIG);
 
-        registry.register("create", "crate", () -> new FlexCrateRegistry(), () -> FlexCrateRegistry.CONFIG);
         registry.register("create", "creative_crate", () -> new CreativeCrateRegistry(), () -> CreativeCrateRegistry.CONFIG);
 
         registry.register("enderstorage", "ender_chest", () -> new EnderStorageRegistry(), () -> EnderStorageRegistry.CONFIG);
@@ -133,12 +131,12 @@ public class MoreMountedStorages {
 
     @SuppressWarnings("Convert2MethodRef")
     private void registerStorageOverhaul(@Nonnull Registry registry) {
-        registry.register("storage_overhaul", "storages", () -> new StorageOverhaulRegistry());
-        registry.register("storage_overhaul", "barrel", () -> new StorageBarrelRegistry());
-        Config.registerConfigsIfModLoaded("storage_overhaul", () -> Utils.arrayOf(
-                StorageOverhaulRegistry.CONFIG,
-                StorageBarrelRegistry.CONFIG
-        ));
+//        registry.register("storage_overhaul", "storages", () -> new StorageOverhaulRegistry());
+//        registry.register("storage_overhaul", "barrel", () -> new StorageBarrelRegistry());
+//        Config.registerConfigsIfModLoaded("storage_overhaul", () -> Utils.arrayOf(
+//                StorageOverhaulRegistry.CONFIG,
+//                StorageBarrelRegistry.CONFIG
+//        ));
     }
 
     private static class Registry {

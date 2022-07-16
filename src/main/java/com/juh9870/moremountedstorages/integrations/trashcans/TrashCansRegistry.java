@@ -7,10 +7,10 @@ import com.juh9870.moremountedstorages.Utils;
 import com.juh9870.moremountedstorages.helpers.TrashCanHandler;
 import com.supermartijn642.trashcans.TrashCanTile;
 import com.supermartijn642.trashcans.TrashCans;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.util.Lazy;
 
@@ -27,23 +27,23 @@ public class TrashCansRegistry extends ContraptionStorageRegistry {
 	}
 
 	@Override
-	public TileEntityType<?>[] affectedStorages() {
-		return new TileEntityType<?>[]{TrashCans.item_trash_can_tile, TrashCans.ultimate_trash_can_tile};
+	public BlockEntityType<?>[] affectedStorages() {
+		return new BlockEntityType<?>[]{TrashCans.item_trash_can_tile, TrashCans.ultimate_trash_can_tile};
 	}
 
 	@Override
-	public boolean canUseAsStorage(TileEntity te) {
+	public boolean canUseAsStorage(BlockEntity te) {
 		return super.canUseAsStorage(te) && CONFIG.isEnabled();
 	}
 
 	@Override
-	public ContraptionItemStackHandler createHandler(TileEntity te) {
+	public ContraptionItemStackHandler createHandler(BlockEntity te) {
 		TrashCanTile can = (TrashCanTile) te;
 		return new FilteredTrashCanHandler(can.itemFilter, can.itemFilterWhitelist);
 	}
 
 	@Override
-	public ContraptionItemStackHandler deserializeHandler(CompoundNBT nbt) {
+	public ContraptionItemStackHandler deserializeHandler(CompoundTag nbt) {
 		return deserializeHandler(new FilteredTrashCanHandler(), nbt);
 	}
 
@@ -91,11 +91,11 @@ public class TrashCansRegistry extends ContraptionStorageRegistry {
 		}
 
 		@Override
-		public CompoundNBT serializeNBT() {
-			CompoundNBT nbt = super.serializeNBT();
+		public CompoundTag serializeNBT() {
+			CompoundTag nbt = super.serializeNBT();
 
 			for (int i = 0; i < this.itemFilter.size(); ++i) {
-				nbt.put("itemFilter" + i, this.itemFilter.get(i).save(new CompoundNBT()));
+				nbt.put("itemFilter" + i, this.itemFilter.get(i).save(new CompoundTag()));
 			}
 
 			nbt.putBoolean("itemFilterWhitelist", whitelist);
@@ -104,7 +104,7 @@ public class TrashCansRegistry extends ContraptionStorageRegistry {
 		}
 
 		@Override
-		public void deserializeNBT(CompoundNBT nbt) {
+		public void deserializeNBT(CompoundTag nbt) {
 			super.deserializeNBT(nbt);
 			for (int i = 0; i < this.itemFilter.size(); ++i) {
 				this.itemFilter.set(i, nbt.contains("itemFilter" + i) ? ItemStack.of(nbt.getCompound("itemFilter" + i)) : ItemStack.EMPTY);

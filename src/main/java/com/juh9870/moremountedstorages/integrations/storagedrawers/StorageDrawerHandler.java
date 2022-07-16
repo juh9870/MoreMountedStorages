@@ -13,13 +13,14 @@ import com.jaquadro.minecraft.storagedrawers.capabilities.BasicDrawerAttributes;
 import com.jaquadro.minecraft.storagedrawers.config.CommonConfig;
 import com.juh9870.moremountedstorages.ContraptionItemStackHandler;
 import com.juh9870.moremountedstorages.ContraptionStorageRegistry;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.world.World;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
@@ -29,21 +30,20 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class StorageDrawerHandler extends ContraptionItemStackHandler implements ICapabilityProvider {
-	@CapabilityInject(IDrawerAttributes.class)
-	public static Capability<IDrawerAttributes> DRAWER_ATTRIBUTES_CAPABILITY = null;
+	public static Capability<IDrawerAttributes> DRAWER_ATTRIBUTES_CAPABILITY = CapabilityManager.get(new CapabilityToken<>(){});
 	protected final UpgradeData upgradeData;
 	protected final BasicDrawerAttributes drawerAttributes;
 	protected final LazyOptional<?> attributesHandler = LazyOptional.of(this::getDrawerAttributes);
 	protected IDrawerGroup drawerGroup;
 	protected int storageUnits;
 	protected int drawers;
-	protected World world;
+	protected Level world;
 
 	public StorageDrawerHandler() {
 		this(new UpgradeData(7), new BasicDrawerAttributes(), null, 1, null);
 	}
 
-	public StorageDrawerHandler(UpgradeData upgrades, IDrawerAttributes attributes, @Nullable IDrawerGroup group, int units, @Nullable World world) {
+	public StorageDrawerHandler(UpgradeData upgrades, IDrawerAttributes attributes, @Nullable IDrawerGroup group, int units, @Nullable Level world) {
 		super();
 		this.storageUnits = units;
 		this.world = world;
@@ -232,20 +232,20 @@ public class StorageDrawerHandler extends ContraptionItemStackHandler implements
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public CompoundNBT serializeNBT() {
-		CompoundNBT nbt = super.serializeNBT();
+	public CompoundTag serializeNBT() {
+		CompoundTag nbt = super.serializeNBT();
 
 		nbt.putInt("StorageUnits", storageUnits);
 		nbt.putInt("DrawersAmount", drawers);
 		nbt.put("Upgrades", upgradeData.serializeNBT());
 		nbt.put("Attributes", drawerAttributes.serializeNBT());
-		nbt.put("DrawerGroup", ((INBTSerializable<CompoundNBT>) drawerGroup).serializeNBT());
+		nbt.put("DrawerGroup", ((INBTSerializable<CompoundTag>) drawerGroup).serializeNBT());
 		return nbt;
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public void deserializeNBT(CompoundNBT nbt) {
+	public void deserializeNBT(CompoundTag nbt) {
 		super.deserializeNBT(nbt);
 
 		storageUnits = nbt.getInt("StorageUnits");
@@ -253,7 +253,7 @@ public class StorageDrawerHandler extends ContraptionItemStackHandler implements
 		upgradeData.deserializeNBT(nbt.getCompound("Upgrades"));
 		drawerAttributes.deserializeNBT(nbt.getCompound("Attributes"));
 		drawerGroup = createGroup(drawers);
-		((INBTSerializable<CompoundNBT>) drawerGroup).deserializeNBT(nbt.getCompound("DrawerGroup"));
+		((INBTSerializable<CompoundTag>) drawerGroup).deserializeNBT(nbt.getCompound("DrawerGroup"));
 	}
 
 	protected IDrawerGroup createGroup(int drawers) {
@@ -261,12 +261,12 @@ public class StorageDrawerHandler extends ContraptionItemStackHandler implements
 	}
 
 	@Override
-	public void applyWorld(World world) {
+	public void applyWorld(Level world) {
 		this.world = world;
 	}
 
 	@Override
-	public boolean addStorageToWorld(TileEntity te) {
+	public boolean addStorageToWorld(BlockEntity te) {
 		TileEntityDrawersStandard drawer = (TileEntityDrawersStandard) te;
 		copyItemsTo(drawer);
 		return false;

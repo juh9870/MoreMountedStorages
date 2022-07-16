@@ -1,11 +1,11 @@
 package com.juh9870.moremountedstorages.helpers;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nonnull;
 
-public abstract class InventoryWrapperStackHandler<T extends IInventory> extends SmartItemStackHandler {
+public abstract class InventoryWrapperStackHandler<T extends Container> extends SmartItemStackHandler {
 	protected T storage;
 
 	protected T storage() {

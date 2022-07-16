@@ -1,9 +1,9 @@
 package com.juh9870.moremountedstorages.helpers;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.nbt.Tag;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
@@ -61,12 +61,12 @@ public abstract class FilteringItemStackHandler extends AdvancedItemStackHandler
 	}
 
 	@Override
-	public CompoundNBT serializeNBT() {
-		CompoundNBT nbt = super.serializeNBT();
-		ListNBT l = new ListNBT();
+	public CompoundTag serializeNBT() {
+		CompoundTag nbt = super.serializeNBT();
+		ListTag l = new ListTag();
 		for (int i = 0; i < stacks.size(); i++) {
 			if (!filter[i].isEmpty()) {
-				CompoundNBT subTag = new CompoundNBT();
+				CompoundTag subTag = new CompoundTag();
 				subTag.putInt("Slot", i);
 				filter[i].save(subTag);
 				l.add(subTag);
@@ -77,13 +77,13 @@ public abstract class FilteringItemStackHandler extends AdvancedItemStackHandler
 	}
 
 	@Override
-	public void deserializeNBT(CompoundNBT nbt) {
+	public void deserializeNBT(CompoundTag nbt) {
 		super.deserializeNBT(nbt);
 		filter = new ItemStack[stacks.size()];
 		Arrays.fill(filter, ItemStack.EMPTY);
-		ListNBT l = nbt.getList("Filter", Constants.NBT.TAG_COMPOUND);
+		ListTag l = nbt.getList("Filter", Tag.TAG_COMPOUND);
 		for (int i = 0; i < l.size(); i++) {
-			CompoundNBT tag = l.getCompound(i);
+			CompoundTag tag = l.getCompound(i);
 			ItemStack stack = ItemStack.of(tag);
 			filter[tag.getInt("Slot")] = stack;
 		}

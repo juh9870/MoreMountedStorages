@@ -1,8 +1,8 @@
 package com.juh9870.moremountedstorages.helpers;
 
 import com.juh9870.moremountedstorages.ContraptionItemStackHandler;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;

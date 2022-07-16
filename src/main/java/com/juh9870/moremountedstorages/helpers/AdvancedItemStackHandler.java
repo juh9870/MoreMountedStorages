@@ -1,8 +1,8 @@
 package com.juh9870.moremountedstorages.helpers;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
@@ -101,8 +101,8 @@ public abstract class AdvancedItemStackHandler extends SmartItemStackHandler {
     }
 
     @Override
-    public CompoundNBT serializeNBT() {
-        CompoundNBT nbt = super.serializeNBT();
+    public CompoundTag serializeNBT() {
+        CompoundTag nbt = super.serializeNBT();
         nbt.putIntArray("StackSizes", stackSizes);
         nbt.putBoolean("IgnoreItemStackSizes", ignoreItemStackSize);
         int[] voids = new int[voiding.length];
@@ -114,7 +114,7 @@ public abstract class AdvancedItemStackHandler extends SmartItemStackHandler {
     }
 
     @Override
-    public void deserializeNBT(CompoundNBT nbt) {
+    public void deserializeNBT(CompoundTag nbt) {
         super.deserializeNBT(nbt);
         stackSizes = nbt.getIntArray("StackSizes");
         ignoreItemStackSize = nbt.getBoolean("IgnoreItemStackSizes");

@@ -1,11 +1,10 @@
 package com.juh9870.moremountedstorages.helpers;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -50,7 +49,7 @@ public abstract class DoubleChestItemStackHandler<T> extends SmartItemStackHandl
 
     protected abstract BlockPos secondHalfPos(BlockPos pos, BlockState state, T type);
 
-    protected abstract void attachToOther(World level, BlockState self, BlockPos selfPos, BlockState other, BlockPos otherPos);
+    protected abstract void attachToOther(Level level, BlockState self, BlockPos selfPos, BlockState other, BlockPos otherPos);
 
     protected abstract boolean isSingle(BlockState state);
 
@@ -58,14 +57,14 @@ public abstract class DoubleChestItemStackHandler<T> extends SmartItemStackHandl
 
     protected abstract T getType(BlockState state);
 
-    protected abstract void setSingle(World level, BlockState state, BlockPos pos);
+    protected abstract void setSingle(Level level, BlockState state, BlockPos pos);
 
     protected boolean canConnect(BlockState self, BlockState other) {
         return Objects.equals(self.getBlock().getRegistryName(), other.getBlock().getRegistryName());
     }
 
     @Override
-    public boolean addStorageToWorld(TileEntity te) {
+    public boolean addStorageToWorld(BlockEntity te) {
         BlockState chestState = te.getBlockState();
         BlockPos neighbourPos = secondHalfPos(te.getBlockPos(), chestState, ownType());
         BlockState neighbourState = te.getLevel().getBlockState(neighbourPos);
@@ -108,14 +107,14 @@ public abstract class DoubleChestItemStackHandler<T> extends SmartItemStackHandl
     }
 
     @Override
-    public CompoundNBT serializeNBT() {
-        CompoundNBT nbt = super.serializeNBT();
+    public CompoundTag serializeNBT() {
+        CompoundTag nbt = super.serializeNBT();
         nbt.putBoolean("second", second);
         return nbt;
     }
 
     @Override
-    public void deserializeNBT(CompoundNBT nbt) {
+    public void deserializeNBT(CompoundTag nbt) {
         super.deserializeNBT(nbt);
         second = nbt.getBoolean("second");
     }

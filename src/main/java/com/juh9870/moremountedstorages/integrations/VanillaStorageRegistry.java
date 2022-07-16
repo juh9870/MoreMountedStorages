@@ -5,16 +5,17 @@ import com.juh9870.moremountedstorages.ContraptionItemStackHandler;
 import com.juh9870.moremountedstorages.ContraptionStorageRegistry;
 import com.juh9870.moremountedstorages.Utils;
 import com.juh9870.moremountedstorages.helpers.DoubleChestItemStackHandler;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ChestBlock;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.state.EnumProperty;
-import net.minecraft.state.properties.ChestType;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.state.properties.ChestType;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.items.IItemHandler;
 
@@ -28,20 +29,20 @@ public class VanillaStorageRegistry extends ContraptionStorageRegistry {
     }
 
     @Override
-    public TileEntityType<?>[] affectedStorages() {
-        return new TileEntityType[]{
-                TileEntityType.CHEST,
-                TileEntityType.TRAPPED_CHEST,
-                TileEntityType.BARREL,
-                TileEntityType.SHULKER_BOX,
+    public BlockEntityType<?>[] affectedStorages() {
+        return new BlockEntityType[]{
+                BlockEntityType.CHEST,
+                BlockEntityType.TRAPPED_CHEST,
+                BlockEntityType.BARREL,
+                BlockEntityType.SHULKER_BOX,
         };
     }
 
     @Override
-    public ContraptionItemStackHandler createHandler(TileEntity te) {
+    public ContraptionItemStackHandler createHandler(BlockEntity te) {
 
         // Double chests use custom handler, other storages use default mounted logic
-        if (te.getType() == TileEntityType.CHEST || te.getType() == TileEntityType.TRAPPED_CHEST) {
+        if (te.getType() == BlockEntityType.CHEST || te.getType() == BlockEntityType.TRAPPED_CHEST) {
             ChestType type = te.getBlockState()
                     .getValue(ChestBlock.TYPE);
             if (type != ChestType.SINGLE) {
@@ -53,7 +54,7 @@ public class VanillaStorageRegistry extends ContraptionStorageRegistry {
     }
 
     @Override
-    public ContraptionItemStackHandler deserializeHandler(CompoundNBT nbt) {
+    public ContraptionItemStackHandler deserializeHandler(CompoundTag nbt) {
         return deserializeHandler(new McDoubleChestItemStackHandler(), nbt);
     }
 
@@ -78,7 +79,7 @@ public class VanillaStorageRegistry extends ContraptionStorageRegistry {
         }
 
         @Override
-        public void attachToOther(World level, BlockState self, BlockPos selfPos, BlockState other, BlockPos otherPos) {
+        public void attachToOther(Level level, BlockState self, BlockPos selfPos, BlockState other, BlockPos otherPos) {
             level.setBlockAndUpdate(
                     selfPos,
                     self.setValue(propertyName(), second ? ChestType.LEFT : ChestType.RIGHT)
@@ -87,8 +88,8 @@ public class VanillaStorageRegistry extends ContraptionStorageRegistry {
                     otherPos,
                     other.setValue(propertyName(), second ? ChestType.RIGHT : ChestType.LEFT)
             );
-            level.getBlockEntity(selfPos).clearCache();
-            level.getBlockEntity(otherPos).clearCache();
+            level.getBlockEntity(selfPos).setChanged();
+            level.getBlockEntity(otherPos).setChanged();
         }
 
         @Override
@@ -107,7 +108,7 @@ public class VanillaStorageRegistry extends ContraptionStorageRegistry {
         }
 
         @Override
-        protected void setSingle(World level, BlockState state, BlockPos pos) {
+        protected void setSingle(Level level, BlockState state, BlockPos pos) {
             level.setBlockAndUpdate(
                     pos,
                     state.setValue(propertyName(), ChestType.SINGLE)

@@ -7,7 +7,6 @@ buildscript {
         maven {
             url = 'https://maven.parchmentmc.org'
         }
-        jcenter()
         mavenCentral()
     }
     dependencies {
@@ -34,11 +33,13 @@ version = '1.2.0'
 group = 'com.juh9870.moremountedstorages' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'moremountedstorages'
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+//sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.17' // Need this here so eclipse task generates correctly.
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
-    mappings channel: 'parchment', version: '2021.10.17-1.16.5'
+    // mappings channel: 'parchment', version: '2022.07.10-1.18.2'
+    mappings channel: 'official', version: '1.18.2'
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
     runs {
         client {
@@ -58,6 +59,7 @@ minecraft {
 
         server {
             workingDirectory project.file('run')
+            args "-mixin.config=moremountedstorages.mixins.json"
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
@@ -114,13 +116,13 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.5-36.2.9'
+    minecraft 'net.minecraftforge:forge:1.18.2-40.1.59'
 
-    implementation fg.deobf("com.jozufozu.flywheel:Flywheel:${flywheel_version}")
+    implementation fg.deobf("com.jozufozu.flywheel:Flywheel-Forge:${flywheel_version}")
     implementation fg.deobf("com.simibubi.create:Create:${create_version}")
 
-    implementation fg.deobf("codechicken:CodeChickenLib:${chickenlib_version}:universal")
-    implementation fg.deobf("codechicken:EnderStorage:${enderstorage_version}:universal")
+    implementation fg.deobf("curse.maven:codechicken-lib-1-8-242818:${chickenlib_version}")
+    implementation fg.deobf("curse.maven:ender-storage-1-8-245174:${enderstorage_version}")
 
     implementation fg.deobf("curse.maven:iron-chests-228756:${ironchests_versioncode}")
 
@@ -132,7 +134,8 @@ dependencies {
     implementation fg.deobf("com.hrznstudio:titanium:${titanium_version}")
     implementation fg.deobf("com.buuz135:industrial-foregoing:${IF_version}")
 
-    implementation fg.deobf("me.desht.pneumaticcraft:pneumaticcraft-repressurized:${pneumaticcraft_version}")
+    implementation fg.deobf("curse.maven:patchouli-306770:${patchouli_version}")
+    implementation fg.deobf("curse.maven:pneumaticcraft-repressurized-281849:${pneumaticcraft_version}")
 
     implementation fg.deobf("curse.maven:ninjaphenixs-container-library_versioncode-530668:${ninjaphenixs_container_library_versioncode}")
     implementation fg.deobf("curse.maven:expanded-storage-forge-362415:${expandedstorage_versioncode}")
@@ -144,9 +147,9 @@ dependencies {
 
     implementation fg.deobf("curse.maven:dimstorage-353882:${dimstorage_versioncode}")
 
-    implementation fg.deobf("curse.maven:storage_overhaul-382599:${storage_overhaul_versioncode}")
+    // implementation fg.deobf("curse.maven:storage_overhaul-382599:${storage_overhaul_versioncode}")
 
-    annotationProcessor 'org.spongepowered:mixin:0.8:processor'
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
 jar {
@@ -156,7 +159,7 @@ jar {
                 "Specification-Vendor"    : "mrh0",
                 "Specification-Version"   : "1", // We are version 1 of ourselves
                 "Implementation-Title"    : project.name,
-                "Implementation-Version"  : "${version}",
+                "Implementation-Version"  : "${archiveVersion}",
                 "Implementation-Vendor"   : "mrh0",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])

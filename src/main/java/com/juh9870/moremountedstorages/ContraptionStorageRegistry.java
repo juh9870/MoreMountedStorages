@@ -1,11 +1,10 @@
 package com.juh9870.moremountedstorages;
 
 import com.simibubi.create.Create;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -15,7 +14,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegistryBuilder;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import org.apache.commons.lang3.NotImplementedException;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -27,22 +26,22 @@ public abstract class ContraptionStorageRegistry extends ForgeRegistryEntry<Cont
 	public static final DeferredRegister<ContraptionStorageRegistry> STORAGES = DeferredRegister.create(ContraptionStorageRegistry.class, MoreMountedStorages.ID);
 	public static final Supplier<IForgeRegistry<ContraptionStorageRegistry>> REGISTRY = STORAGES.makeRegistry("mountable_storage", RegistryBuilder::new);
 	public static final String REGISTRY_NAME = "StorageRegistryId";
-	private static Map<TileEntityType<?>, ContraptionStorageRegistry> tileEntityMappingsCache = null;
+	private static Map<BlockEntityType<?>, ContraptionStorageRegistry> BlockEntityMappingsCache = null;
 
 	public static void initCache() {
-		if (tileEntityMappingsCache != null) return;
-		tileEntityMappingsCache = new HashMap<>();
+		if (BlockEntityMappingsCache != null) return;
+		BlockEntityMappingsCache = new HashMap<>();
 		ContraptionStorageRegistry other;
 		for (ContraptionStorageRegistry registry : REGISTRY.get()) {
-			for (TileEntityType<?> tileEntityType : registry.affectedStorages()) {
-				if ((other = tileEntityMappingsCache.get(tileEntityType)) != null) {
+			for (BlockEntityType<?> BlockEntityType : registry.affectedStorages()) {
+				if ((other = BlockEntityMappingsCache.get(BlockEntityType)) != null) {
 					if (other.getPriority() == registry.getPriority() && other.getPriority() != Priority.DUMMY) {
-						throw new RegistryConflictException(tileEntityType, other.getClass(), registry.getClass());
+						throw new RegistryConflictException(BlockEntityType, other.getClass(), registry.getClass());
 					} else if (!registry.getPriority().isOverwrite(other.getPriority()))
 						continue;
 				}
 
-				tileEntityMappingsCache.put(tileEntityType, registry);
+				BlockEntityMappingsCache.put(BlockEntityType, registry);
 			}
 		}
 	}
@@ -54,8 +53,8 @@ public abstract class ContraptionStorageRegistry extends ForgeRegistryEntry<Cont
 	 * @return matching registry entry, or null if nothing is found
 	 */
 	@Nullable
-	public static ContraptionStorageRegistry forTileEntity(TileEntityType<?> type) {
-		return tileEntityMappingsCache.get(type);
+	public static ContraptionStorageRegistry forBlockEntity(BlockEntityType<?> type) {
+		return BlockEntityMappingsCache.get(type);
 	}
 
 	/**
@@ -102,10 +101,10 @@ public abstract class ContraptionStorageRegistry extends ForgeRegistryEntry<Cont
 	/**
 	 * Helper method to get default item handler capability from tile entity
 	 *
-	 * @param te TileEntity to get handler from
+	 * @param te BlockEntity to get handler from
 	 * @return IItemHandler from {@link CapabilityItemHandler#ITEM_HANDLER_CAPABILITY} capability
 	 */
-	protected static IItemHandler getHandlerFromDefaultCapability(TileEntity te) {
+	protected static IItemHandler getHandlerFromDefaultCapability(BlockEntity te) {
 		return te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(dummyHandler);
 	}
 
@@ -129,13 +128,13 @@ public abstract class ContraptionStorageRegistry extends ForgeRegistryEntry<Cont
 	/**
 	 * @return array of Tile Entity types handled by this registry
 	 */
-	public abstract TileEntityType<?>[] affectedStorages();
+	public abstract BlockEntityType<?>[] affectedStorages();
 
 	/**
 	 * @param te Tile Entity
 	 * @return true if given tile entity can be used as mounted storage
 	 */
-	public boolean canUseAsStorage(TileEntity te) {
+	public boolean canUseAsStorage(BlockEntity te) {
 		return true;
 	}
 
@@ -143,7 +142,7 @@ public abstract class ContraptionStorageRegistry extends ForgeRegistryEntry<Cont
 	 * @param te original Tile Entity
 	 * @return Item handler to be used in contraption or null if default logic should be used
 	 */
-	public ContraptionItemStackHandler createHandler(TileEntity te) {
+	public ContraptionItemStackHandler createHandler(BlockEntity te) {
 		return null;
 	}
 
@@ -153,7 +152,7 @@ public abstract class ContraptionStorageRegistry extends ForgeRegistryEntry<Cont
 	 * @param nbt serialized NBT
 	 * @return deserialized handler
 	 */
-	public ContraptionItemStackHandler deserializeHandler(CompoundNBT nbt) {
+	public ContraptionItemStackHandler deserializeHandler(CompoundTag nbt) {
 		throw new NotImplementedException();
 	}
 
@@ -164,7 +163,7 @@ public abstract class ContraptionStorageRegistry extends ForgeRegistryEntry<Cont
 	 * @param nbt     serialized NBT
 	 * @return Deserialized handler
 	 */
-	protected final <T extends ContraptionItemStackHandler> T deserializeHandler(T handler, CompoundNBT nbt) {
+	protected final <T extends ContraptionItemStackHandler> T deserializeHandler(T handler, CompoundTag nbt) {
 		handler.deserializeNBT(nbt);
 		return handler;
 	}
@@ -206,7 +205,7 @@ public abstract class ContraptionStorageRegistry extends ForgeRegistryEntry<Cont
 
 	public static class DummyHandler extends ContraptionStorageRegistry {
 		@Override
-		public boolean canUseAsStorage(TileEntity te) {
+		public boolean canUseAsStorage(BlockEntity te) {
 			return false;
 		}
 
@@ -216,13 +215,13 @@ public abstract class ContraptionStorageRegistry extends ForgeRegistryEntry<Cont
 		}
 
 		@Override
-		public TileEntityType<?>[] affectedStorages() {
-			return new TileEntityType[0];
+		public BlockEntityType<?>[] affectedStorages() {
+			return new BlockEntityType[0];
 		}
 	}
 
 	public static class RegistryConflictException extends RuntimeException {
-		public RegistryConflictException(TileEntityType<?> teType, Class<? extends ContraptionStorageRegistry> a, Class<? extends ContraptionStorageRegistry> b) {
+		public RegistryConflictException(BlockEntityType<?> teType, Class<? extends ContraptionStorageRegistry> a, Class<? extends ContraptionStorageRegistry> b) {
 			super("Registry conflict: registries " + a.getName() + " and " + b.getName() + " tried to register the same tile entity " + teType.getRegistryName());
 		}
 	}

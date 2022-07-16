@@ -7,13 +7,13 @@ import com.juh9870.moremountedstorages.ContraptionItemStackHandler;
 import com.juh9870.moremountedstorages.ContraptionStorageRegistry;
 import com.juh9870.moremountedstorages.Utils;
 import com.juh9870.moremountedstorages.helpers.FilteringItemStackHandler;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Rarity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.ResourceLocationException;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.ResourceLocationException;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -27,18 +27,18 @@ public class IndustrialForegoingRegistry extends ContraptionStorageRegistry {
 
 	public static final Lazy<ContraptionStorageRegistry> INSTANCE = getInstance(Utils.constructId("industrialforegoing", "black_hole_unit"));
 	public static final Config.PriorityRegistryInfo CONFIG = new Config.PriorityRegistryInfo("black_hole_unit", "Black Hole Unit", PRIORITY_ITEM_BIN);
-	private static final Lazy<TileEntityType<?>[]> affectedStorages = Lazy.of(() -> {
-		List<TileEntityType<?>> values = new ArrayList<>();
+	private static final Lazy<BlockEntityType<?>[]> affectedStorages = Lazy.of(() -> {
+		List<BlockEntityType<?>> values = new ArrayList<>();
 
 		for (Rarity rarity : Rarity.values()) {
 			try {
-				TileEntityType<?> type = ForgeRegistries.TILE_ENTITIES.getValue(new ResourceLocation(Reference.MOD_ID, rarity.name().toLowerCase() + "_black_hole_unit"));
+				BlockEntityType<?> type = ForgeRegistries.BLOCK_ENTITIES.getValue(new ResourceLocation(Reference.MOD_ID, rarity.name().toLowerCase() + "_black_hole_unit"));
 				if (type != null) values.add(type);
 			} catch (ResourceLocationException ignored) {
 			}
 		}
 
-		return values.toArray(new TileEntityType<?>[0]);
+		return values.toArray(new BlockEntityType<?>[0]);
 	});
 
 
@@ -48,17 +48,17 @@ public class IndustrialForegoingRegistry extends ContraptionStorageRegistry {
 	}
 
 	@Override
-	public boolean canUseAsStorage(TileEntity te) {
+	public boolean canUseAsStorage(BlockEntity te) {
 		return super.canUseAsStorage(te) && CONFIG.isEnabled();
 	}
 
 	@Override
-	public TileEntityType<?>[] affectedStorages() {
+	public BlockEntityType<?>[] affectedStorages() {
 		return affectedStorages.get();
 	}
 
 	@Override
-	public ContraptionItemStackHandler createHandler(TileEntity te) {
+	public ContraptionItemStackHandler createHandler(BlockEntity te) {
 		BlackHoleUnitTile bhu = (BlackHoleUnitTile) te;
 		IItemHandler bhHandler = getHandlerFromDefaultCapability(bhu);
 		if (bhHandler == dummyHandler) {
@@ -69,7 +69,7 @@ public class IndustrialForegoingRegistry extends ContraptionStorageRegistry {
 	}
 
 	@Override
-	public ContraptionItemStackHandler deserializeHandler(CompoundNBT nbt) {
+	public ContraptionItemStackHandler deserializeHandler(CompoundTag nbt) {
 		return deserializeHandler(new BlackHoleItemStackHandler(), nbt);
 	}
 
@@ -89,7 +89,7 @@ public class IndustrialForegoingRegistry extends ContraptionStorageRegistry {
 		}
 
 		@Override
-		public boolean addStorageToWorld(TileEntity te) {
+		public boolean addStorageToWorld(BlockEntity te) {
 			IItemHandler bhHandler = getHandlerFromDefaultCapability(te);
 			if (bhHandler == dummyHandler) {
 				return false;
