@@ -46,7 +46,21 @@ public abstract class SmartItemStackHandler extends ContraptionItemStackHandler 
             if (!to.getStackInSlot(i + offsetTo).isEmpty()) {
                 throw new RuntimeException("Can't free slot " + (i) + " in target item handler " + to.getClass());
             }
-            to.insertItem(i + offsetTo, from.getStackInSlot(i + offsetFrom), false);
+
+            // Item count is stored as byte in nbt,
+            // which will result in negative item count in deserialized ItemStack instance
+            // when item count is greater than 127.
+            // So any item stack with size larger than 127
+            // should be split and insert separately
+            // to meet the assumption that count of ItemStack is always within Byte range.
+            // TODO: Should the step be 64? Will 64 make it more vanilla compatible?
+            ItemStack stack = from.getStackInSlot(i + offsetFrom);
+            int step = Byte.MAX_VALUE;
+
+            while (stack.getCount() > step) {
+                to.insertItem(i + offsetTo, stack.split(step), false);
+            }
+            to.insertItem(i + offsetTo, stack, false);
         }
     }
 
