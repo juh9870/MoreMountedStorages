@@ -115,17 +115,7 @@ public class MoreMountedStorages {
 
     @SuppressWarnings("Convert2MethodRef")
     private void registerPneumaticcraft(@Nonnull Registry registry) {
-        registry.registerConditionally(() -> {
-            Optional<? extends ModContainer> container = ModList.get().getModContainerById("pneumaticcraft");
-            if (container.isPresent()) {
-                String versionCode = container.get().getModInfo().getVersion().getQualifier();
-                Matcher matcher = Pattern.compile("(\\d+)$").matcher(versionCode);
-                if (!matcher.find()) return false;
-                int buildId = Integer.parseInt(matcher.group(1));
-                return buildId >= 273;
-            }
-            return false;
-        }, Utils.constructId("pneumaticcraft", "smart_chest"), () -> new PneumaticcraftRegistry());
+        registry.register("pneumaticcraft", "smart_chest", () -> new PneumaticcraftRegistry());
         Config.registerConfigsIfModLoaded("pneumaticcraft", () -> Utils.arrayOf(PneumaticcraftRegistry.CONFIG));
     }
 
