@@ -2,23 +2,14 @@ package com.juh9870.moremountedstorages.mixin;
 
 import com.juh9870.moremountedstorages.ContraptionItemStackHandler;
 import com.juh9870.moremountedstorages.ContraptionStorageRegistry;
-import com.simibubi.create.content.contraptions.components.crafter.MechanicalCrafterTileEntity;
 import com.simibubi.create.content.contraptions.components.structureMovement.MountedStorage;
-import com.simibubi.create.content.contraptions.processing.ProcessingInventory;
-import com.simibubi.create.content.logistics.block.inventories.BottomlessItemHandler;
-import com.simibubi.create.foundation.utility.NBTHelper;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -44,20 +35,15 @@ public class MountedStorageMixin {
 	/**
 	 * @author juh9870
 	 */
-	@Overwrite(remap = false)
-	public static boolean canUseAsStorage(BlockEntity te) {
-		if (te == null)
-			return false;
-
-		if (te instanceof MechanicalCrafterTileEntity)
-			return false;
-
+	// @Inject(at = @At(value = "TAIL"), method = "canUseAsStorage", remap = false, cancellable=true)
+	@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/entity/BlockEntity;getCapability(Lnet/minecraftforge/common/capabilities/Capability;)Lnet/minecraftforge/common/util/LazyOptional;"),
+			method = "canUseAsStorage", remap = false, cancellable=true)
+	private static void moremountedstorages__canUseAsStorage(BlockEntity te, CallbackInfoReturnable<Boolean> cir) {
 		ContraptionStorageRegistry registry = ContraptionStorageRegistry.forBlockEntity(te.getType());
-		if (registry != null) return registry.canUseAsStorage(te);
-
-		LazyOptional<IItemHandler> capability = te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
-		IItemHandler handler = capability.orElse(null);
-		return handler instanceof ItemStackHandler && !(handler instanceof ProcessingInventory);
+		if (registry != null) {
+			cir.setReturnValue(registry.canUseAsStorage(te));
+			cir.cancel();
+		}
 	}
 
 	@Inject(at = @At(value = "HEAD"), method = "deserialize(Lnet/minecraft/nbt/CompoundTag;)Lcom/simibubi/create/content/contraptions/components/structureMovement/MountedStorage;", remap = false, cancellable = true)
@@ -92,54 +78,18 @@ public class MountedStorageMixin {
 	/**
 	 * @author juh9870
 	 */
-	@Overwrite(remap = false)
-	public void removeStorageFromWorld() {
-		valid = false;
-		if (te == null)
-			return;
-
+	//@Overwrite(remap = false)
+	@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/entity/BlockEntity;getCapability(Lnet/minecraftforge/common/capabilities/Capability;)Lnet/minecraftforge/common/util/LazyOptional;"),
+			method = "removeStorageFromWorld", remap = false, cancellable = true)
+	public void moremountedstorages__removeStorageFromWorld(CallbackInfo ci) {
 		ContraptionStorageRegistry registry = ContraptionStorageRegistry.forBlockEntity(te.getType());
 		if (registry == null) return;
 		IItemHandler teHandler = registry.createHandler(te);
 		if (teHandler != null) {
 			handler = (ContraptionItemStackHandler) teHandler;
 			valid = true;
-			return;
+			ci.cancel();
 		}
-
-		teHandler = te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
-				.orElse(dummyHandler);
-		if (teHandler == dummyHandler)
-			return;
-
-		// te uses ItemStackHandler
-		if (teHandler instanceof ItemStackHandler) {
-			handler = (ItemStackHandler) teHandler;
-			valid = true;
-			return;
-		}
-
-		// serialization not accessible -> fill into a serializable handler
-		if (teHandler instanceof IItemHandlerModifiable) {
-			IItemHandlerModifiable inv = (IItemHandlerModifiable) teHandler;
-			handler = new ItemStackHandler(teHandler.getSlots());
-			for (int slot = 0; slot < handler.getSlots(); slot++) {
-				handler.setStackInSlot(slot, inv.getStackInSlot(slot));
-				inv.setStackInSlot(slot, ItemStack.EMPTY);
-			}
-			valid = true;
-			return;
-		}
-	}
-
-	/**
-	 * @author juh9870
-	 */
-	@Overwrite(remap = false)
-	public CompoundTag serialize() {
-		if (!valid)
-			return null;
-		return handler.serializeNBT();
 	}
 
 	@Inject(at = @At("HEAD"), method = "addStorageToWorld(Lnet/minecraft/world/level/block/entity/BlockEntity;)V", remap = false, cancellable = true)
