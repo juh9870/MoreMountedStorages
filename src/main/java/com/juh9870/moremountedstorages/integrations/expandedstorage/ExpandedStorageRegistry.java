@@ -144,7 +144,7 @@ public class ExpandedStorageRegistry extends ContraptionStorageRegistry {
 
         @Override
         public int getPriority() {
-            return 0;
+            return super.getPriority();
         }
 
         @Override

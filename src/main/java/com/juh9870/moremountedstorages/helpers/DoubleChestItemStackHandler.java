@@ -59,6 +59,11 @@ public abstract class DoubleChestItemStackHandler<T> extends SmartItemStackHandl
 
     protected abstract void setSingle(Level level, BlockState state, BlockPos pos);
 
+    @Override
+    public int getPriority() {
+        return second ? 0 : 1;
+    }
+
     protected boolean canConnect(BlockState self, BlockState other) {
         return Objects.equals(self.getBlock().getRegistryName(), other.getBlock().getRegistryName());
     }
