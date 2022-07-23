@@ -19,6 +19,8 @@ import ninjaphenix.expandedstorage.api.EsChestType;
 import ninjaphenix.expandedstorage.api.ExpandedStorageAccessors;
 
 import java.util.Optional;
+import java.util.Queue;
+import java.util.Set;
 
 public class ExpandedStorageRegistry extends ContraptionStorageRegistry {
 
@@ -63,6 +65,23 @@ public class ExpandedStorageRegistry extends ContraptionStorageRegistry {
                 Common.getOldChestBlockEntityType(),
                 Common.getMiniChestBlockEntityType(),
         };
+    }
+
+    @Override
+    public boolean moveBlock(Level world,
+                             Direction forcedDirection,
+                             Queue<BlockPos> frontier,
+                             Set<BlockPos> visited,
+                             BlockPos pos,
+                             BlockState state) {
+        // Double Chest halves stick together
+        Direction offset = ExpandedStorageAccessors.getAttachedChestDirection(state).orElse(null);
+        if (offset != null) {
+            BlockPos attached = pos.relative(offset);
+            if (!visited.contains(attached))
+                frontier.add(attached);
+        }
+        return true;
     }
 
     public static class EsItemStackHandler extends DoubleChestItemStackHandler<EsChestType> {

@@ -1,10 +1,15 @@
 package com.juh9870.moremountedstorages;
 
 import com.simibubi.create.Create;
+import com.simibubi.create.content.contraptions.components.structureMovement.Contraption;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -19,6 +24,8 @@ import org.apache.commons.lang3.NotImplementedException;
 import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
 import java.util.function.Supplier;
 
 public abstract class ContraptionStorageRegistry extends ForgeRegistryEntry<ContraptionStorageRegistry> {
@@ -135,6 +142,27 @@ public abstract class ContraptionStorageRegistry extends ForgeRegistryEntry<Cont
 	 * @return true if given tile entity can be used as mounted storage
 	 */
 	public boolean canUseAsStorage(BlockEntity te) {
+		return true;
+	}
+
+
+	/**
+	 * called when the specific block at pos is about to be moved
+	 * @param world           the level where the block is
+	 * @param forcedDirection the direction that the block is about to move to
+	 * @param frontier        queue containing the blocks to be moved
+	 *                        push new blocks here if they should be moved along with this one
+	 * @param visited         blocks visited, including this one
+	 * @param pos             position of the block
+	 * @param state           block state of the block
+	 * @return indicates whether this block can be moved
+	 * 		   true: move as usual
+	 * 		   false: reject to move, this will fail the contraption assemble process
+	 * @see Contraption#moveBlock(Level, Direction, Queue, Set)
+	 */
+	public boolean moveBlock(Level world, Direction forcedDirection, Queue<BlockPos> frontier, Set<BlockPos> visited,
+							 BlockPos pos, BlockState state)
+	{
 		return true;
 	}
 
