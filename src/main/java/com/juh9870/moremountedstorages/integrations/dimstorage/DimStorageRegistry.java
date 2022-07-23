@@ -5,10 +5,10 @@ import com.juh9870.moremountedstorages.ContraptionItemStackHandler;
 import com.juh9870.moremountedstorages.ContraptionStorageRegistry;
 import com.juh9870.moremountedstorages.Utils;
 import edivad.dimstorage.setup.Registration;
-import edivad.dimstorage.tile.TileEntityDimChest;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
+import edivad.dimstorage.blockentities.BlockEntityDimChest;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.common.util.Lazy;
 
 public class DimStorageRegistry extends ContraptionStorageRegistry {
@@ -17,7 +17,7 @@ public class DimStorageRegistry extends ContraptionStorageRegistry {
 	public static int managerGeneration = 0;
 
 	@Override
-	public boolean canUseAsStorage(TileEntity te) {
+	public boolean canUseAsStorage(BlockEntity te) {
 		return super.canUseAsStorage(te) && CONFIG.isEnabled();
 	}
 
@@ -27,18 +27,18 @@ public class DimStorageRegistry extends ContraptionStorageRegistry {
 	}
 
 	@Override
-	public TileEntityType<?>[] affectedStorages() {
-		return new TileEntityType[]{Registration.DIMCHEST_TILE.get()};
+	public BlockEntityType<?>[] affectedStorages() {
+		return new BlockEntityType[]{Registration.DIMCHEST_TILE.get()};
 	}
 
 	@Override
-	public ContraptionItemStackHandler createHandler(TileEntity te) {
-		TileEntityDimChest chest = (TileEntityDimChest) te;
+	public ContraptionItemStackHandler createHandler(BlockEntity te) {
+		BlockEntityDimChest chest = (BlockEntityDimChest) te;
 		return new DimStorageStackHandler(chest.getStorage());
 	}
 
 	@Override
-	public ContraptionItemStackHandler deserializeHandler(CompoundNBT nbt) {
+	public ContraptionItemStackHandler deserializeHandler(CompoundTag nbt) {
 		DimStorageStackHandler handler = new DimStorageStackHandler();
 		handler.deserializeNBT(nbt);
 		return handler;

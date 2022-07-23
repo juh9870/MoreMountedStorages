@@ -1,11 +1,12 @@
 package com.juh9870.moremountedstorages.helpers;
 
 import com.juh9870.moremountedstorages.ContraptionItemStackHandler;
-import mcp.MethodsReturnNonnullByDefault;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+
 
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
@@ -52,14 +53,14 @@ public abstract class CrateItemHandler extends SmartItemStackHandler {
 	}
 
 	@Override
-	public CompoundNBT serializeNBT() {
-		CompoundNBT nbt = super.serializeNBT();
+	public CompoundTag serializeNBT() {
+		CompoundTag nbt = super.serializeNBT();
 		nbt.putInt("AllowedAmount", getAllowedAmount());
 		return nbt;
 	}
 
 	@Override
-	public void deserializeNBT(CompoundNBT nbt) {
+	public void deserializeNBT(CompoundTag nbt) {
 		super.deserializeNBT(nbt);
 		allowedAmount = nbt.getInt("AllowedAmount");
 	}

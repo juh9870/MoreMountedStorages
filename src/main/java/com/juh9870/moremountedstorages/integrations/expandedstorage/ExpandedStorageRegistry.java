@@ -5,20 +5,22 @@ import com.juh9870.moremountedstorages.ContraptionItemStackHandler;
 import com.juh9870.moremountedstorages.ContraptionStorageRegistry;
 import com.juh9870.moremountedstorages.Utils;
 import com.juh9870.moremountedstorages.helpers.DoubleChestItemStackHandler;
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.items.IItemHandler;
-import ninjaphenix.expandedstorage.Common;
+import ellemes.expandedstorage.Common;
 import ninjaphenix.expandedstorage.api.EsChestType;
 import ninjaphenix.expandedstorage.api.ExpandedStorageAccessors;
 
 import java.util.Optional;
+import java.util.Queue;
+import java.util.Set;
 
 public class ExpandedStorageRegistry extends ContraptionStorageRegistry {
 
@@ -27,7 +29,7 @@ public class ExpandedStorageRegistry extends ContraptionStorageRegistry {
 
 
     @Override
-    public ContraptionItemStackHandler createHandler(TileEntity te) {
+    public ContraptionItemStackHandler createHandler(BlockEntity te) {
         Optional<EsChestType> type = ExpandedStorageAccessors.getChestType(te.getBlockState());
         if (type.isPresent() && type.get() != EsChestType.SINGLE) {
             boolean second = true;
@@ -41,7 +43,7 @@ public class ExpandedStorageRegistry extends ContraptionStorageRegistry {
     }
 
     @Override
-    public ContraptionItemStackHandler deserializeHandler(CompoundNBT nbt) {
+    public ContraptionItemStackHandler deserializeHandler(CompoundTag nbt) {
         return deserializeHandler(new EsItemStackHandler(), nbt);
     }
 
@@ -51,18 +53,35 @@ public class ExpandedStorageRegistry extends ContraptionStorageRegistry {
     }
 
     @Override
-    public boolean canUseAsStorage(TileEntity te) {
+    public boolean canUseAsStorage(BlockEntity te) {
         return super.canUseAsStorage(te) && CONFIG.isEnabled();
     }
 
     @Override
-    public TileEntityType<?>[] affectedStorages() {
-        return new TileEntityType<?>[]{
+    public BlockEntityType<?>[] affectedStorages() {
+        return new BlockEntityType<?>[]{
                 Common.getBarrelBlockEntityType(),
                 Common.getChestBlockEntityType(),
                 Common.getOldChestBlockEntityType(),
                 Common.getMiniChestBlockEntityType(),
         };
+    }
+
+    @Override
+    public boolean moveBlock(Level world,
+                             Direction forcedDirection,
+                             Queue<BlockPos> frontier,
+                             Set<BlockPos> visited,
+                             BlockPos pos,
+                             BlockState state) {
+        // Double Chest halves stick together
+        Direction offset = ExpandedStorageAccessors.getAttachedChestDirection(state).orElse(null);
+        if (offset != null) {
+            BlockPos attached = pos.relative(offset);
+            if (!visited.contains(attached))
+                frontier.add(attached);
+        }
+        return true;
     }
 
     public static class EsItemStackHandler extends DoubleChestItemStackHandler<EsChestType> {
@@ -105,7 +124,7 @@ public class ExpandedStorageRegistry extends ContraptionStorageRegistry {
         }
 
         @Override
-        protected void attachToOther(World level, BlockState self, BlockPos selfPos, BlockState other, BlockPos otherPos) {
+        protected void attachToOther(Level level, BlockState self, BlockPos selfPos, BlockState other, BlockPos otherPos) {
             level.setBlockAndUpdate(
                     selfPos,
                     ExpandedStorageAccessors.chestWithType(self, type).orElseThrow(this::throwInvalidBlockState)
@@ -114,8 +133,8 @@ public class ExpandedStorageRegistry extends ContraptionStorageRegistry {
                     otherPos,
                     ExpandedStorageAccessors.chestWithType(other, opposite(type)).orElseThrow(this::throwInvalidBlockState)
             );
-            level.getBlockEntity(selfPos).clearCache();
-            level.getBlockEntity(otherPos).clearCache();
+            level.getBlockEntity(selfPos).setChanged();
+            level.getBlockEntity(otherPos).setChanged();
         }
 
         @Override
@@ -135,7 +154,7 @@ public class ExpandedStorageRegistry extends ContraptionStorageRegistry {
         }
 
         @Override
-        protected void setSingle(World level, BlockState state, BlockPos pos) {
+        protected void setSingle(Level level, BlockState state, BlockPos pos) {
             level.setBlockAndUpdate(
                     pos,
                     ExpandedStorageAccessors.chestWithType(state, EsChestType.SINGLE).orElseThrow(this::throwInvalidBlockState)
@@ -144,7 +163,7 @@ public class ExpandedStorageRegistry extends ContraptionStorageRegistry {
 
         @Override
         public int getPriority() {
-            return 0;
+            return super.getPriority();
         }
 
         @Override
@@ -157,14 +176,14 @@ public class ExpandedStorageRegistry extends ContraptionStorageRegistry {
         }
 
         @Override
-        public CompoundNBT serializeNBT() {
-            CompoundNBT nbt = super.serializeNBT();
+        public CompoundTag serializeNBT() {
+            CompoundTag nbt = super.serializeNBT();
             nbt.putString("chestType", type.getSerializedName());
             return nbt;
         }
 
         @Override
-        public void deserializeNBT(CompoundNBT nbt) {
+        public void deserializeNBT(CompoundTag nbt) {
             super.deserializeNBT(nbt);
             String name = nbt.getString("chestType");
             for (EsChestType value : EsChestType.values()) {

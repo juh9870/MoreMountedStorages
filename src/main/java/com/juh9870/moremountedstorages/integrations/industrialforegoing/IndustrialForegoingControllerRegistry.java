@@ -8,11 +8,11 @@ import com.juh9870.moremountedstorages.ContraptionItemStackHandler;
 import com.juh9870.moremountedstorages.ContraptionStorageRegistry;
 import com.juh9870.moremountedstorages.Utils;
 import com.juh9870.moremountedstorages.helpers.FilteringItemStackHandler;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -26,7 +26,7 @@ public class IndustrialForegoingControllerRegistry extends ContraptionStorageReg
 	public static final Lazy<ContraptionStorageRegistry> INSTANCE = getInstance(Utils.constructId("industrialforegoing", "black_hole_controller"));
 	public static final Config.PriorityRegistryInfo CONFIG = new Config.PriorityRegistryInfo("black_hole_controller", "Black Hole Controller", PRIORITY_ITEM_BIN);
 
-	private static final Lazy<TileEntityType<?>[]> affectedStorages = Lazy.of(() -> new TileEntityType<?>[]{ForgeRegistries.TILE_ENTITIES.getValue(new ResourceLocation("industrialforegoing:black_hole_controller"))});
+	private static final Lazy<BlockEntityType<?>[]> affectedStorages = Lazy.of(() -> new BlockEntityType<?>[]{ForgeRegistries.BLOCK_ENTITIES.getValue(new ResourceLocation("industrialforegoing:black_hole_controller"))});
 
 	@Override
 	public Priority getPriority() {
@@ -34,22 +34,22 @@ public class IndustrialForegoingControllerRegistry extends ContraptionStorageReg
 	}
 
 	@Override
-	public ContraptionItemStackHandler deserializeHandler(CompoundNBT nbt) {
+	public ContraptionItemStackHandler deserializeHandler(CompoundTag nbt) {
 		return deserializeHandler(new BlackHoleControllerItemStackHandler(), nbt);
 	}
 
 	@Override
-	public boolean canUseAsStorage(TileEntity te) {
+	public boolean canUseAsStorage(BlockEntity te) {
 		return super.canUseAsStorage(te) && CONFIG.isEnabled();
 	}
 
 	@Override
-	public TileEntityType<?>[] affectedStorages() {
+	public BlockEntityType<?>[] affectedStorages() {
 		return affectedStorages.get();
 	}
 
 	@Override
-	public ContraptionItemStackHandler createHandler(TileEntity te) {
+	public ContraptionItemStackHandler createHandler(BlockEntity te) {
 		BlackHoleControllerTile bhc = (BlackHoleControllerTile) te;
 		IItemHandler bhHandler = getHandlerFromDefaultCapability(te);
 		if (bhHandler == dummyHandler) {
@@ -103,7 +103,7 @@ public class IndustrialForegoingControllerRegistry extends ContraptionStorageReg
 		}
 
 		@Override
-		public boolean addStorageToWorld(TileEntity te) {
+		public boolean addStorageToWorld(BlockEntity te) {
 			IItemHandler bhHandler = getHandlerFromDefaultCapability(te);
 			if (bhHandler == dummyHandler) {
 				return false;

@@ -1,10 +1,10 @@
 package com.juh9870.moremountedstorages;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.NonNullList;
-import net.minecraft.world.World;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.items.ItemStackHandler;
 
 public abstract class ContraptionItemStackHandler extends ItemStackHandler {
@@ -42,7 +42,7 @@ public abstract class ContraptionItemStackHandler extends ItemStackHandler {
 	 * @param te Tile Entity being added to the world
 	 * @return false if default create logic should be skipped
 	 */
-	public boolean addStorageToWorld(TileEntity te) {
+	public boolean addStorageToWorld(BlockEntity te) {
 		return true;
 	}
 
@@ -70,8 +70,8 @@ public abstract class ContraptionItemStackHandler extends ItemStackHandler {
 	protected abstract ContraptionStorageRegistry registry();
 
 	@Override
-	public CompoundNBT serializeNBT() {
-		CompoundNBT nbt = super.serializeNBT();
+	public CompoundTag serializeNBT() {
+		CompoundTag nbt = super.serializeNBT();
 		nbt.putString(ContraptionStorageRegistry.REGISTRY_NAME, registry().getRegistryName().toString());
 		return nbt;
 	}
@@ -81,6 +81,6 @@ public abstract class ContraptionItemStackHandler extends ItemStackHandler {
 	 *
 	 * @param world contraption world
 	 */
-	public void applyWorld(World world) {
+	public void applyWorld(Level world) {
 	}
 }

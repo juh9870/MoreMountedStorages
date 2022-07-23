@@ -5,11 +5,11 @@ import com.juh9870.moremountedstorages.ContraptionItemStackHandler;
 import com.juh9870.moremountedstorages.ContraptionStorageRegistry;
 import com.juh9870.moremountedstorages.Utils;
 import com.juh9870.moremountedstorages.helpers.WrapperStackHandler;
-import me.desht.pneumaticcraft.common.core.ModTileEntities;
-import me.desht.pneumaticcraft.common.tileentity.TileEntitySmartChest;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
+import me.desht.pneumaticcraft.common.core.ModBlockEntities;
+import me.desht.pneumaticcraft.common.block.entity.SmartChestBlockEntity;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
@@ -20,15 +20,15 @@ public class PneumaticcraftRegistry extends ContraptionStorageRegistry {
 
 
 	@Override
-	public TileEntityType<?>[] affectedStorages() {
-		return new TileEntityType[]{
-				ModTileEntities.SMART_CHEST.get()
+	public BlockEntityType<?>[] affectedStorages() {
+		return new BlockEntityType[]{
+                ModBlockEntities.SMART_CHEST.get()
 		};
 	}
 
 	@Override
-	public boolean canUseAsStorage(TileEntity te) {
-		return getHandlerFromDefaultCapability(te) instanceof TileEntitySmartChest.SmartChestItemHandler && CONFIG.isEnabled();
+	public boolean canUseAsStorage(BlockEntity te) {
+		return getHandlerFromDefaultCapability(te) instanceof SmartChestBlockEntity.SmartChestItemHandler && CONFIG.isEnabled();
 	}
 
 	@Override
@@ -37,22 +37,22 @@ public class PneumaticcraftRegistry extends ContraptionStorageRegistry {
 	}
 
 	@Override
-	public ContraptionItemStackHandler createHandler(TileEntity te) {
+	public ContraptionItemStackHandler createHandler(BlockEntity te) {
 
 		IItemHandler handler = getHandlerFromDefaultCapability(te);
 		if (handler == dummyHandler) {
 			return null;
 		}
-		if (!(handler instanceof TileEntitySmartChest.SmartChestItemHandler)) {
+		if (!(handler instanceof SmartChestBlockEntity.SmartChestItemHandler)) {
 			return null;
 		}
 
-		return new SmartChestWrapper((TileEntitySmartChest.SmartChestItemHandler) handler);
+		return new SmartChestWrapper((SmartChestBlockEntity.SmartChestItemHandler) handler);
 	}
 
 	@Override
-	public ContraptionItemStackHandler deserializeHandler(CompoundNBT nbt) {
-		return new SmartChestWrapper((ItemStackHandler) TileEntitySmartChest.deserializeSmartChest(nbt));
+	public ContraptionItemStackHandler deserializeHandler(CompoundTag nbt) {
+		return new SmartChestWrapper((ItemStackHandler) SmartChestBlockEntity.deserializeSmartChest(nbt));
 	}
 
 	public static class SmartChestWrapper extends WrapperStackHandler {

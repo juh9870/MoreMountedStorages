@@ -8,8 +8,8 @@ import com.jaquadro.minecraft.storagedrawers.block.tile.tiledata.FractionalDrawe
 import com.jaquadro.minecraft.storagedrawers.block.tile.tiledata.UpgradeData;
 import com.jaquadro.minecraft.storagedrawers.config.CommonConfig;
 import com.juh9870.moremountedstorages.ContraptionStorageRegistry;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 
@@ -19,7 +19,7 @@ public class CompactingDrawerHandler extends StorageDrawerHandler {
 		super();
 	}
 
-	public CompactingDrawerHandler(UpgradeData upgrades, IDrawerAttributes attributes, @Nullable IDrawerGroup group, int units, World world) {
+	public CompactingDrawerHandler(UpgradeData upgrades, IDrawerAttributes attributes, @Nullable IDrawerGroup group, int units, Level world) {
 		super(upgrades, attributes, group, units, world);
 	}
 
@@ -45,7 +45,7 @@ public class CompactingDrawerHandler extends StorageDrawerHandler {
 	}
 
 	@Override
-	public boolean addStorageToWorld(TileEntity te) {
+	public boolean addStorageToWorld(BlockEntity te) {
 		clearGroup((TileEntityDrawersComp) te);
 		copyItemsTo((TileEntityDrawersComp) te);
 		copyItemsTo((TileEntityDrawersComp) te.getLevel().getBlockEntity(te.getBlockPos()));
@@ -77,7 +77,7 @@ public class CompactingDrawerHandler extends StorageDrawerHandler {
 		}
 
 		@Override
-		protected World getWorld() {
+		protected Level getWorld() {
 			return world;
 		}
 	}

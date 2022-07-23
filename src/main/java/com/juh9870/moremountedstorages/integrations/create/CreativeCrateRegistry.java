@@ -7,10 +7,10 @@ import com.juh9870.moremountedstorages.Utils;
 import com.juh9870.moremountedstorages.helpers.InfiniteItemStackHandler;
 import com.simibubi.create.AllTileEntities;
 import com.simibubi.create.content.logistics.block.inventories.BottomlessItemHandler;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.common.util.Lazy;
 
 import java.util.function.Supplier;
@@ -24,19 +24,19 @@ public class CreativeCrateRegistry extends ContraptionStorageRegistry {
 	}
 
 	@Override
-	public TileEntityType<?>[] affectedStorages() {
-		return new TileEntityType[]{
+	public BlockEntityType<?>[] affectedStorages() {
+		return new BlockEntityType[]{
 				AllTileEntities.CREATIVE_CRATE.get()
 		};
 	}
 
 	@Override
-	public boolean canUseAsStorage(TileEntity te) {
+	public boolean canUseAsStorage(BlockEntity te) {
 		return super.canUseAsStorage(te) && CONFIG.isEnabled();
 	}
 
 	@Override
-	public ContraptionItemStackHandler deserializeHandler(CompoundNBT nbt) {
+	public ContraptionItemStackHandler deserializeHandler(CompoundTag nbt) {
 		return deserializeHandler(new CreativeCrateItemHandler(() -> ItemStack.EMPTY), nbt);
 	}
 

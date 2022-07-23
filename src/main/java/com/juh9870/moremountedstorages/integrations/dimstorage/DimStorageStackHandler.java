@@ -5,8 +5,8 @@ import com.juh9870.moremountedstorages.helpers.InventoryWrapperStackHandler;
 import edivad.dimstorage.api.Frequency;
 import edivad.dimstorage.manager.DimStorageManager;
 import edivad.dimstorage.storage.DimChestStorage;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
 public class DimStorageStackHandler extends InventoryWrapperStackHandler<DimChestStorage> {
 	protected Frequency frequency;
@@ -41,15 +41,15 @@ public class DimStorageStackHandler extends InventoryWrapperStackHandler<DimChes
 
 
 	@Override
-	public CompoundNBT serializeNBT() {
-		CompoundNBT nbt = super.serializeNBT();
+	public CompoundTag serializeNBT() {
+		CompoundTag nbt = super.serializeNBT();
 		nbt.put("Frequency", frequency.serializeNBT());
 		nbt.putBoolean("Clientside", isClientSide);
 		return nbt;
 	}
 
 	@Override
-	public void deserializeNBT(CompoundNBT nbt) {
+	public void deserializeNBT(CompoundTag nbt) {
 		super.deserializeNBT(nbt);
 		frequency.set(new Frequency(nbt.getCompound("Frequency")));
 		isClientSide = nbt.getBoolean("Clientside");
@@ -62,7 +62,7 @@ public class DimStorageStackHandler extends InventoryWrapperStackHandler<DimChes
 	}
 
 	@Override
-	public boolean addStorageToWorld(TileEntity te) {
+	public boolean addStorageToWorld(BlockEntity te) {
 		valid = false;
 		return false;
 	}

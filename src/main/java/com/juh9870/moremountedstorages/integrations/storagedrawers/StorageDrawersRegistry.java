@@ -1,14 +1,14 @@
 package com.juh9870.moremountedstorages.integrations.storagedrawers;
 
 import com.jaquadro.minecraft.storagedrawers.block.tile.TileEntityDrawersStandard;
-import com.jaquadro.minecraft.storagedrawers.core.ModBlocks;
+import com.jaquadro.minecraft.storagedrawers.core.ModBlockEntities;
 import com.juh9870.moremountedstorages.Config;
 import com.juh9870.moremountedstorages.ContraptionItemStackHandler;
 import com.juh9870.moremountedstorages.ContraptionStorageRegistry;
 import com.juh9870.moremountedstorages.Utils;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.common.util.Lazy;
 
 import static com.juh9870.moremountedstorages.ContraptionItemStackHandler.PRIORITY_ITEM_BIN;
@@ -19,22 +19,22 @@ public class StorageDrawersRegistry extends ContraptionStorageRegistry {
 
 
 	@Override
-	public boolean canUseAsStorage(TileEntity te) {
+	public boolean canUseAsStorage(BlockEntity te) {
 		TileEntityDrawersStandard drawer = (TileEntityDrawersStandard) te;
 		return drawer.isGroupValid() && CONFIG.isEnabled();
 	}
 
 	@Override
-	public TileEntityType<?>[] affectedStorages() {
-		return new TileEntityType[]{
-				ModBlocks.Tile.STANDARD_DRAWERS_1,
-				ModBlocks.Tile.STANDARD_DRAWERS_2,
-				ModBlocks.Tile.STANDARD_DRAWERS_4,
+	public BlockEntityType<?>[] affectedStorages() {
+		return new BlockEntityType[]{
+				ModBlockEntities.STANDARD_DRAWERS_1.get(),
+				ModBlockEntities.STANDARD_DRAWERS_2.get(),
+				ModBlockEntities.STANDARD_DRAWERS_4.get(),
 		};
 	}
 
 	@Override
-	public ContraptionItemStackHandler createHandler(TileEntity te) {
+	public ContraptionItemStackHandler createHandler(BlockEntity te) {
 		return new StorageDrawerHandler((TileEntityDrawersStandard) te);
 	}
 
@@ -44,7 +44,7 @@ public class StorageDrawersRegistry extends ContraptionStorageRegistry {
 	}
 
 	@Override
-	public ContraptionItemStackHandler deserializeHandler(CompoundNBT nbt) {
+	public ContraptionItemStackHandler deserializeHandler(CompoundTag nbt) {
 		StorageDrawerHandler handler = new StorageDrawerHandler();
 		handler.deserializeNBT(nbt);
 		return handler;

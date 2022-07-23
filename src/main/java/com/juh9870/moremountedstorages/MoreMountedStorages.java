@@ -2,7 +2,6 @@ package com.juh9870.moremountedstorages;
 
 import com.juh9870.moremountedstorages.integrations.VanillaStorageRegistry;
 import com.juh9870.moremountedstorages.integrations.create.CreativeCrateRegistry;
-import com.juh9870.moremountedstorages.integrations.create.FlexCrateRegistry;
 import com.juh9870.moremountedstorages.integrations.dimstorage.DimStorageRegistry;
 import com.juh9870.moremountedstorages.integrations.enderchests.EnderChestsRegistry;
 import com.juh9870.moremountedstorages.integrations.enderstorage.EnderStorageRegistry;
@@ -16,8 +15,8 @@ import com.juh9870.moremountedstorages.integrations.storagedrawers.CompactingDra
 import com.juh9870.moremountedstorages.integrations.storagedrawers.FramedCompactingDrawerRegistry;
 import com.juh9870.moremountedstorages.integrations.storagedrawers.FramedDrawersRegistry;
 import com.juh9870.moremountedstorages.integrations.storagedrawers.StorageDrawersRegistry;
-import com.juh9870.moremountedstorages.integrations.storageoverhaul.StorageBarrelRegistry;
-import com.juh9870.moremountedstorages.integrations.storageoverhaul.StorageOverhaulRegistry;
+//import com.juh9870.moremountedstorages.integrations.storageoverhaul.StorageBarrelRegistry;
+//import com.juh9870.moremountedstorages.integrations.storageoverhaul.StorageOverhaulRegistry;
 import com.juh9870.moremountedstorages.integrations.trashcans.TrashCansRegistry;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -70,7 +69,6 @@ public class MoreMountedStorages {
 
         registry.register("minecraft", "storages", () -> new VanillaStorageRegistry(), () -> VanillaStorageRegistry.CONFIG);
 
-        registry.register("create", "crate", () -> new FlexCrateRegistry(), () -> FlexCrateRegistry.CONFIG);
         registry.register("create", "creative_crate", () -> new CreativeCrateRegistry(), () -> CreativeCrateRegistry.CONFIG);
 
         registry.register("enderstorage", "ender_chest", () -> new EnderStorageRegistry(), () -> EnderStorageRegistry.CONFIG);
@@ -117,28 +115,18 @@ public class MoreMountedStorages {
 
     @SuppressWarnings("Convert2MethodRef")
     private void registerPneumaticcraft(@Nonnull Registry registry) {
-        registry.registerConditionally(() -> {
-            Optional<? extends ModContainer> container = ModList.get().getModContainerById("pneumaticcraft");
-            if (container.isPresent()) {
-                String versionCode = container.get().getModInfo().getVersion().getQualifier();
-                Matcher matcher = Pattern.compile("(\\d+)$").matcher(versionCode);
-                if (!matcher.find()) return false;
-                int buildId = Integer.parseInt(matcher.group(1));
-                return buildId >= 273;
-            }
-            return false;
-        }, Utils.constructId("pneumaticcraft", "smart_chest"), () -> new PneumaticcraftRegistry());
+        registry.register("pneumaticcraft", "smart_chest", () -> new PneumaticcraftRegistry());
         Config.registerConfigsIfModLoaded("pneumaticcraft", () -> Utils.arrayOf(PneumaticcraftRegistry.CONFIG));
     }
 
     @SuppressWarnings("Convert2MethodRef")
     private void registerStorageOverhaul(@Nonnull Registry registry) {
-        registry.register("storage_overhaul", "storages", () -> new StorageOverhaulRegistry());
-        registry.register("storage_overhaul", "barrel", () -> new StorageBarrelRegistry());
-        Config.registerConfigsIfModLoaded("storage_overhaul", () -> Utils.arrayOf(
-                StorageOverhaulRegistry.CONFIG,
-                StorageBarrelRegistry.CONFIG
-        ));
+//        registry.register("storage_overhaul", "storages", () -> new StorageOverhaulRegistry());
+//        registry.register("storage_overhaul", "barrel", () -> new StorageBarrelRegistry());
+//        Config.registerConfigsIfModLoaded("storage_overhaul", () -> Utils.arrayOf(
+//                StorageOverhaulRegistry.CONFIG,
+//                StorageBarrelRegistry.CONFIG
+//        ));
     }
 
     private static class Registry {
