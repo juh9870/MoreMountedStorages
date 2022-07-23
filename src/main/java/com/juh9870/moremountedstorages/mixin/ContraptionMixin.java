@@ -31,7 +31,7 @@ public class ContraptionMixin {
 	@Shadow(remap = false)
 	protected MountedStorageManager storage;
 
-	@Inject(at = @At(value = "INVOKE", target = "Ljava/util/Map;clear()V", ordinal = 5), method = "readNBT", remap = false)
+	@Inject(at = @At(value = "INVOKE", target = "Ljava/util/Map;clear()V", ordinal = 4), method = "readNBT", remap = false)
 	public void moremountedstorages__readNBT(Level world, CompoundTag nbt, boolean spawnData, CallbackInfo cbi) {
 		MoreMountedStorages.breakpoint();
 		IStorageExposer exposedStorage = (IStorageExposer) this.storage;
