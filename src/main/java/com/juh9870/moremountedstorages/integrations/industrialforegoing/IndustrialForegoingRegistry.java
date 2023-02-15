@@ -96,6 +96,9 @@ public class IndustrialForegoingRegistry extends ContraptionStorageRegistry {
 			}
 
 			simpleOverwrite(bhHandler);
+			if(te instanceof BlackHoleUnitTile) {
+				((BlackHoleUnitTile) te).markForUpdate();
+			}
 			return false;
 		}
 
