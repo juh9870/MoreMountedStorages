@@ -5,7 +5,7 @@ import com.juh9870.moremountedstorages.ContraptionItemStackHandler;
 import com.juh9870.moremountedstorages.ContraptionStorageRegistry;
 import com.juh9870.moremountedstorages.Utils;
 import com.juh9870.moremountedstorages.helpers.TrashCanHandler;
-import com.supermartijn642.trashcans.TrashCanTile;
+import com.supermartijn642.trashcans.TrashCanBlockEntity;
 import com.supermartijn642.trashcans.TrashCans;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -18,118 +18,126 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 
 public class TrashCansRegistry extends ContraptionStorageRegistry {
-	public static final Lazy<ContraptionStorageRegistry> INSTANCE = getInstance(Utils.constructId("trashcans", "can"));
-	public static final TrashCanConfig CONFIG = new TrashCanConfig("trashcans", "Trash Cans");
+    public static final Lazy<ContraptionStorageRegistry> INSTANCE = getInstance(Utils.constructId("trashcans", "trashcan"));
+    public static final TrashCanConfig CONFIG = new TrashCanConfig("trashcans", "Trash Cans");
 
-	@Override
-	public Priority getPriority() {
-		return Priority.ADDON;
-	}
+    @Override
+    public Priority getPriority() {
+        return Priority.ADDON;
+    }
 
-	@Override
-	public TileEntityType<?>[] affectedStorages() {
-		return new TileEntityType<?>[]{TrashCans.item_trash_can_tile, TrashCans.ultimate_trash_can_tile};
-	}
+    @Override
+    public TileEntityType<?>[] affectedStorages() {
+        return new TileEntityType<?>[]{TrashCans.item_trash_can_tile, TrashCans.ultimate_trash_can_tile};
+    }
 
-	@Override
-	public boolean canUseAsStorage(TileEntity te) {
-		return super.canUseAsStorage(te) && CONFIG.isEnabled();
-	}
+    @Override
+    public boolean canUseAsStorage(TileEntity te) {
+        return super.canUseAsStorage(te) && CONFIG.isEnabled();
+    }
 
-	@Override
-	public ContraptionItemStackHandler createHandler(TileEntity te) {
-		TrashCanTile can = (TrashCanTile) te;
-		return new FilteredTrashCanHandler(can.itemFilter, can.itemFilterWhitelist);
-	}
+    @Override
+    public ContraptionItemStackHandler createHandler(TileEntity te) {
+        TrashCanBlockEntity can = (TrashCanBlockEntity) te;
+        return new FilteredTrashCanHandler(can.itemFilter, can.itemFilterWhitelist);
+    }
 
-	@Override
-	public ContraptionItemStackHandler deserializeHandler(CompoundNBT nbt) {
-		return deserializeHandler(new FilteredTrashCanHandler(), nbt);
-	}
+    @Override
+    public ContraptionItemStackHandler deserializeHandler(CompoundNBT nbt) {
+        return deserializeHandler(new FilteredTrashCanHandler(), nbt);
+    }
 
-	public static class FilteredTrashCanHandler extends TrashCanHandler {
-		private ArrayList<ItemStack> itemFilter = new ArrayList<>();
-		private boolean whitelist;
+    public static class FilteredTrashCanHandler extends TrashCanHandler {
+        private ArrayList<ItemStack> itemFilter = new ArrayList<>();
+        private boolean whitelist;
 
-		public FilteredTrashCanHandler() {
-			for (int i = 0; i < 9; ++i) {
-				this.itemFilter.add(ItemStack.EMPTY);
-			}
-		}
+        public FilteredTrashCanHandler() {
+            for (int i = 0; i < 9; ++i) {
+                this.itemFilter.add(ItemStack.EMPTY);
+            }
+        }
 
-		public FilteredTrashCanHandler(ArrayList<ItemStack> itemFilter, boolean whitelist) {
-			this();
-			this.itemFilter = new ArrayList<>(itemFilter);
-			this.whitelist = whitelist;
-		}
+        public FilteredTrashCanHandler(ArrayList<ItemStack> itemFilter, boolean whitelist) {
+            this();
+            this.itemFilter = new ArrayList<>(itemFilter);
+            this.whitelist = whitelist;
+        }
 
-		@Nonnull
-		public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
-			for (ItemStack filter : itemFilter) {
-				if (!filter.isEmpty() && ItemStack.isSame(stack, filter))
-					return whitelist ? ItemStack.EMPTY : stack;
-			}
-			return whitelist ? stack : ItemStack.EMPTY;
-		}
+        @Nonnull
+        public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
+            for (ItemStack filter : itemFilter) {
+                if (!filter.isEmpty() && ItemStack.isSame(stack, filter))
+                    return whitelist ? ItemStack.EMPTY : stack;
+            }
+            return whitelist ? stack : ItemStack.EMPTY;
+        }
 
-		public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-			for (ItemStack filter : itemFilter) {
-				if (!filter.isEmpty() && ItemStack.isSame(stack, filter))
-					return whitelist;
-			}
-			return !whitelist;
-		}
+        public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
+            for (ItemStack filter : itemFilter) {
+                if (!filter.isEmpty() && ItemStack.isSame(stack, filter))
+                    return whitelist;
+            }
+            return !whitelist;
+        }
 
-		@Override
-		public int getPriority() {
-			return whitelist ? CONFIG.getWhitelistPriority() : CONFIG.getPriority();
-		}
+        @Override
+        public int getPriority() {
+            return whitelist ? CONFIG.getWhitelistPriority() : CONFIG.getPriority();
+        }
 
-		@Override
-		protected ContraptionStorageRegistry registry() {
-			return INSTANCE.get();
-		}
+        @Override
+        protected ContraptionStorageRegistry registry() {
+            return INSTANCE.get();
+        }
 
-		@Override
-		public CompoundNBT serializeNBT() {
-			CompoundNBT nbt = super.serializeNBT();
+        @Override
+        public CompoundNBT serializeNBT() {
+            CompoundNBT nbt = super.serializeNBT();
 
-			for (int i = 0; i < this.itemFilter.size(); ++i) {
-				nbt.put("itemFilter" + i, this.itemFilter.get(i).save(new CompoundNBT()));
-			}
+            for (int i = 0; i < this.itemFilter.size(); ++i) {
+                nbt.put("itemFilter" + i, this.itemFilter.get(i).save(new CompoundNBT()));
+            }
 
-			nbt.putBoolean("itemFilterWhitelist", whitelist);
+            nbt.putBoolean("itemFilterWhitelist", whitelist);
 
-			return nbt;
-		}
+            return nbt;
+        }
 
-		@Override
-		public void deserializeNBT(CompoundNBT nbt) {
-			super.deserializeNBT(nbt);
-			for (int i = 0; i < this.itemFilter.size(); ++i) {
-				this.itemFilter.set(i, nbt.contains("itemFilter" + i) ? ItemStack.of(nbt.getCompound("itemFilter" + i)) : ItemStack.EMPTY);
-			}
+        @Override
+        public void deserializeNBT(CompoundNBT nbt) {
+            super.deserializeNBT(nbt);
+            for (int i = 0; i < this.itemFilter.size(); ++i) {
+                this.itemFilter.set(i, nbt.contains("itemFilter" + i) ? ItemStack.of(nbt.getCompound("itemFilter" + i)) : ItemStack.EMPTY);
+            }
 
-			whitelist = nbt.contains("itemFilterWhitelist") && nbt.getBoolean("itemFilterWhitelist");
-		}
-	}
+            whitelist = nbt.contains("itemFilterWhitelist") && nbt.getBoolean("itemFilterWhitelist");
+        }
 
-	public static class TrashCanConfig extends Config.PriorityRegistryInfo {
+        @Override
+        public boolean addStorageToWorld(TileEntity te) {
+            if (te instanceof TrashCanBlockEntity) {
+                ((TrashCanBlockEntity) te).dataChanged();
+            }
+            return super.addStorageToWorld(te);
+        }
+    }
 
-		private ForgeConfigSpec.ConfigValue<Integer> priorityWhitelist = null;
+    public static class TrashCanConfig extends Config.PriorityRegistryInfo {
 
-		public TrashCanConfig(String id, String name) {
-			super(id, name, ContraptionItemStackHandler.PRIORITY_TRASH);
-		}
+        private ForgeConfigSpec.ConfigValue<Integer> priorityWhitelist = null;
 
-		@Override
-		protected void registerEntries(ForgeConfigSpec.Builder builder) {
-			super.registerEntries(builder);
-			priorityWhitelist = builder.comment(name + " storage priority when whitelist is enabled. Items are inserted first into storages with higher priority. Default value is 20").define("priority_whitelist", ContraptionItemStackHandler.PRIORITY_WHITELIST_TRASH);
-		}
+        public TrashCanConfig(String id, String name) {
+            super(id, name, ContraptionItemStackHandler.PRIORITY_TRASH);
+        }
 
-		public Integer getWhitelistPriority() {
-			return priorityWhitelist != null ? priorityWhitelist.get() : -1;
-		}
-	}
+        @Override
+        protected void registerEntries(ForgeConfigSpec.Builder builder) {
+            super.registerEntries(builder);
+            priorityWhitelist = builder.comment(name + " storage priority when whitelist is enabled. Items are inserted first into storages with higher priority. Default value is 20").define("priority_whitelist", ContraptionItemStackHandler.PRIORITY_WHITELIST_TRASH);
+        }
+
+        public Integer getWhitelistPriority() {
+            return priorityWhitelist != null ? priorityWhitelist.get() : -1;
+        }
+    }
 }

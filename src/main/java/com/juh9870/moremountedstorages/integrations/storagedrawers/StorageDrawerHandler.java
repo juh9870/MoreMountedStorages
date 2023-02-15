@@ -6,7 +6,6 @@ import com.jaquadro.minecraft.storagedrawers.api.storage.IDrawerAttributesModifi
 import com.jaquadro.minecraft.storagedrawers.api.storage.IDrawerGroup;
 import com.jaquadro.minecraft.storagedrawers.api.storage.attribute.LockAttribute;
 import com.jaquadro.minecraft.storagedrawers.block.tile.TileEntityDrawers;
-import com.jaquadro.minecraft.storagedrawers.block.tile.TileEntityDrawersStandard;
 import com.jaquadro.minecraft.storagedrawers.block.tile.tiledata.StandardDrawerGroup;
 import com.jaquadro.minecraft.storagedrawers.block.tile.tiledata.UpgradeData;
 import com.jaquadro.minecraft.storagedrawers.capabilities.BasicDrawerAttributes;
@@ -53,6 +52,8 @@ public class StorageDrawerHandler extends ContraptionItemStackHandler implements
 
 		drawerAttributes = new BasicDrawerAttributes();
 		copyAttributes(attributes, drawerAttributes);
+
+		upgradeData.setDrawerAttributes(drawerAttributes);
 
 		drawers = group == null ? 4 : group.getDrawerCount();
 		drawerGroup = createGroup(drawers);
@@ -267,7 +268,7 @@ public class StorageDrawerHandler extends ContraptionItemStackHandler implements
 
 	@Override
 	public boolean addStorageToWorld(TileEntity te) {
-		TileEntityDrawersStandard drawer = (TileEntityDrawersStandard) te;
+		TileEntityDrawers drawer = (TileEntityDrawers) te;
 		copyItemsTo(drawer);
 		return false;
 	}

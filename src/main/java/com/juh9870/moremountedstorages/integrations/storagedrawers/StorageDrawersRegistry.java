@@ -1,6 +1,6 @@
 package com.juh9870.moremountedstorages.integrations.storagedrawers;
 
-import com.jaquadro.minecraft.storagedrawers.block.tile.TileEntityDrawersStandard;
+import com.jaquadro.minecraft.storagedrawers.block.tile.TileEntityDrawers;
 import com.jaquadro.minecraft.storagedrawers.core.ModBlocks;
 import com.juh9870.moremountedstorages.Config;
 import com.juh9870.moremountedstorages.ContraptionItemStackHandler;
@@ -20,7 +20,7 @@ public class StorageDrawersRegistry extends ContraptionStorageRegistry {
 
 	@Override
 	public boolean canUseAsStorage(TileEntity te) {
-		TileEntityDrawersStandard drawer = (TileEntityDrawersStandard) te;
+		TileEntityDrawers drawer = (TileEntityDrawers) te;
 		return drawer.isGroupValid() && CONFIG.isEnabled();
 	}
 
@@ -35,7 +35,7 @@ public class StorageDrawersRegistry extends ContraptionStorageRegistry {
 
 	@Override
 	public ContraptionItemStackHandler createHandler(TileEntity te) {
-		return new StorageDrawerHandler((TileEntityDrawersStandard) te);
+		return new StorageDrawerHandler((TileEntityDrawers) te);
 	}
 
 	@Override

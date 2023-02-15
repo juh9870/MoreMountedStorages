@@ -2,9 +2,7 @@ package com.juh9870.moremountedstorages.helpers;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
@@ -81,7 +79,11 @@ public abstract class AdvancedItemStackHandler extends SmartItemStackHandler {
 
     @Override
     protected int getStackLimit(int slot, @Nonnull ItemStack stack) {
-        return voiding[slot] ? Integer.MAX_VALUE : ignoreItemStackSize ? stackSizes[slot] : Math.min(stackSizes[slot], (int) (stackSizes[slot] * (stack.getMaxStackSize() / 64f)));
+        return voiding[slot] ? Integer.MAX_VALUE : getActualSlotSize(slot, stack);
+    }
+
+    protected int getActualSlotSize(int slot, @Nonnull ItemStack stack) {
+        return ignoreItemStackSize ? stackSizes[slot] : Math.min(stackSizes[slot], (int) (stackSizes[slot] * (stack.getMaxStackSize() / 64f)));
     }
 
     @Override
@@ -93,9 +95,9 @@ public abstract class AdvancedItemStackHandler extends SmartItemStackHandler {
     @Override
     public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
         ItemStack returnStack = super.insertItem(slot, stack, simulate);
-        int superLimit = super.getStackLimit(slot, stack);
-        if (stacks.get(slot).getCount() > superLimit) {
-            stacks.get(slot).setCount(superLimit);
+        int actualLimit = getActualSlotSize(slot, stack);
+        if (stacks.get(slot).getCount() > actualLimit) {
+            stacks.get(slot).setCount(actualLimit);
         }
         return returnStack;
     }
@@ -110,6 +112,13 @@ public abstract class AdvancedItemStackHandler extends SmartItemStackHandler {
             voids[i] = voiding[i] ? 1 : 0;
         }
         nbt.putIntArray("Voiding", voids);
+        // Item stacks are stored in byte, so extra count is lost, and we have
+        // to serialize them separately
+        int[] itemCounts = new int[stacks.size()];
+        for (int i = 0; i < stacks.size(); i++) {
+            itemCounts[i] = stacks.get(i).getCount();
+        }
+        nbt.putIntArray("ItemCounts", itemCounts);
         return nbt;
     }
 
@@ -122,6 +131,11 @@ public abstract class AdvancedItemStackHandler extends SmartItemStackHandler {
         voiding = new boolean[voids.length];
         for (int i = 0; i < voids.length; i++) {
             voiding[i] = voids[i] == 1;
+        }
+        // Read comment on line 117
+        int[] itemCounts = nbt.getIntArray("ItemCounts");
+        for (int i = 0; i < stacks.size(); i++) {
+            stacks.get(i).setCount(itemCounts[i]);
         }
     }
 }

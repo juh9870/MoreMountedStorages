@@ -145,6 +145,7 @@ dependencies {
     implementation fg.deobf("curse.maven:dimstorage-353882:${dimstorage_versioncode}")
 
     implementation fg.deobf("curse.maven:storage_overhaul-382599:${storage_overhaul_versioncode}")
+    implementation fg.deobf("curse.maven:more_storage_drawers-591494:${more_storage_drawers_versioncode}")
 
     annotationProcessor 'org.spongepowered:mixin:0.8:processor'
 }

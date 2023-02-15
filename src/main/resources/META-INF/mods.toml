@@ -14,6 +14,7 @@ Suppoted mods:
     - Iron Chests https://www.curseforge.com/minecraft/mc-mods/iron-chests
     - Storage Drawers https://www.curseforge.com/minecraft/mc-mods/storage-drawers
     - Framed Compacting Drawers https://www.curseforge.com/minecraft/mc-mods/framed-compacting-drawers
+    - More Storage Drawers https://www.curseforge.com/minecraft/mc-mods/storage-drawers
     - Immersive Engineering https://www.curseforge.com/minecraft/mc-mods/immersive-engineering
     - Industrial Foregoing https://www.curseforge.com/minecraft/mc-mods/industrial-foregoing
     - PneumaticCraft: Repressurized https://www.curseforge.com/minecraft/mc-mods/pneumaticcraft-repressurized
@@ -48,13 +49,19 @@ Suppoted mods:
 [[dependencies.moremountedstorages]]
     modId="storagedrawers"
     mandatory=false
-    versionRange="[1.16.3-8.3.0,)" #keep updated
+    versionRange="[1.16.3-8.5.2,)" #keep updated
     ordering="AFTER"
     side="BOTH"
 [[dependencies.moremountedstorages]]
     modId="framedcompactdrawers"
     mandatory=false
     versionRange="[1.16-2.2.1,)" #keep updated
+    ordering="AFTER"
+    side="BOTH"
+[[dependencies.moremountedstorages]]
+    modId="morestoragedrawers"
+    mandatory=false
+    versionRange="[1.16.5-1.1.2,)" #keep updated
     ordering="AFTER"
     side="BOTH"
 [[dependencies.moremountedstorages]]
@@ -84,7 +91,7 @@ Suppoted mods:
 [[dependencies.moremountedstorages]]
     modId="trashcans"
     mandatory=false
-    versionRange="[1.0.10,)" #keep updated
+    versionRange="[1.0.16,)" #keep updated
     ordering="AFTER"
     side="BOTH"
 [[dependencies.moremountedstorages]]

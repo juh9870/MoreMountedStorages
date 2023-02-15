@@ -12,10 +12,7 @@ import com.juh9870.moremountedstorages.integrations.industrialforegoing.Industri
 import com.juh9870.moremountedstorages.integrations.industrialforegoing.IndustrialForegoingRegistry;
 import com.juh9870.moremountedstorages.integrations.ironchests.IronChestsRegistry;
 import com.juh9870.moremountedstorages.integrations.pneumaticcraft.PneumaticcraftRegistry;
-import com.juh9870.moremountedstorages.integrations.storagedrawers.CompactingDrawerRegistry;
-import com.juh9870.moremountedstorages.integrations.storagedrawers.FramedCompactingDrawerRegistry;
-import com.juh9870.moremountedstorages.integrations.storagedrawers.FramedDrawersRegistry;
-import com.juh9870.moremountedstorages.integrations.storagedrawers.StorageDrawersRegistry;
+import com.juh9870.moremountedstorages.integrations.storagedrawers.*;
 import com.juh9870.moremountedstorages.integrations.storageoverhaul.StorageBarrelRegistry;
 import com.juh9870.moremountedstorages.integrations.storageoverhaul.StorageOverhaulRegistry;
 import com.juh9870.moremountedstorages.integrations.trashcans.TrashCansRegistry;
@@ -98,6 +95,8 @@ public class MoreMountedStorages {
 
         registry.register("framedcompactdrawers", "drawer", () -> new FramedDrawersRegistry());
         registry.register("framedcompactdrawers", "compacting_drawer", () -> new FramedCompactingDrawerRegistry());
+
+        registry.register("morestoragedrawers", "drawer", () -> new MoreDrawersRegistry());
 
         Config.registerConfigsIfModLoaded("storagedrawers", () -> Utils.arrayOf(
                 StorageDrawersRegistry.CONFIG,
