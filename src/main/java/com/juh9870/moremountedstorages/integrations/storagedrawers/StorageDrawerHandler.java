@@ -54,6 +54,8 @@ public class StorageDrawerHandler extends ContraptionItemStackHandler implements
 		drawerAttributes = new BasicDrawerAttributes();
 		copyAttributes(attributes, drawerAttributes);
 
+		upgradeData.setDrawerAttributes(drawerAttributes);
+
 		drawers = group == null ? 4 : group.getDrawerCount();
 		drawerGroup = createGroup(drawers);
 		if (group != null) copyItems(group, drawerGroup);
